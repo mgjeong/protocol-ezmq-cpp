@@ -1,0 +1,367 @@
+##
+# This script includes generic build options:
+#    release/debug, target os, target arch, cross toolchain, build environment etc
+##
+
+import os
+import platform
+
+project_version = '1.0.0'
+
+# Map of build host to possible target os
+host_target_map = {
+    'linux': ['linux'],
+    'windows': ['windows']
+}
+
+# Map of target os to possible target architecture
+os_arch_map = {
+		'linux': ['x86', 'x86_64', 'arm', 'arm64', 'armhf'],
+		'windows': ['x86', 'amd64', 'arm']
+}
+
+# Fetch host from Python platform information and smash case
+host = platform.system().lower()
+
+if host not in host_target_map:
+    msg = "\nError: building on host os '%s' is not currently supported.\n" % host
+    Exit(msg)
+
+######################################################################
+# Get build options from command line
+######################################################################
+target_os = ARGUMENTS.get('TARGET_OS', host).lower()
+
+if target_os not in host_target_map[host]:
+    msg = "\nError: host '%s' cannot currently build target '%s'" % (host, target_os)
+    msg += "\n\tchoices: %s\n" % host_target_map[host]
+    Exit(msg)
+
+default_arch = platform.machine()
+if target_os == 'windows':
+    default_arch = default_arch.lower()
+
+target_arch = ARGUMENTS.get('TARGET_ARCH', default_arch)  # target arch
+
+if target_arch not in os_arch_map[host]:
+    msg = "\nError: Arch '%s' is not supported" % (target_arch)
+    msg += "\n\tchoices: %s\n" % os_arch_map[host]
+    Exit(msg)
+
+if ARGUMENTS.get('TEST'):
+    logging_default = False
+else:
+    release_mode = False
+    if ARGUMENTS.get('RELEASE', True) in [
+            'y', 'yes', 'true', 't', '1', 'on', 'all', True
+    ]:
+        release_mode = True
+    logging_default = (release_mode is False)
+
+# generate a list of unique targets: convert to set() for uniqueness,
+# then convert back to a list
+targetlist = list(set(x for l in host_target_map.values() for x in l))
+
+######################################################################
+# Common build options
+######################################################################
+
+help_vars = Variables()
+help_vars.AddVariables(
+    ('PROJECT_VERSION',
+                 'The version of EZMQ',
+                 project_version),
+    BoolVariable('VERBOSE',
+                 'Show compilation',
+                 default=False),
+    BoolVariable('RELEASE',
+                 'Build for release?',
+                 default=True),
+    EnumVariable('TARGET_OS',
+                 'Target platform',
+                 default=host,
+                 allowed_values=targetlist),
+    EnumVariable('TARGET_ARCH',
+                 'Target architecture',
+                 default=default_arch,
+                 allowed_values=os_arch_map[target_os]),
+    EnumVariable('TEST',
+                 'Run unit tests',
+                 default='0',
+                 allowed_values=('0', '1')),
+    BoolVariable('LOGGING',
+                 'Enable stack logging',
+                 default=logging_default),
+    EnumVariable('LOG_LEVEL',
+                 'Enable stack logging level',
+                 default='DEBUG',
+                 allowed_values=('DEBUG', 'INFO', 'ERROR', 'WARNING', 'FATAL'))
+)
+
+AddOption(
+    '--prefix',
+    dest='prefix',
+    type='string',
+    nargs=1,
+    action='store',
+    metavar='DIR',
+    help='installation prefix')
+
+
+######################################################################
+# Platform (build target) specific options: toolchain
+######################################################################
+
+targets_support_cc = ['linux']
+
+if target_os in targets_support_cc:
+    # Set cross compile toolchain
+    help_vars.Add('TC_PREFIX',
+                  "Toolchain prefix (Generally only required for cross-compiling)",
+                  default=None)
+    help_vars.Add(
+        PathVariable('TC_PATH',
+                     'Toolchain path (Generally only required for cross-compiling)',
+                     default=None,
+                     validator=PathVariable.PathAccept))
+
+######################################################################
+# this is where the setup of the construction envionment begins
+######################################################################
+env = Environment(
+        variables=help_vars,
+        tools=['default', 'textfile'],
+        TARGET_ARCH=target_arch,
+        TARGET_OS=target_os,
+        PREFIX=GetOption('prefix'),
+        LIB_INSTALL_DIR=ARGUMENTS.get('LIB_INSTALL_DIR')  #for 64bit build
+    )
+
+# set quieter build messages unless verbose mode was requested
+if not env.get('VERBOSE'):
+    env['CCCOMSTR'] = "Compiling $TARGET"
+    env['SHCCCOMSTR'] = "Compiling $TARGET"
+    env['CXXCOMSTR'] = "Compiling $TARGET"
+    env['SHCXXCOMSTR'] = "Compiling $TARGET"
+    env['LINKCOMSTR'] = "Linking $TARGET"
+    env['SHLINKCOMSTR'] = "Linking shared object $TARGET"
+    env['ARCOMSTR'] = "Archiving $TARGET"
+    env['RANLIBCOMSTR'] = "Indexing Archive $TARGET"
+
+tc_set_msg = '''
+************************************ Warning **********************************
+* Warning: TC_PREFIX and/or TC_PATH is set in the environment.
+* This means a non-default compilation toolchain will be used.
+* If this is not what you expected you should unset, or it
+* may lead to unexpected results.
+*******************************************************************************
+'''
+sys_root = None
+if target_os in targets_support_cc:
+    prefix = env.get('TC_PREFIX')
+    tc_path = env.get('TC_PATH')
+    if prefix:
+        env.Replace(CC=prefix + env.get('CC', 'gcc'))
+        env.Replace(CXX=prefix + env.get('CXX', 'g++'))
+        env.Replace(AR=prefix + env.get('AR', 'ar'))
+        env.Replace(AS=prefix + env.get('AS', 'as'))
+        env.Replace(RANLIB=prefix + env.get('RANLIB', 'ranlib'))
+
+    if tc_path:
+        env.PrependENVPath('PATH', tc_path)
+        sys_root = os.path.abspath(tc_path + '/../../')
+        env.AppendUnique(CCFLAGS=['--sysroot=' + sys_root])
+        env.AppendUnique(LINKFLAGS=['--sysroot=' + sys_root])
+
+print "tc_path: %s" % tc_path
+print "prefix: %s" % prefix
+print "sys_root: %s" % sys_root
+
+if target_os in ['windows']:
+    # UnpackAll.py needs access to system PATH components that SCons
+    # does not include by default - e.g., the path to 7z.exe.
+    env.AppendUnique(PATH=os.environ['PATH'])
+
+# Ensure scons is able to change its working directory
+env.SConscriptChdir(1)
+
+######################################################################
+# Convenience functions to "extend" SCons
+######################################################################
+
+
+def __set_dir(env, dir):
+    #
+    # Set the source and build directories
+    #   Source directory: 'dir'
+    #   Build directory: 'dir'/out/<target_os>/<target_arch>/<release or debug>/
+    #   On windows, the build directory will be:
+    #     'dir'/out/windows/<win32 or uwp>/<target_arch>/<release or debug>/
+    #
+    # You can get the directory as following:
+    #   env.get('SRC_DIR')
+    #   env.get('BUILD_DIR')
+    #
+    if not os.path.exists(dir + '/SConstruct'):
+        msg = '''
+*************************************** Error *********************************
+* The directory (%s) seems not to be a buildable directory,
+* no SConstruct file found.
+*******************************************************************************
+''' % dir
+        Exit(msg)
+
+    build_dir = dir + '/out/' + target_os + '/'
+
+    if target_os == 'windows':
+        if env.get('MSVC_UWP_APP') == '1':
+            build_dir = build_dir + 'uwp/'
+        else:
+            build_dir = build_dir + 'win32/'
+
+    build_dir = build_dir + target_arch
+
+    if env.get('RELEASE'):
+        build_dir = build_dir + '/release/'
+    else:
+        build_dir = build_dir + '/debug/'
+
+    env.VariantDir(build_dir, dir, duplicate=0)
+
+    env.Replace(BUILD_DIR=build_dir)
+    env.Replace(SRC_DIR=dir)
+
+
+def __src_to_obj(env, src, home=''):
+    #
+    # make sure builds happen in BUILD_DIR (by default they
+    # would happen in the directory of the source file)
+    # Note this does not seem to be used, VariantDir is used instead
+    #
+    obj = env.get('BUILD_DIR') + src.replace(home, '')
+    if env.get('OBJSUFFIX'):
+        obj += env.get('OBJSUFFIX')
+    return env.Object(obj, src)
+
+
+def __install(ienv, targets, name):
+    i_n = ienv.Install(env.get('BUILD_DIR'), targets)
+    Alias(name, i_n)
+    env.AppendUnique(TS=[name])
+
+
+def __installlib(ienv, targets, name):
+    user_prefix = env.get('PREFIX')
+    if user_prefix:
+        user_lib = env.get('LIB_INSTALL_DIR')
+        if user_lib:
+            i_n = ienv.Install(user_lib, targets)
+        else:
+            i_n = ienv.Install(user_prefix + '/lib', targets)
+        ienv.Alias("install", i_n)
+    else:
+        i_n = ienv.Install(env.get('BUILD_DIR'), targets)
+    ienv.Alias("install", i_n)
+
+
+def __installbin(ienv, targets, name):
+    user_prefix = env.get('PREFIX')
+    if user_prefix:
+        i_n = ienv.Install(user_prefix + '/bin', targets)
+        ienv.Alias("install", i_n)
+
+
+def __installheader(ienv, targets, dir, name):
+    user_prefix = env.get('PREFIX')
+    if user_prefix:
+        i_n = ienv.Install(user_prefix + '/include/' + dir, targets)
+    else:
+        i_n = ienv.Install(
+            os.path.join(env.get('BUILD_DIR'), 'include', dir), targets)
+    ienv.Alias("install", i_n)
+
+
+def __installpcfile(ienv, targets, name):
+    user_prefix = env.get('PREFIX')
+    if user_prefix:
+        user_lib = env.get('LIB_INSTALL_DIR')
+        if user_lib:
+            i_n = ienv.Install(user_lib + '/pkgconfig', targets)
+        else:
+            i_n = ienv.Install(user_prefix + '/lib/pkgconfig', targets)
+    else:
+        i_n = ienv.Install(env.get('BUILD_DIR') + 'lib/pkgconfig', targets)
+    ienv.Alias("install", i_n)
+
+
+def __append_target(ienv, name, targets=None):
+    if targets:
+        env.Alias(name, targets)
+    env.AppendUnique(TS=[name])
+
+
+def __add_pthread_if_needed(ienv):
+    if 'gcc' == ienv.get('CC') and target_os not in ['android']:
+        ienv.AppendUnique(LINKFLAGS="-pthread")
+
+def __print_targets(env):
+    Help('''
+===============================================================================
+Targets:\n    ''')
+    for t in env.get('TS'):
+        Help(t + ' ')
+    Help('''
+
+Default: all targets will be built. You can specify the target to build:
+
+    $ scons [options] [target]
+===============================================================================
+''')
+
+env.AddMethod(__set_dir, 'SetDir')
+env.AddMethod(__print_targets, 'PrintTargets')
+env.AddMethod(__src_to_obj, 'SrcToObj')
+env.AddMethod(__append_target, 'AppendTarget')
+env.AddMethod(__add_pthread_if_needed, 'AddPthreadIfNeeded')
+env.AddMethod(__install, 'InstallTarget')
+env.AddMethod(__installlib, 'UserInstallTargetLib')
+env.AddMethod(__installbin, 'UserInstallTargetBin')
+env.AddMethod(__installheader, 'UserInstallTargetHeader')
+env.AddMethod(__installpcfile, 'UserInstallTargetPCFile')
+env.SetDir(env.GetLaunchDir())
+env['ROOT_DIR'] = env.GetLaunchDir() + '/..'
+
+# make 'env' available to all other build scripts to Import()
+Export('env')
+
+######################################################################
+# Setting global compiler flags
+######################################################################
+target_transport = env.get('TARGET_TRANSPORT')
+env.AppendUnique(LIBPATH = [env.get('BUILD_DIR')])
+if (target_os not in ['windows']):
+    env.AppendUnique(CPPDEFINES=['WITH_POSIX'])
+env.AppendUnique(RPATH = [env.get('BUILD_DIR')])
+env.AppendUnique(CPPDEFINES={'EZMQ_LOG_LEVEL': env.get('LOG_LEVEL')})
+
+if env.get('LOGGING'):
+    env.AppendUnique(CPPDEFINES=['DEBUG_LOG'])
+
+#external libs building
+env.SConscript('external_builders.scons')
+env.SConscript('external_libs.scons')
+# Load extra options
+SConscript('extra_options.scons')
+
+# Load config of target os
+env.SConscript(target_os + '/SConscript')
+
+if env.get('CROSS_COMPILE'):
+    env.Append(RPATH=env.Literal('\\$$ORIGIN'))
+else:
+    env.Append(RPATH=env.get('BUILD_DIR'))
+
+help_vars.Update(env)
+Help(help_vars.GenerateHelpText(env, sort=cmp))
+
+Return('env')

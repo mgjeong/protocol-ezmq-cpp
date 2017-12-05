@@ -1,0 +1,74 @@
+##
+# EZMQ Unit Test build script
+##
+
+import os
+from build_common.tools.RunTest import run_test
+
+Import('env')
+
+gtest_env = SConscript('#extlibs/gtest/SConscript')
+lib_env = gtest_env.Clone()
+
+if lib_env.get('RELEASE'):
+    lib_env.AppendUnique(CCFLAGS=['-Os'])
+else:
+    lib_env.AppendUnique(CCFLAGS=['-g'])
+    lib_env.AppendUnique(CPPDEFINES=['DEBUG_LOG'])
+
+
+ezmq_test_env = lib_env.Clone()
+target_os = ezmq_test_env.get('TARGET_OS')
+
+######################################################################
+# Build flags
+######################################################################
+
+ezmq_test_env.AppendUnique(LIBPATH=[lib_env.get('BUILD_DIR')])
+ezmq_test_env.AppendUnique(LIBS=['ezmq', 'protobuf'])
+
+if target_os not in ['windows']:
+    ezmq_test_env.AppendUnique(
+        CXXFLAGS=['-O2', '-g', '-Wall', '-fmessage-length=0', '-I/usr/local/include'])
+
+if not ezmq_test_env.get('RELEASE'):
+    ezmq_test_env.PrependUnique(LIBS=['gcov'])
+    ezmq_test_env.AppendUnique(CXXFLAGS=['--coverage'])
+
+ezmq_test_env.AppendUnique(CPPPATH=[
+    '../extlibs/hippomocks/hippomocks',
+	'../extlibs/zmq',
+	'../protobuf',
+    '../include',
+    '../include/logger',
+    '../src',
+    '.'
+])
+
+######################################################################
+# Build Test
+######################################################################
+
+ezmq_api_test_src = ezmq_test_env.Glob('./EZMQAPITest.cpp')
+ezmq_api_test = ezmq_test_env.Program('ezmq_api_test',
+                                         ezmq_api_test_src)
+Alias("ezmq_api_test", ezmq_api_test)
+ezmq_test_env.AppendTarget('ezmq_api_test')
+
+ezmq_pub_test_src = ezmq_test_env.Glob('./EZMQPublisherTest.cpp')
+ezmq_pub_test = ezmq_test_env.Program('ezmq_pub_test',
+                                         ezmq_pub_test_src)
+Alias("ezmq_pub_test", ezmq_pub_test)
+ezmq_test_env.AppendTarget('ezmq_pub_test')
+
+ezmq_sub_test_src = ezmq_test_env.Glob('./EZMQSubscriberTest.cpp')
+ezmq_sub_test = ezmq_test_env.Program('ezmq_sub_test',
+                                         ezmq_sub_test_src)
+Alias("ezmq_sub_test", ezmq_sub_test)
+ezmq_test_env.AppendTarget('ezmq_sub_test')
+
+if env.get('TEST') == '1':
+	run_test(ezmq_test_env, '', 'unittests/ezmq_api_test', ezmq_api_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_pub_test', ezmq_pub_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_sub_test', ezmq_sub_test)
+

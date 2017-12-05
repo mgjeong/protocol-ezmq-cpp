@@ -1,0 +1,27 @@
+package ezmq;
+
+option java_package = "org.edgexfoundry.ezmq.protobufevent";
+option java_outer_classname = "EZMQProtoEvent";
+
+message Event {
+	required string id = 1;
+	required int64 created = 2;
+	required int64 modified = 3;
+	required int64 origin = 4;
+	required int64 pushed = 5;
+	required string device = 6;
+	repeated Reading reading = 7;
+}
+
+message Reading {
+	required string id = 1;
+	required int64 created = 2;
+	required int64 modified = 3;
+	required int64 origin = 4;
+	required int64 pushed = 5;
+	required string name = 6;
+	required string value = 7;
+	required string device = 8;
+}
+
+

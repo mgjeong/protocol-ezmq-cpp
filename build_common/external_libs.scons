@@ -1,0 +1,30 @@
+##
+# This script manages external libraries
+#
+# By default, assume the script for an exteranl library is:
+#    <src_dir>/extlibs/<libname>/SConscript
+#
+# Note: After the external library is built:
+#   Head files should be installed to <src_dir>/deps/<target_os>/include
+#   lib(e.g .so, .a) should be installed to <src_dir>/deps/<target_os>/lib/<arch>
+#
+##
+import os
+
+Import('env')
+
+target_os = env.get('TARGET_OS')
+target_arch = env.get('TARGET_ARCH')
+src_dir = env.get('SRC_DIR')
+
+# External library include files are in <src_dir>/deps/<target_os>/include
+# the library binaries are in <src_dir>/deps/<target_os>/lib/<arch>
+if target_os not in ['windows']:
+    env.AppendUnique(CPPPATH = [os.path.join(src_dir, 'deps', target_os, 'include')])
+    env.AppendUnique(LIBPATH = [os.path.join(src_dir, 'deps', target_os, 'lib', target_arch)])
+
+# gtest build/fetch
+SConscript(os.path.join(src_dir, 'extlibs', 'gtest', 'SConscript'))
+
+# hippmocks build/fetch
+SConscript(os.path.join(src_dir, 'extlibs', 'hippomocks', 'SConscript'))
