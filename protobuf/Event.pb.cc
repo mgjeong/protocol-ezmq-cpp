@@ -145,18 +145,18 @@ namespace {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\013Event.proto\022\003ezmq\"\205\001\n\005Event\022\n\n\002id\030\001 \002(\t"
-      "\022\017\n\007created\030\002 \002(\003\022\020\n\010modified\030\003 \002(\003\022\016\n\006o"
-      "rigin\030\004 \002(\003\022\016\n\006pushed\030\005 \002(\003\022\016\n\006device\030\006 "
-      "\002(\t\022\035\n\007reading\030\007 \003(\0132\014.ezmq.Reading\"\205\001\n\007R"
-      "eading\022\n\n\002id\030\001 \002(\t\022\017\n\007created\030\002 \002(\003\022\020\n\010m"
-      "odified\030\003 \002(\003\022\016\n\006origin\030\004 \002(\003\022\016\n\006pushed\030"
-      "\005 \002(\003\022\014\n\004name\030\006 \002(\t\022\r\n\005value\030\007 \002(\t\022\016\n\006de"
-      "vice\030\010 \002(\tB3\n\"org.edgexfoundry.ezmq.proto"
-      "bufeventB\rEZMQProtoEvent"
+      "\n\013Event.proto\022\004ezmq\"\206\001\n\005Event\022\n\n\002id\030\001 \002("
+      "\t\022\017\n\007created\030\002 \002(\003\022\020\n\010modified\030\003 \002(\003\022\016\n\006"
+      "origin\030\004 \002(\003\022\016\n\006pushed\030\005 \002(\003\022\016\n\006device\030\006"
+      " \002(\t\022\036\n\007reading\030\007 \003(\0132\r.ezmq.Reading\"\205\001\n"
+      "\007Reading\022\n\n\002id\030\001 \002(\t\022\017\n\007created\030\002 \002(\003\022\020\n"
+      "\010modified\030\003 \002(\003\022\016\n\006origin\030\004 \002(\003\022\016\n\006pushe"
+      "d\030\005 \002(\003\022\014\n\004name\030\006 \002(\t\022\r\n\005value\030\007 \002(\t\022\016\n\006"
+      "device\030\010 \002(\tB5\n#org.edgexfoundry.ezmq.pr"
+      "otobufeventB\016EZMQProtoEvent"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 343);
+      descriptor, 347);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Event.proto", &protobuf_RegisterTypes);
 }
