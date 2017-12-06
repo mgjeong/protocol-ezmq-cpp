@@ -1,10 +1,15 @@
 #!/bin/bash
-CPP_ROOT=$(pwd)
-FILENAME="protobuf-cpp-3.4.0.tar.gz"
+
+#install required cross compile tool-chain
+sudo apt-get update
+sudo apt-get install gcc-arm-linux-gnueabi
+sudo apt-get install g++-arm-linux-gnueabi
+
 mkdir ./dependencies
 cd ./dependencies
-
 DEP_ROOT=$(pwd)
+
+#Clone, build and install ZeroMQ library for arm architecture
 git clone https://github.com/zeromq/libzmq.git
 cd libzmq
 git checkout v4.2.2
@@ -12,12 +17,13 @@ chmod 777 version.sh
 ./version.sh
 chmod 777 autogen.sh
 ./autogen.sh
-./configure --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8
-
+./configure --host=arm-none-linux-gnueabi CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++
 make -j 4
 sudo make install
 sudo ldconfig
 
+#build, install protobuf library for arm architecture
+FILENAME="protobuf-cpp-3.4.0.tar.gz"
 cd $DEP_ROOT
 if [ -e"$FILENAME" ] ; then
     echo "file exist"
@@ -29,7 +35,7 @@ tar -xvf protobuf-cpp-3.4.0.tar.gz
 cd protobuf-3.4.0/
 chmod 777 autogen.sh
 ./autogen.sh
-./configure --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8
+./configure --host=arm-linux CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++
 make -j 4
 sudo make install
 #handle error
