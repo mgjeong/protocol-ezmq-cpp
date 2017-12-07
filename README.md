@@ -192,8 +192,9 @@ Note:
 ########## Build EZMQ SDK for arm64 architecture [Cross compile on ubuntu] ################
 
 1. Install tool-chain for arm64:
-   - sudo apt-get install gcc-aarch64-linux-gnu
-   - sudo apt-get install g++-aarch64-linux-gnu
+   $ sudo apt-get update
+   $ sudo apt-get install gcc-4.8-aarch64-linux-gnu
+   $ sudo apt-get install g++-4.8-aarch64-linux-gnu
 
 2. Build and Install zeroMQ [libzmq] for arm64 architecture:
 
@@ -246,11 +247,12 @@ Note:
    - export LD_LIBRARY_PATH=../
    - ./publisher
 
-########## Build EZMQ SDK for arm [hard float: armhf] architecture [Cross compile on ubuntu] ################
+########## Build EZMQ SDK for arm [hard float: armhf] architecture [Cross compile on ubuntu with static linking] ################
 
 1. Install tool-chain for arm [hard float]:
-   sudo apt-get install gcc-arm-linux-gnueabihf
-   sudo apt-get install g++-arm-linux-gnueabihf
+   $ sudo apt-get update
+   $ sudo apt-get install gcc-4.8-arm-linux-gnueabihf
+   $ sudo apt-get install g++-4.8-arm-linux-gnueabihf
 
 2. Build and install zeroMQ [libzmq] for arm [hard float] architecture:
 
@@ -260,7 +262,7 @@ Note:
 (d) chmod 777 version.sh
 (e) chmod 777 autogen.sh
 (f) ./autogen.sh
-(g) ./configure --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8
+(g) ./configure --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8 --disable-shared --enable-static CFLAGS=-fPIC CPPFLAGS=-fPIC
 (h) make -j 4
 (i) sudo make install
 (j) sudo ldconfig
@@ -305,3 +307,14 @@ Note:
    - export LD_LIBRARY_PATH=../
      Note: update export library path as per your library directory.
    - ./publisher
+   
+   
+########## Cross compile ezmq samples for Raspberry pi board [static linking] ################
+
+1. chmod build_armhf_static_samples.sh
+2. ./build_armhf_static_samples.sh
+3. On success, it will build ezmq samples for raspberry pi borad in following directory:
+   ~/protocol-ezmq-cpp/out/linux/armhf/release/static_linked
+4. Copy built samples [armhf_publisher & armhf_subscriber] to Raspberry pi board and run.
+   $./armhf_publisher
+   $./armhf_subscriber
