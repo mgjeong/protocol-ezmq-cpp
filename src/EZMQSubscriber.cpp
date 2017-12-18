@@ -31,7 +31,6 @@ namespace ezmq
         mShutdownClient = nullptr;
         mSubscriber = nullptr;
         isReceiverStarted = false;
-        std::srand(std::time(0));
     }
 
     EZMQSubscriber::EZMQSubscriber(std::string serviceName, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback):
