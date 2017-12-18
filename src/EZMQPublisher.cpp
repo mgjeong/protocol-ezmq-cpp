@@ -29,7 +29,6 @@ namespace ezmq
              EZMQ_LOG(ERROR, TAG, "Context is null");
         }
         mPublisher = nullptr;
-        std::srand(std::time(0));
     }
 
     EZMQPublisher::~EZMQPublisher()
