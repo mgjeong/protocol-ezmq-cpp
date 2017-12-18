@@ -57,7 +57,11 @@ namespace ezmq
             std::shared_ptr<zmq::context_t>  getContext();
 
         private:
-            EZMQAPI() { mStatus = EZMQ_Constructed; }
+            EZMQAPI() 
+            { 
+              mStatus = EZMQ_Constructed; 
+              std::srand(std::time(0));
+            }
             EZMQStatusCode mStatus;
             std::shared_ptr<zmq::context_t> mContext;
     };
