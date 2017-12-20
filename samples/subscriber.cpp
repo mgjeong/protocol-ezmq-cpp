@@ -7,10 +7,16 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include <condition_variable>
+#include <memory>
+
 using namespace std;
 using namespace ezmq;
 
 EZMQSubscriber *subscriber = nullptr ;
+
+std::mutex m_mutex;
+std::condition_variable m_cv;
 
 void printEvent(ezmq::Event event)
 {
@@ -49,6 +55,7 @@ void sigint(int signal)
         cout<<"callig stop API: "<<endl;
         EZMQErrorCode result = subscriber->stop();
         cout<<"stop API: [Result]: "<<result<<std::endl;
+		//m_cv.notify_all();
     }
     exit(0);
 }
@@ -117,8 +124,8 @@ int main()
     }
 
     cout<<"Suscribed to publisher.. -- Waiting for Events --"<<endl;
-
-    // infinite loop for receiving messages....
-    while (true) { }
+    std::unique_lock<std::mutex> lk(m_mutex);
+    m_cv.wait(lk);
+	
 return 0;
 }
