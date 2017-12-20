@@ -28,8 +28,10 @@ Following is the architecture of ezMQ client library: </br> </br>
 2.  ./build.sh </br>
     **It will give the list of options supported for ezMQ build.**
 
-## How to run ezmq samples
+## How to run ezMQ samples
 
+### pre-requisites
+Built ezMQ
 ### Run the subscriber sample application
 
 1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
