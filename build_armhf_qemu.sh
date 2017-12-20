@@ -3,3 +3,5 @@
 
 #build ezmq SDK and samples
 scons TARGET_ARCH=armhf
+
+cp /usr/bin/qemu-arm-static .
