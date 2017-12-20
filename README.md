@@ -25,8 +25,10 @@ Following is the architecture of ezMQ client library: </br> </br>
 
 ### Build Instructions
 1. Goto: ~/protocol-ezmq-cpp/
-2. ./build.sh </br>
-   **Note:** For getting help about script: **$ ./build.sh --help**
+2. ./build.sh <options></br>
+**Notes:** </br>
+(i) For getting help about script: **$ ./build.sh --help** </br>
+(ii)Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezMQ sdk.
 
 ## How to run ezMQ samples
 
