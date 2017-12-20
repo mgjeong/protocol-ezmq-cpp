@@ -26,7 +26,7 @@ Following is the architecture of ezMQ client library: </br> </br>
 ### Build Instructions
 1. Goto: ~/protocol-ezmq-cpp/
 2. ./build.sh </br>
-   **Note:** For getting help about script, use the following: **$ ./build.sh --help**
+   **Note:** For getting help about script: **$ ./build.sh --help**
 
 ## How to run ezMQ samples
 
@@ -66,7 +66,7 @@ Initialize API [result]: 0
 1. Goto: ~/protocol-ezmq-cpp/</br>
 2. Run the script [generate_report.sh]:</br>
    $ ./generate_report.sh </br>
-     **Note:** For getting help about script, use the following: **$ ./generate_report.sh --help**
+     **Note:** For getting help about script: **$ ./generate_report.sh --help**
 3. On success, it will generate following reports in [~/protocol-ezmq-cpp/] : </br>
    (i)  UnitTestReport </br>
    (ii) CoverageReport </br>
