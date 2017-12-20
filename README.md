@@ -18,7 +18,7 @@ Following is the architecture of ezMQ client library: </br> </br>
 * Clustering Support.
 </br></br>
 
-## How to build 
+## How to build ezMQ SDK and samples
 ### pre-requisites
 1. Scons should be installed on linux machine. </br>
    $ sudo apt-get install scons
@@ -28,7 +28,28 @@ Following is the architecture of ezMQ client library: </br> </br>
 2.  ./build.sh </br>
     **It will give the list of options supported for ezMQ build.**
 
-## How to run sample
+## How to run ezmq samples
 
-Build guide of **ezMQ samples** is given 
-[here](./samples/README.md)
+### Run the subscriber sample application
+
+1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
+2. export LD_LIBRARY_PATH=../
+3. ./subscriber
+4.  On successful running it will show following logs:
+
+```
+Initialize API [result]: 0
+```
+**Follow the instructions on the screen.**
+
+###  Run the publisher sample application
+
+1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
+2. export LD_LIBRARY_PATH=../
+3. ./publisher
+4. On successful running it will show following logs:
+
+```
+Initialize API [result]: 0
+```
+**Follow the instructions on the screen.**
