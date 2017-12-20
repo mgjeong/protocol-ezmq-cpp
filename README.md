@@ -27,6 +27,7 @@ Following is the architecture of ezMQ client library: </br> </br>
 1. Goto: ~/protocol-ezmq-cpp/
 2.  ./build.sh </br>
     **It will give the list of options supported for ezMQ build.**
+**Note:** For getting help about script, use the following: **$ ./build.sh --help**
 
 ## How to run ezMQ samples
 
@@ -55,3 +56,18 @@ Initialize API [result]: 0
 Initialize API [result]: 0
 ```
 **Follow the instructions on the screen.**
+
+##  Unit test and Code coverage report generation
+
+### Pre-requisite
+1. Gcovr tool </br>
+   **Refer:** http://gcovr.com/guide.html#installation
+
+### Report generation guide
+1. Goto: ~/protocol-ezmq-cpp/</br>
+2. Run the script [generate_report.sh]:</br>
+   $ ./generate_report.sh </br>
+     **Note:** For getting help about script, use the following: **$ ./generate_report.sh --help**
+3. On success, it will generate following reports in [~/protocol-ezmq-cpp/] : </br>
+   (i)  UnitTestReport </br>
+   (ii) CoverageReport </br>
