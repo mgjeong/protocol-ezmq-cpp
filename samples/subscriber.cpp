@@ -74,6 +74,11 @@ int main()
     EZMQAPI *obj = EZMQAPI::getInstance();
     std::cout<<"Initialize API [result]: "<<obj->initialize()<<endl;
 
+    cout<<"Host: ";
+    cin>>ip;
+    cout<<"Port: ";
+    cin>>port;
+
     cout<<"Enter 1 for General Event testing"<<endl;
     cout<<"Enter 2 for Topic Based delivery"<<endl;
     cout<<"ctrl+c to terminate the program"<<endl<<endl;
