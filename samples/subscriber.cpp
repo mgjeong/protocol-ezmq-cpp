@@ -50,14 +50,8 @@ void subTopicCB(std::string topic, ezmq::Event event)
 
 void sigint(int signal)
 {
-    if(nullptr!=subscriber)
-    {
-        cout<<"callig stop API: "<<endl;
-        EZMQErrorCode result = subscriber->stop();
-        cout<<"stop API: [Result]: "<<result<<std::endl;
-		//m_cv.notify_all();
-    }
-    exit(0);
+    std::unique_lock<std::mutex> lock(m_mutex);
+    m_cv.notify_all();
 }
 
 int main()
@@ -129,8 +123,14 @@ int main()
     }
 
     cout<<"Suscribed to publisher.. -- Waiting for Events --"<<endl;
-    std::unique_lock<std::mutex> lk(m_mutex);
-    m_cv.wait(lk);
-	
+    std::unique_lock<std::mutex> lock(m_mutex);
+    m_cv.wait(lock);
+
+    if(nullptr!=subscriber)
+    {
+        cout<<"callig stop API: "<<endl;
+        result = subscriber->stop();
+        cout<<"stop API: [Result]: "<<result<<std::endl;
+    }
 return 0;
 }
