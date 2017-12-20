@@ -9,17 +9,17 @@
 using namespace std;
 using namespace ezmq;
 
-void startCB(EZMQErrorCode code)
+void startCB(EZMQErrorCode /*code*/)
 {
     cout<<"Start callback ";
 }
 
-void stopCB(EZMQErrorCode code)
+void stopCB(EZMQErrorCode /*code*/)
 {
     cout<<"stop callback ";
 }
 
-void errorCB(EZMQErrorCode code)
+void errorCB(EZMQErrorCode /*code*/)
 {
     cout<<"Error callback ";
 }
