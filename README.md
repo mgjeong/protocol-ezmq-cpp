@@ -19,12 +19,14 @@ Following is the architecture of ezMQ client library: </br> </br>
 </br></br>
 
 ## How to build 
-**For building the ezMQ SDK following are the pre-requisites:**
-1. Java 1.8 or higher <br>
-2. Maven 3.5 or higher <br>
+### pre-requisites
+1. Scons should be installed on linux machine. </br>
+   $ sudo apt-get install scons
 
-Build guide of **ezMQ sdk** is given [here](./edgex-ezmq/README.md)
-
+### Build Instructions
+1. Goto: ~/protocol-ezmq-cpp/
+2.  ./build.sh 
+**It will give the list of options supported for ezMQ build.**
 
 ## How to run sample
 
