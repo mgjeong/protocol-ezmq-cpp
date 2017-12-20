@@ -25,8 +25,8 @@ Following is the architecture of ezMQ client library: </br> </br>
 
 ### Build Instructions
 1. Goto: ~/protocol-ezmq-cpp/
-2.  ./build.sh 
-**It will give the list of options supported for ezMQ build.**
+2.  ./build.sh </br>
+    **It will give the list of options supported for ezMQ build.**
 
 ## How to run sample
 
