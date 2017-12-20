@@ -70,3 +70,11 @@ Initialize API [result]: 0
 3. On success, it will generate following reports in [~/protocol-ezmq-cpp/] : </br>
    (i)  UnitTestReport </br>
    (ii) CoverageReport </br>
+   
+##  ezMQ Usage guide [For micro-services]
+
+1. The micro-service which wants to use ezMQ APIs has to link following libraries:
+    - ezmq.so
+    - protobuf.so
+    
+2. Refer ezMQ sample apps for linking and ezMQ SDK APIs usage. **[~/protocol-ezmq-cpp/samples]**
