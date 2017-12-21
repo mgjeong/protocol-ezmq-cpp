@@ -60,14 +60,14 @@ Initialize API [result]: 0
 
 ##  ezmq Usage guide [For micro-services]
 
-The micro-service which wants to use ezmq APIs has to link following libraries:</br></br>
-**1. If micro-service wants to link ezmq dynamically following are the libraries it needs to link:**</br>
-       - ezmq.so</br>
-       - protobuf.so</br>
-       - zmq.so </br>
-**2. If micro-service wants to link ezmq statically following are the libraries it needs to link:**</br>
-       - ezmq.a</br>
-       - protobuf.a</br>
-       - zmq.a </br>
+1. The micro-service which wants to use ezmq APIs has to link following libraries:</br></br>
+   **(A) If micro-service wants to link ezmq dynamically following are the libraries it needs to link:**</br>
+        - ezmq.so</br>
+        - protobuf.so</br>
+        - zmq.so </br> 
+   **(B) If micro-service wants to link ezmq statically following are the libraries it needs to link:**</br>
+        - ezmq.a</br>
+        - protobuf.a</br>
+        - zmq.a </br>
     
 2. Refer ezmq sample apps for linking and ezmq library APIs usage. **[~/protocol-ezmq-cpp/samples]**
