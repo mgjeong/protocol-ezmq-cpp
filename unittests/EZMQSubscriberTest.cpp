@@ -10,15 +10,16 @@
 
 using namespace ezmq;
 
-void subCB(ezmq::Event event)
+void subCB(ezmq::Event /*event*/)
 {
     EZMQ_LOG(DEBUG, TAG, "Event received");
 }
 
-void subTopicCB(std::string topic, ezmq::Event event)
+void subTopicCB(std::string topic, ezmq::Event /*event*/)
 {
     EZMQ_LOG(DEBUG, TAG, "Event received");
     EZMQ_LOG_V(DEBUG, TAG, "Topic: %s", topic.c_str());
+    UNUSED(topic);
 }
 
 class EZMQSubscriberTest: public TestWithMock

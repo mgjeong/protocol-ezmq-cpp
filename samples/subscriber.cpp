@@ -48,7 +48,7 @@ void subTopicCB(std::string topic, ezmq::Event event)
     printEvent(event);
 }
 
-void sigint(int signal)
+void sigint(int /*signal*/)
 {
     std::unique_lock<std::mutex> lock(m_mutex);
     m_cv.notify_all();

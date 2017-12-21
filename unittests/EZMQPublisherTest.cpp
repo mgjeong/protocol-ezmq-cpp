@@ -10,17 +10,17 @@
 static int mPort = 5562;
 using namespace ezmq;
 
-void startCB(EZMQErrorCode code)
+void startCB(EZMQErrorCode /*code*/)
 {
     EZMQ_LOG(DEBUG, TAG, "Start callback");
 }
 
-void stopCB(EZMQErrorCode code)
+void stopCB(EZMQErrorCode /*code*/)
 {
     EZMQ_LOG(DEBUG, TAG, "stop callback");
 }
 
-void errorCB(EZMQErrorCode code)
+void errorCB(EZMQErrorCode /*code*/)
 {
     EZMQ_LOG(DEBUG, TAG, "error callback");
 }
