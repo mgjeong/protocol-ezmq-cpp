@@ -18,7 +18,7 @@ Following is the architecture of ezMQ client library: </br> </br>
 * Clustering Support.
 </br></br>
 
-## How to build ezMQ SDK and samples
+## How to build ezmq library and samples
 ### pre-requisites
 1. Scons should be installed on linux machine. </br>
    $ sudo apt-get install scons
@@ -28,12 +28,12 @@ Following is the architecture of ezMQ client library: </br> </br>
 2. ./build.sh <options></br>
 **Notes:** </br>
 (i) For getting help about script: **$ ./build.sh --help** </br>
-(ii)Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezMQ sdk.
+(ii)Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library.
 
-## How to run ezMQ samples
+## How to run ezmq samples
 
 ### pre-requisites
-Built ezMQ
+Built ezmq
 ### Run the subscriber sample application
 
 1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
@@ -58,10 +58,16 @@ Initialize API [result]: 0
 ```
 **Follow the instructions on the screen.**
 
-##  ezMQ Usage guide [For micro-services]
+##  ezmq Usage guide [For micro-services]
 
-1. The micro-service which wants to use ezMQ APIs has to link following libraries:
-    - ezmq.so
-    - protobuf.so
+The micro-service which wants to use ezmq APIs has to link following libraries:</br></br>
+**1. If micro-service wants to link ezmq dynamically following are the libraries it needs to link:**</br>
+       - ezmq.so</br>
+       - protobuf.so</br>
+       - zmq.so </br>
+**2. If micro-service wants to link ezmq statically following are the libraries it needs to link:**</br>
+       - ezmq.a</br>
+       - protobuf.a</br>
+       - zmq.a </br>
     
-2. Refer ezMQ sample apps for linking and ezMQ SDK APIs usage. **[~/protocol-ezmq-cpp/samples]**
+2. Refer ezmq sample apps for linking and ezmq library APIs usage. **[~/protocol-ezmq-cpp/samples]**
