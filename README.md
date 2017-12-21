@@ -1,4 +1,4 @@
-# Ezmq CPP Client Library
+# ezmq CPP Client Library
 
 protocol-ezmq-cpp library provides a standard messaging interface over various data streaming 
 and serialization / deserialization middlewares along with some added functionalities.</br>
