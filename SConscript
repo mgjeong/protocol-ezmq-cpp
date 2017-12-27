@@ -52,4 +52,5 @@ if target_os == 'linux':
 
 # Go to build EZMQ unit test cases
 if target_os == 'linux':
-       SConscript('unittests/SConscript')
+    if target_arch in ['x86', 'x86_64']:
+        SConscript('unittests/SConscript')
