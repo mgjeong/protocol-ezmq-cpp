@@ -14,31 +14,40 @@ EZMQ_WITH_DEP=false
 install_dependencies() {
     # download required tool chain for cross compilation [arm/arm64/armhf]
     if [ "arm" == ${EZMQ_TARGET_ARCH} ]; then
-        if [ -x "/usr/bin/arm-linux-gnueabi-g++" ] || [-x "/usr/bin/arm-linux-gnueabi-gcc" ]; then
+        if [ -x "/usr/bin/arm-linux-gnueabi-g++" ] && [ -x "/usr/bin/arm-linux-gnueabi-gcc" ]; then
             echo -e "${BLUE}Cross compile tool-chain found for arm${NO_COLOUR}"
         else
-            echo -e "${RED}No cross compile tool-chain found for arm${NO_COLOUR}"
-            echo -e " $ sudo apt-get update"
+            echo -e "${RED}No cross compile tool-chain found for arm, install using below commands:${NO_COLOUR}"
+            echo -e "${BLUE} $ sudo apt-get update"
             echo -e " $ sudo apt-get install gcc-arm-linux-gnueabi"
-            echo -e " $ sudo apt-get install g++-arm-linux-gnueabi"
+            echo -e " $ sudo apt-get install g++-arm-linux-gnueabi${NO_COLOUR}"
+            exit 0
         fi
     elif [ "arm64" == ${EZMQ_TARGET_ARCH} ]; then
-        if [ -x "/usr/bin/aarch64-linux-gnu-g++-4.8" ] || [-x "/usr/bin/aarch64-linux-gnu-gcc-4.8" ]; then
+        if [ -x "/usr/bin/aarch64-linux-gnu-g++-4.8" ] && [ -x "/usr/bin/aarch64-linux-gnu-gcc-4.8" ] && [ -x "/usr/bin/aarch64-linux-gnu-g++" ] && [ -x "/usr/bin/aarch64-linux-gnu-gcc" ]; then
             echo -e "${BLUE}Cross compile tool-chain found for arm64${NO_COLOUR}"
         else
-            echo -e "${RED}No cross compile tool-chain found for arm64${NO_COLOUR}"
-            echo -e " $ sudo apt-get update"
+            echo -e "${RED}No cross compile tool-chain found for arm64, install using below commands:${NO_COLOUR}"
+            echo -e "${BLUE} $ sudo apt-get update"
             echo -e " $ sudo apt-get install gcc-4.8-aarch64-linux-gnu"
             echo -e " $ sudo apt-get install g++-4.8-aarch64-linux-gnu"
+            echo -e " $ cd /usr/bin"
+            echo -e " $ sudo ln -s aarch64-linux-gnu-g++-4.8 aarch64-linux-gnu-g++"
+            echo -e " $ sudo ln -s aarch64-linux-gnu-gcc-4.8 arch64-linux-gnu-gcc${NO_COLOUR}"
+            exit 0
         fi
     elif [ "armhf" == ${EZMQ_TARGET_ARCH} ]; then
-        if [ -x "/usr/bin/arm-linux-gnueabihf-g++-4.8" ] || [-x "/usr/bin/arm-linux-gnueabihf-gcc-4.8" ]; then
+        if [ -x "/usr/bin/arm-linux-gnueabihf-g++-4.8" ] && [ -x "/usr/bin/arm-linux-gnueabihf-gcc-4.8" ] && [ -x "/usr/bin/arm-linux-gnueabihf-g++" ] && [ -x "/usr/bin/arm-linux-gnueabihf-gcc" ]; then
             echo -e "${BLUE}Cross compile tool-chain found for armhf${NO_COLOUR}"
         else
-            echo -e "${RED}No cross compile tool-chain found for armhf${NO_COLOUR}"
-            echo -e " $ sudo apt-get update"
+            echo -e "${RED}No cross compile tool-chain found for armhf, install using below commands:${NO_COLOUR}"
+            echo -e "${BLUE} $ sudo apt-get update"
             echo -e " $ sudo apt-get install gcc-4.8-arm-linux-gnueabihf"
             echo -e " $ sudo apt-get install g++-4.8-arm-linux-gnueabihf"
+            echo -e " $ cd /usr/bin"
+            echo -e " $ sudo ln -s arm-linux-gnueabihf-g++-4.8 arm-linux-gnueabihf-g++"
+            echo -e " $ sudo ln -s arm-linux-gnueabihf-gcc-4.8 arm-linux-gnueabihf-gcc${NO_COLOUR}"
+            exit 0
         fi
     fi
 
@@ -77,7 +86,7 @@ install_dependencies() {
     # build, install protobuf library
     FILENAME="protobuf-cpp-3.4.0.tar.gz"
     cd $DEP_ROOT
-    if [ -e"$FILENAME" ]; then
+    if [ -e "$FILENAME" ]; then
         echo "Protobuf tar exist"
     else
         wget https://github.com/google/protobuf/releases/download/v3.4.0/protobuf-cpp-3.4.0.tar.gz
@@ -179,7 +188,7 @@ build_armhf_qemu() {
     else
         echo -e "${RED}No qemu-arm-static found${NO_COLOUR}"
         echo -e "${BLUE} - Install qemu-arm-static and build again${NO_COLOUR}"
-    fi    
+    fi
 }
 
 clean_ezmq() {
@@ -197,10 +206,10 @@ clean_ezmq() {
 usage() {
     echo -e "${BLUE}Usage:${NO_COLOUR} ./build.sh <option>"
     echo -e "${GREEN}Options:${NO_COLOUR}"
-    echo "  --target_arch=[x86|x86_64|arm|arm64|armhf|armhf-qemu]                  :  Choose Target Architecture"
-    echo "  --with_dependencies=(default: false)                                   :  Build ezMQ along with dependencies [zmq and protobuf]"
-    echo "  -c                                                                     :  Clean ezMQ Repository and its dependencies"
-    echo "  -h / --help                                                            :  Display help and exit"
+    echo "  --target_arch=[x86|x86_64|arm|arm64|armhf|armhf-qemu]        :  Choose Target Architecture"
+    echo "  --with_dependencies=(default: false)                         :  Build ezmq along with dependencies [zmq and protobuf]"
+    echo "  -c                                                           :  Clean ezmq Repository and its dependencies"
+    echo "  -h / --help                                                  :  Display help and exit"
     echo -e "${GREEN}Examples: ${NO_COLOUR}"
     echo -e "${BLUE}  build:-${NO_COLOUR}"
     echo "  $ ./build.sh --target_arch=x86_64"
@@ -250,10 +259,10 @@ process_cmd_args() {
                 else
                     echo -e "${RED}Not a supported architecture${NO_COLOUR}"
                     usage; exit 1;
-                fi
-                shift 1
+                    fi
+                    shift 1
                 ;;
-                        -c)
+            -c)
                 clean_ezmq
                 shift 1; exit 0
                 ;;
