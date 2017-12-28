@@ -73,7 +73,7 @@ and serialization / deserialization middlewares along with some added functional
         - ezmq.a</br>
         - protobuf.a</br>
         - zmq.a </br>
-2. Reference ezmq library APIs [doc/doxygen/docs/html/index.html](doc/doxygen/docs/html/index.html)
+2. Reference ezmq library APIs : [doc/doxygen/docs/html/index.html](doc/doxygen/docs/html/index.html)
     
 ## Future Work ##
   - High speed parallel ordered serialization / deserialization based on streaming load.
