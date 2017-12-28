@@ -9,20 +9,19 @@ and serialization / deserialization middlewares along with some added functional
 
 
 ## Prerequisites ##
-  - Remember, you must configure proxies for git and maven accordingly if necessary.
-  - Setting up proxy for git
-```shell
-$ git config --global http.proxy http://proxyuser:proxypwd@proxyserver.com:8080
-```
-- JDK
-  - Version : 1.8
-  - [How to install](https://docs.oracle.com/javase/8/docs/technotes/guides/install/linux_jdk.html)
-- Maven
-  - Version : 3.5.2
-  - [Where to download](https://maven.apache.org/download.cgi)
-  - [How to install](https://maven.apache.org/install.html)
-  - [Setting up proxy for maven](https://maven.apache.org/guides/mini/guide-proxies.html)
+ - You must install basic prerequisites for build 
+   - Install build-essential
+   ```
+   $ sudo apt-get install build-essential
+   ```
 
+- Python
+  - Version : 2.4 to 3.0
+  - [How to install](https://wiki.python.org/moin/BeginnersGuide/Download)
+
+- SCons
+  - Version : 2.3.0 or above
+  - [How to install](http://scons.org/doc/2.3.0/HTML/scons-user/c95.html)
 
 ## How to build ##
 1. Goto: ~/protocol-ezmq-cpp/
@@ -63,7 +62,6 @@ $ git config --global http.proxy http://proxyuser:proxypwd@proxyserver.com:8080
  ```
  Initialize API [result]: 0
  ```
-**Follow the instructions on the screen.**
 
 ## Usage guide for ezmq library (For micro-services)
 
