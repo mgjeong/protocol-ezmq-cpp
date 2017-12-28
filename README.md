@@ -77,9 +77,6 @@ $ git config --global http.proxy http://proxyuser:proxypwd@proxyserver.com:8080
         - protobuf.a</br>
         - zmq.a </br>
     
-2. Refer ezmq sample apps for linking and ezmq library APIs usage. **[~/protocol-ezmq-cpp/samples]**
-
-
 ## Future Work ##
   - High speed parallel ordered serialization / deserialization based on streaming load.
   - Threadpool for multi-subscriber handling.
