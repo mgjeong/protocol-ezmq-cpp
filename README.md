@@ -27,10 +27,10 @@ and serialization / deserialization middlewares along with some added functional
 1. Goto: ~/protocol-ezmq-cpp/
 2. 
  ```
- ./build.sh <options></br>
+ ./build.sh <options>
  ```
 **Notes** </br>
-(a) For getting help about script: **$ ./build.sh --help** </br>
+(a) For getting help about script option: **$ ./build.sh --help** </br>
 (b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library.
 
 ## How to run ##
