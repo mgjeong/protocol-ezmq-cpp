@@ -63,7 +63,7 @@ and serialization / deserialization middlewares along with some added functional
  Initialize API [result]: 0
  ```
 
-## Usage guide for ezmq library (For micro-services)
+## Usage guide for ezmq library (for micro-services)
 
 1. The micro-service which wants to use ezmq APIs has to link following libraries:</br></br>
    **(A) If micro-service wants to link ezmq dynamically following are the libraries it needs to link:**</br>
