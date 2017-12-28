@@ -74,46 +74,77 @@ ezmq::Event getProtoBufEvent()
     return event;
 }
 
-int main()
+void printError()
+{
+    cout<<"\nRe-run the application as shown in below examples: "<<endl;
+    cout<<"\n  (1) For publishing without topic: "<<endl;
+    cout<<"     ./publisher -port 5562"<<endl;
+    cout<<"\n  (2) For publishing with topic: "<<endl;
+    cout<<"      ./publisher -port 5562 -t topic1"<<endl;
+}
+
+int main(int argc, char* argv[])
 {
     int port = 5562;
-    int choice =0;
     std::string topic="";
     EZMQPublisher *publisher  = NULL;
+    EZMQErrorCode result = EZMQ_ERROR;
+
+    // get port from command line arguments
+    if(argc != 3 && argc != 5)
+    {
+        printError();
+        return -1;
+    }
+    int n = 1;
+    while (n < argc)
+    {
+        if (0 == strcmp(argv[n],"-port"))
+        {
+            port = atoi(argv[n + 1]);
+            cout<<"Given Port: " << port <<endl;
+            n = n + 2;
+        }
+        else if (0 == strcmp(argv[n],"-t"))
+        {
+            topic = argv[n + 1];
+            cout<<"Topic is : " << topic<<endl;
+            n = n + 2;
+        }
+        else
+        {
+            printError();
+        }
+    }
 
      //Initialize EZMQ stack
     EZMQAPI *obj = EZMQAPI::getInstance();
-    std::cout<<"Initialize API [result]: "<<obj->initialize()<<endl;
-
-    cout<<"Enter 1 for General Event testing"<<endl;
-    cout<<"Enter 2 for Topic Based delivery"<<endl;
-    cin>>choice;
+    result = obj->initialize();
+    std::cout<<"\nInitialize API [result]: "<<result<<endl;
+    if(result != EZMQ_OK)
+    {
+        return -1;
+    }
 
     //Create EZMQ Publisher
-    switch (choice)
-    {
-        case 1:
-            publisher = new EZMQPublisher(port, startCB,  stopCB,  errorCB);
-            break;
-        case 2:
-            publisher = new EZMQPublisher(port, startCB,  stopCB,  errorCB);
-            cout<<"Enter the topic: ";
-            cin>>topic;
-            cout<<"Topic is: "<<topic<<endl;
-            break;
-        default:
-            cout<<"Invalid choice..[Re-run application]"<<endl;
-            return -1;
-    }
+    publisher = new EZMQPublisher(port, startCB,  stopCB,  errorCB);
 
     std::cout<<"Publisher created !!"<<endl;
 
     //Start EZMQ Publisher
-    EZMQErrorCode result = publisher->start();
+    result = publisher->start();
     cout<<"Publisher start [Result] : "<<result<<endl;
+    if(result != EZMQ_OK)
+    {
+        return -1;
+    }
 
     // get Proto EZMQ event
     ezmq::Event event = getProtoBufEvent();
+
+    // This delay is added to prevent ZeroMQ first packet drop during
+    // initial connection of publisher and subscriber.
+    sleep(1);
 
     cout<<"--------- Will Publish 15 events at interval of 2 seconds --------- "<<endl;
     int i = 1;

@@ -9,7 +9,7 @@ and serialization / deserialization middlewares along with some added functional
 
 
 ## Prerequisites ##
- - You must install basic prerequisites for build 
+ - You must install basic prerequisites for build
    - Install build-essential
    ```
    $ sudo apt-get install build-essential
@@ -41,26 +41,22 @@ and serialization / deserialization middlewares along with some added functional
 ### Subscriber sample ###
 1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
 2. export LD_LIBRARY_PATH=../
-3. Run the script:
-   ``` shall
-   ./subscriber
-   ```
-4. On successful running it will show following logs:
-   ``` 
-   Initialize API [result]: 0
-   ```
+3. Run the sample:
+    ```
+     ./subscriber
+    ```
+    - **It will give list of options for running the sample.** </br>
+    - **Update ip, port and topic as per requirement.** </br>
 
 ### Publisher sample ###
 1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
 2. export LD_LIBRARY_PATH=../
-3. Run the script:
-   ``` shall
+3. Run the sample:
+   ```
    ./publisher
    ```
-4. On successful running it will show following logs:
-   ```
-   Initialize API [result]: 0
-   ```
+   - **It will give list of options for running the sample.** </br>
+   - **Update port and topic as per requirement.** </br>
 
 ## Usage guide for ezmq library (for microservices)
 
@@ -68,13 +64,13 @@ and serialization / deserialization middlewares along with some added functional
    **(A) If microservice wants to link ezmq dynamically following are the libraries it needs to link:**</br>
         - ezmq.so</br>
         - protobuf.so</br>
-        - zmq.so </br> 
+        - zmq.so </br>
    **(B) If microservice wants to link ezmq statically following are the libraries it needs to link:**</br>
         - ezmq.a</br>
         - protobuf.a</br>
         - zmq.a </br>
 2. Reference ezmq library APIs : [doc/doxygen/docs/html/index.html](doc/doxygen/docs/html/index.html)
-    
+
 ## Future Work ##
   - High speed parallel ordered serialization / deserialization based on streaming load.
   - Threadpool for multi-subscriber handling.
