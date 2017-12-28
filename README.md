@@ -25,10 +25,10 @@ and serialization / deserialization middlewares along with some added functional
 
 ## How to build ##
 1. Goto: ~/protocol-ezmq-cpp/
-2. 
- ```
- ./build.sh <options>
- ```
+2. Run the script:
+   ```
+   ./build.sh <options>
+   ```
 **Notes** </br>
 (a) For getting help about script option: **$ ./build.sh --help** </br>
 (b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library.
@@ -41,27 +41,26 @@ and serialization / deserialization middlewares along with some added functional
 ### Subscriber sample ###
 1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
 2. export LD_LIBRARY_PATH=../
-3. 
- ``` shall
- ./subscriber
- ```
+3. Run the script:
+   ``` shall
+   ./subscriber
+   ```
 4. On successful running it will show following logs:
- ``` 
- Initialize API [result]: 0
- ```
-**Follow the instructions on the screen.**
+   ``` 
+   Initialize API [result]: 0
+   ```
 
 ### Publisher sample ###
 1. Goto: ~/protocol-ezmq-cpp/out/linux/{ARCH}/{MODE}/samples/
 2. export LD_LIBRARY_PATH=../
-3. 
- ``` shall
- ./publisher
- ```
+3. Run the script:
+   ``` shall
+   ./publisher
+   ```
 4. On successful running it will show following logs:
- ```
- Initialize API [result]: 0
- ```
+   ```
+   Initialize API [result]: 0
+   ```
 
 ## Usage guide for ezmq library (for micro-services)
 
@@ -74,6 +73,7 @@ and serialization / deserialization middlewares along with some added functional
         - ezmq.a</br>
         - protobuf.a</br>
         - zmq.a </br>
+2. Reference ezmq library APIs. [here](doc/doxygen/docs/html/index.html)
     
 ## Future Work ##
   - High speed parallel ordered serialization / deserialization based on streaming load.
