@@ -32,6 +32,7 @@ using namespace ezmq;
 
 EZMQSubscriber *subscriber = nullptr ;
 
+bool isStarted;
 std::mutex m_mutex;
 std::condition_variable m_cv;
 
@@ -67,62 +68,98 @@ void subTopicCB(std::string topic, ezmq::Event event)
 
 void sigint(int /*signal*/)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
-    m_cv.notify_all();
+    if (isStarted)
+    {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_cv.notify_all();
+    }
+    else
+    {
+        exit (EXIT_FAILURE);
+    }
 }
 
-int main()
+void printError()
 {
-    std::string ip = "localhost";
+    cout<<"\nRe-run the application as shown in below examples: "<<endl;
+    cout<<"\n  (1) For subscribing without topic: "<<endl;
+    cout<<"     ./subscriber -ip 107.108.81.116 -port 5562"<<endl;
+    cout<<"     ./subscriber -ip localhost -port 5562"<<endl;
+    cout<<"\n  (2) For subscribing with topic: "<<endl;
+    cout<<"     ./subscriber -ip 107.108.81.116 -port 5562 -t topic1"<<endl;
+    cout<<"     ./subscriber -ip localhost -port 5562 -t topic1"<<endl;
+}
+
+int main(int argc, char* argv[])
+{
+    std::string ip;
     int port = 5562;
-    int choice =0;
     std::string topic="";
+    EZMQErrorCode result = EZMQ_ERROR;
+    isStarted = false;
+
+    // get ip and port from command line arguments
+    if(argc != 5 && argc != 7)
+    {
+        printError();
+        return -1;
+    }
+    int n = 1;
+    while (n < argc)
+    {
+        if (0 == strcmp(argv[n],"-ip"))
+        {
+            ip = argv[n + 1];
+            cout<<"Given Ip: " <<ip<<endl;
+            n = n + 2;
+        }
+        else if (0 == strcmp(argv[n],"-port"))
+        {
+            port = atoi(argv[n + 1]);
+            cout<<"Given Port: " << port <<endl;
+            n = n + 2;
+        }
+        else if (0 == strcmp(argv[n],"-t"))
+        {
+            topic = argv[n + 1];
+            cout<<"Topic is : " << topic<<endl;
+            n = n + 2;
+        }
+        else
+        {
+            printError();
+        }
+    }
 
     //this handler is added to check stop API
     signal(SIGINT, sigint);
 
     //Initialize EZMQ stack
     EZMQAPI *obj = EZMQAPI::getInstance();
-    std::cout<<"Initialize API [result]: "<<obj->initialize()<<endl;
-
-    cout<<"Host: ";
-    cin>>ip;
-    cout<<"Port: ";
-    cin>>port;
-
-    cout<<"Enter 1 for General Event testing"<<endl;
-    cout<<"Enter 2 for Topic Based delivery"<<endl;
-    cout<<"ctrl+c to terminate the program"<<endl<<endl;
-    cin>>choice;
-
-    //Create EZMQ Subscriber
-    switch (choice)
+    result = obj->initialize();
+    std::cout<<"\nInitialize API [result]: "<<result<<endl;
+    if(result != EZMQ_OK)
     {
-        case 1:
-            subscriber =  new EZMQSubscriber(ip, port,  subCB,  subTopicCB);
-            break;
-        case 2:
-            subscriber =  new EZMQSubscriber(ip, port,  subCB,  subTopicCB);
-            cout<<"Enter the topic: ";
-            cin>>topic;
-            cout<<"Topic is: "<<topic<<endl;
-            break;
-        default:
-            cout<<"Invalid choice..[Re-run application]"<<endl;
-            return -1;
+        return -1;
     }
 
+    //Create EZMQ Subscriber
+    subscriber =  new EZMQSubscriber(ip, port,  subCB,  subTopicCB);
     if(nullptr ==subscriber )
     {
         cout<<"Subscriber is null "<<endl;
-        return 0;
+        return -1;
     }
     std::cout<<"Subscriber created !!"<<endl;
 
     //Start EZMQ Subscriber
-    EZMQErrorCode result = subscriber->start();
+    result = subscriber->start();
     cout<<"Subscriber start [Result] : "<<result<<endl;
-
+    if(result != EZMQ_OK)
+    {
+        return -1;
+    }
+    isStarted = true;
     //subscribe for events
     if (topic.empty())
     {
