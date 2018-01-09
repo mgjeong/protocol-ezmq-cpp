@@ -1,6 +1,6 @@
 # ezmq library (cpp)
 
-protocol-ezmq-cpp is a library (jar) which provides a standard messaging interface over various data streaming
+protocol-ezmq-cpp is a library which provides a standard messaging interface over various data streaming
 and serialization / deserialization middlewares along with some added functionalities.</br>
   - Currently supports streaming using 0mq and serialization / deserialization using protobuf.
   - Publisher -> Multiple Subscribers broadcasting.
