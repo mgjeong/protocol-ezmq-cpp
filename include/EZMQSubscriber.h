@@ -169,7 +169,7 @@ namespace ezmq
             *
             * @return IP address as String.
             */
-            std::string getIp();
+            std::string& getIp();
 
             /**
             * Get the port of the subscriber.

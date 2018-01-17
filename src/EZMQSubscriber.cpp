@@ -381,7 +381,7 @@ namespace ezmq
         return EZMQ_OK;
     }
 
-        std::string EZMQSubscriber::getIp()
+        std::string& EZMQSubscriber::getIp()
         {
             return mIp;
         }
