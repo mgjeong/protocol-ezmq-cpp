@@ -27,3 +27,4 @@ build_dir = env.get('BUILD_DIR')
 
 # Build EZMQ SDK
 SConscript(build_dir + 'SConscript')
+

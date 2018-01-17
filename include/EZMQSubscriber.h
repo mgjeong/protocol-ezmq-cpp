@@ -24,7 +24,9 @@
 #ifndef EZMQ_SUBSCRIBER_H
 #define EZMQ_SUBSCRIBER_H
 
-#include "EZMQErrorCodes.h"
+#include <list>
+#include <thread>
+#include <mutex>
 
 //Protobuf header file
 #include "Event.pb.h"
@@ -32,9 +34,7 @@
 //ZeroMQ header file
 #include "zmq.hpp"
 
-#include <list>
-#include <thread>
-#include <mutex>
+#include "EZMQErrorCodes.h"
 
 namespace ezmq
 {
@@ -221,3 +221,4 @@ namespace ezmq
     };
 }
 #endif //EZMQ_SUBSCRIBER_H
+

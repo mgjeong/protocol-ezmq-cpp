@@ -15,14 +15,11 @@
  *
  *******************************************************************************/
 
+#include <regex>
+
 #include "EZMQAPI.h"
 #include "EZMQSubscriber.h"
 #include "EZMQLogger.h"
-
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <regex>
 
 #define TCP_PREFIX "tcp://"
 #define INPROC_PREFIX "inproc://shutdown-"
@@ -41,7 +38,7 @@ namespace ezmq
         mContext = EZMQAPI::getInstance()->getContext();
         if(nullptr == mContext)
         {
-            EZMQ_LOG(ERROR, TAG, "Context is null");
+            EZMQ_LOG(ERROR, TAG, "[Constructor] Context is null");
         }
         mShutdownServer = nullptr;
         mShutdownClient = nullptr;
@@ -52,7 +49,7 @@ namespace ezmq
     EZMQSubscriber::EZMQSubscriber(std::string serviceName, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback):
         mServiceName(serviceName), mSubCallback(subCallback), mSubTopicCallback(topicCallback)
     {
-        //TOOD
+        //TBD
     }
 
     EZMQSubscriber::~EZMQSubscriber()
@@ -71,7 +68,7 @@ namespace ezmq
         {
             if (nullptr == mSubscriber || mPollItems.empty())
             {
-                EZMQ_LOG(ERROR, TAG, "subscriber or poller is null");
+                EZMQ_LOG(ERROR, TAG, "[receive] subscriber or poller is null");
                 return;
             }
 
@@ -93,9 +90,9 @@ namespace ezmq
                             mSubscriber->recv(&zMsg);
                         }
                     }
-                    catch (std::exception e)
+                    catch (std::exception &e)
                     {
-                        EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
+                        EZMQ_LOG_V(ERROR, TAG, "[receive] caught exception: %s", e.what());
                         isReceiverStarted = false;
                         break;
                     }
@@ -117,7 +114,7 @@ namespace ezmq
             }
             else if(mPollItems[0].revents & ZMQ_POLLIN)
             {
-                EZMQ_LOG(DEBUG, TAG, "Received the shut down request");
+                EZMQ_LOG(DEBUG, TAG, "[receive] Shut down request");
                 break;
             }
         }
@@ -126,11 +123,7 @@ namespace ezmq
     EZMQErrorCode EZMQSubscriber::start()
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        if (nullptr == mContext)
-        {
-            EZMQ_LOG(ERROR, TAG, "Context is null");
-            return EZMQ_ERROR;
-        }
+        VERIFY_NON_NULL(mContext)
         try
         {
             std::lock_guard<std::recursive_mutex> lock(mSubLock);
@@ -139,6 +132,7 @@ namespace ezmq
             if (!mShutdownServer)
             {
                 mShutdownServer =  new zmq::socket_t(*mContext, ZMQ_PAIR);
+                ALLOC_ASSERT(mShutdownServer)
                 mShutdownServer->bind(address);
             }
 
@@ -146,6 +140,7 @@ namespace ezmq
             if (!mShutdownClient)
             {
                 mShutdownClient = new zmq::socket_t(*mContext, ZMQ_PAIR);
+                ALLOC_ASSERT(mShutdownClient)
                 mShutdownClient->connect(address);
                 zmq_pollitem_t shutDownPoller;
                 shutDownPoller.socket = *mShutdownClient;
@@ -157,6 +152,7 @@ namespace ezmq
             if(!mSubscriber)
             {
                 mSubscriber = new zmq::socket_t(*mContext, ZMQ_SUB);
+                ALLOC_ASSERT(mSubscriber)
                 mSubscriber->connect(getSocketAddress());
                 EZMQ_LOG_V(DEBUG, TAG, "Starting subscriber [Address]: %s", getSocketAddress().c_str());
 
@@ -167,9 +163,9 @@ namespace ezmq
                 mPollItems.push_back(subscriberPoller);
             }
         }
-        catch (std::exception e)
+        catch (std::exception &e)
         {
-            EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
+            EZMQ_LOG_V(ERROR, TAG, "[start] caught exception: %s", e.what());
             stop();
             return EZMQ_ERROR;
         }
@@ -206,27 +202,16 @@ namespace ezmq
     EZMQErrorCode EZMQSubscriber::subscribeInternal(std::string topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        if(!mSubscriber)
-        {
-            EZMQ_LOG(ERROR, TAG, "subscriber is null");
-            return EZMQ_ERROR;
-        }
-
+        VERIFY_NON_NULL(mContext)
         std::lock_guard<std::recursive_mutex> lock(mSubLock);
         try
         {
-            if(mSubscriber)
-            {
-                mSubscriber->setsockopt(ZMQ_SUBSCRIBE, topic.c_str(), topic.size());
-            }
-            else
-            {
-                return EZMQ_ERROR;
-            }
+            VERIFY_NON_NULL(mSubscriber)
+            mSubscriber->setsockopt(ZMQ_SUBSCRIBE, topic.c_str(), topic.size());
         }
-        catch (std::exception e)
+        catch (std::exception &e)
         {
-            EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
+            EZMQ_LOG_V(ERROR, TAG, "[Subscribe] caught exception: %s", e.what());
             return EZMQ_ERROR;
         }
         EZMQ_LOG(DEBUG, TAG, "subscribed for events");
@@ -276,23 +261,12 @@ namespace ezmq
     EZMQErrorCode EZMQSubscriber::unSubscribeInternal(std::string topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        if(!mSubscriber)
-        {
-            EZMQ_LOG(ERROR, TAG, "subscriber is null");
-            return EZMQ_ERROR;
-        }
-
+        VERIFY_NON_NULL(mContext)
         std::lock_guard<std::recursive_mutex> lock(mSubLock);
         try
         {
-            if(mSubscriber)
-            {
-                mSubscriber->setsockopt(ZMQ_UNSUBSCRIBE ,  topic.c_str(), topic.size());
-            }
-            else
-            {
-                return EZMQ_ERROR;
-            }
+            VERIFY_NON_NULL(mSubscriber)
+            mSubscriber->setsockopt(ZMQ_UNSUBSCRIBE ,  topic.c_str(), topic.size());
         }
         catch (std::exception e)
         {
@@ -326,6 +300,7 @@ namespace ezmq
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
         std::lock_guard<std::recursive_mutex> lock(mSubLock);
+        VERIFY_NON_NULL(mContext)
         try
         {
             // Send a shutdown message to receiver thread
@@ -366,7 +341,7 @@ namespace ezmq
                 mSubscriber = nullptr;
             }
         }
-        catch(std::exception e)
+        catch(std::exception &e)
         {
             EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
         }
@@ -431,3 +406,4 @@ namespace ezmq
         return topic;
     }
 }
+

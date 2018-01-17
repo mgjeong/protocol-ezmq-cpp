@@ -15,10 +15,8 @@
  *
  *******************************************************************************/
 
-#include "UnitTestHelper.h"
 #include "EZMQAPI.h"
-
-#include <iostream>
+#include "UnitTestHelper.h"
 
 using namespace ezmq;
 

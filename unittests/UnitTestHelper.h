@@ -18,10 +18,10 @@
 #ifndef UNITTESTHELPER_H
 #define UNITTESTHELPER_H
 
-#include "Event.pb.h"
-
 #include <gtest/gtest.h>
 #include <HippoMocks/hippomocks.h>
+
+#include "Event.pb.h"
 
 class TestWithMock: public testing::Test
 {
@@ -78,3 +78,4 @@ ezmq::Event getProtoBufEvent()
 }
 
 #endif // UNITTESTHELPER_H
+

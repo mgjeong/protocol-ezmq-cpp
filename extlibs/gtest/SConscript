@@ -116,3 +116,4 @@ if target_os in ['windows']:
     gtest_env.AppendUnique(LINKFLAGS=['/subsystem:CONSOLE'])
 
 Return('gtest_env')
+

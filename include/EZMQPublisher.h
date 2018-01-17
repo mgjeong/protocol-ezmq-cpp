@@ -24,7 +24,8 @@
 #ifndef EZMQ_PUBLISHER_H
 #define EZMQ_PUBLISHER_H
 
-#include "EZMQErrorCodes.h"
+#include <list>
+#include <mutex>
 
 //Protobuf header file
 #include "Event.pb.h"
@@ -32,8 +33,7 @@
 //ZeroMQ header file
 #include "zmq.hpp"
 
-#include <list>
-#include <mutex>
+#include "EZMQErrorCodes.h"
 
 namespace ezmq
 {
@@ -150,3 +150,4 @@ namespace ezmq
     };
 }
 #endif //EZMQ_PUBLISHER_H
+

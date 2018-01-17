@@ -49,3 +49,4 @@ namespace ezmq
     } EZMQStatusCode;
 }
 #endif  // EZMQ_ERROR_CODES_H_
+

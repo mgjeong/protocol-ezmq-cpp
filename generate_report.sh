@@ -246,3 +246,4 @@ generate_report_EZMQ()
 
 process_cmd_args "$@"
 generate_report_EZMQ
+

@@ -15,12 +15,10 @@
  *
  *******************************************************************************/
 
-#include "UnitTestHelper.h"
 #include "EZMQAPI.h"
 #include "EZMQLogger.h"
 #include "EZMQPublisher.h"
-
-#include <iostream>
+#include "UnitTestHelper.h"
 
 #define TAG "EZMQ_PUB_TEST"
 static int mPort = 5562;
@@ -51,7 +49,8 @@ class EZMQPublisherTest: public TestWithMock
             apiInstance = EZMQAPI::getInstance();
             ASSERT_NE(nullptr, apiInstance);
             EXPECT_EQ(EZMQ_OK, apiInstance->initialize());
-            mPublisher = new EZMQPublisher(mPort, startCB, stopCB, errorCB);
+            mPublisher = new(std::nothrow) EZMQPublisher(mPort, startCB, stopCB, errorCB);
+            ALLOC_ASSERT(mPublisher)
             TestWithMock::SetUp();
         }
 
@@ -69,7 +68,8 @@ class EZMQPublisherTest: public TestWithMock
 
 TEST_F(EZMQPublisherTest, constructor)
 {
-    EZMQPublisher *instance = new EZMQPublisher(mPort, startCB, stopCB, errorCB);
+    EZMQPublisher *instance = new(std::nothrow) EZMQPublisher(mPort, startCB, stopCB, errorCB);
+    ALLOC_ASSERT(instance)
     ASSERT_NE(nullptr, instance);
 }
 
@@ -171,3 +171,4 @@ TEST_F(EZMQPublisherTest, getPort)
 {
     EXPECT_EQ(mPort, mPublisher->getPort());
 }
+

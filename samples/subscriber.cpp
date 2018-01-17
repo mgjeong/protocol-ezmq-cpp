@@ -15,17 +15,16 @@
  *
  *******************************************************************************/
 
+#include <iostream>
+#include <unistd.h>
+#include <signal.h>
+#include <condition_variable>
+#include <memory>
+
 #include "EZMQAPI.h"
 #include "EZMQSubscriber.h"
 #include "EZMQErrorCodes.h"
 #include "Event.pb.h"
-
-#include <iostream>
-#include <unistd.h>
-#include <signal.h>
-
-#include <condition_variable>
-#include <memory>
 
 using namespace std;
 using namespace ezmq;
@@ -144,11 +143,11 @@ int main(int argc, char* argv[])
     }
 
     //Create EZMQ Subscriber
-    subscriber =  new EZMQSubscriber(ip, port,  subCB,  subTopicCB);
-    if(nullptr ==subscriber )
+    subscriber =  new(std::nothrow) EZMQSubscriber(ip, port,  subCB,  subTopicCB);
+    if(NULL == subscriber)
     {
-        cout<<"Subscriber is null "<<endl;
-        return -1;
+        std::cout<<"subscriber creation failed !!"<<endl;
+        abort();
     }
     std::cout<<"Subscriber created !!"<<endl;
 
@@ -188,3 +187,4 @@ int main(int argc, char* argv[])
     }
 return 0;
 }
+

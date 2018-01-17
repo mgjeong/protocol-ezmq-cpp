@@ -306,3 +306,4 @@ process_cmd_args() {
 }
 
 process_cmd_args "$@"
+
