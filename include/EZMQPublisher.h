@@ -83,7 +83,7 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             */
-            EZMQErrorCode publish(ezmq::Event event);
+            EZMQErrorCode publish(const EZMQMessage &event);
 
             /**
             * Publish events on a specific topic on socket for subscribers.
@@ -97,7 +97,7 @@ namespace ezmq
             *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
             *       numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode publish(std::string topic, ezmq::Event event);
+            EZMQErrorCode publish(std::string topic, const EZMQMessage &event);
 
             /**
             * Publish an events on list of topics on socket for subscribers. On any of
@@ -113,7 +113,7 @@ namespace ezmq
             *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
             *       numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode publish( std::list<std::string> topics, ezmq::Event event);
+            EZMQErrorCode publish( std::list<std::string> topics, const EZMQMessage &event);
 
             /**
             * Stops PUB instance.
