@@ -30,6 +30,27 @@
 #define UNUSED(x) (void)(x)
 #endif
 
+#define VERIFY_NON_NULL(PARAM) \
+if (!PARAM) \
+{ \
+    EZMQ_LOG_V(ERROR, TAG, "[%s:%d] NULL parameter", __func__, __LINE__); \
+    return EZMQ_ERROR; \
+}
+
+#define VERIFY_NON_NULL_TOPIC(PARAM) \
+if (!PARAM) \
+{ \
+    EZMQ_LOG_V(ERROR, TAG, "[%s:%d] Invalid Topic", __func__, __LINE__); \
+    return EZMQ_INVALID_TOPIC; \
+}
+
+#define ALLOC_ASSERT(PARAM) \
+if (!PARAM) \
+{ \
+    EZMQ_LOG_V(ERROR, TAG, "[%s:%d] Memory allocation failed", __func__, __LINE__); \
+    abort(); \
+} \
+
 // Max buffer size
 #define MAX_LOG_V_BUFFER_SIZE (256)
 
@@ -157,3 +178,4 @@ void EZMQLogBuffer(int level, const char* tag, const uint8_t* buffer, size_t buf
 }
 
 #endif // EZMQ_LOGGER_H_
+

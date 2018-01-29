@@ -71,3 +71,4 @@ if target_os == 'linux':
 if target_os == 'linux':
     if target_arch in ['x86', 'x86_64']:
         SConscript('unittests/SConscript')
+

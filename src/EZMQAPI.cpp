@@ -18,8 +18,6 @@
 #include "EZMQAPI.h"
 #include "EZMQLogger.h"
 
-#include <iostream>
-
 #define TAG "EZMQAPI"
 
 namespace ezmq
@@ -37,12 +35,7 @@ namespace ezmq
         {
             mContext = std::make_shared<zmq::context_t>(1);
         }
-
-        if(nullptr == mContext)
-        {
-            EZMQ_LOG(ERROR, TAG, "context is null");
-            return EZMQ_ERROR;
-        }
+        VERIFY_NON_NULL(mContext)
         mStatus = EZMQ_Initialized;
         return EZMQ_OK;
     }
@@ -65,3 +58,4 @@ namespace ezmq
         return mContext;
     }
 }
+

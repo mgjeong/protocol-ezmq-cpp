@@ -30,3 +30,4 @@ if target_arch in ['x86', 'x86_64']:
 # hippmocks build/fetch
 if target_arch in ['x86', 'x86_64']:
          SConscript(os.path.join(src_dir, 'extlibs', 'hippomocks', 'SConscript'))
+

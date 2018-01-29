@@ -45,3 +45,4 @@ if not env.get('WITH_ENV'):
         env.AppendUnique(CPPFLAGS=['-march=armv8-a'])
     elif target_arch in ['armhf']:
         env.AppendUnique(CPPFLAGS=['-marm'])
+

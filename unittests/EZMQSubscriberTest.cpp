@@ -15,12 +15,10 @@
  *
  *******************************************************************************/
 
-#include "UnitTestHelper.h"
 #include "EZMQAPI.h"
 #include "EZMQLogger.h"
 #include "EZMQSubscriber.h"
-
-#include <iostream>
+#include "UnitTestHelper.h"
 
 #define TAG "EZMQ_PUB_TEST"
 
@@ -49,7 +47,8 @@ protected:
         apiInstance = EZMQAPI::getInstance();
         ASSERT_NE(nullptr, apiInstance);
         EXPECT_EQ(EZMQ_OK, apiInstance->initialize());
-        mSubscriber = new EZMQSubscriber(mIp, mPort,  subCB,  subTopicCB);
+        mSubscriber = new(std::nothrow) EZMQSubscriber(mIp, mPort,  subCB,  subTopicCB);
+        ALLOC_ASSERT(mSubscriber)
         TestWithMock::SetUp();
     }
 
@@ -193,3 +192,4 @@ TEST_F(EZMQSubscriberTest, getPort)
 {
     EXPECT_EQ(mPort, mSubscriber->getPort());
 }
+

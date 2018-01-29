@@ -115,3 +115,4 @@ env.AddMethod(__configure, "Configure")
 env.AddMethod(__download, "Download")
 env.AddMethod(__install_head_file, "InstallHeadFile")
 env.AddMethod(__install_lib, "InstallLib")
+

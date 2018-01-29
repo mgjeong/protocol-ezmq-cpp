@@ -15,16 +15,12 @@
  *
  *******************************************************************************/
 
+#include <regex>
+
 #include "EZMQAPI.h"
 #include "EZMQPublisher.h"
 #include "EZMQLogger.h"
 #include "zmq_addon.hpp"
-
-#include <iostream>
-#include <string>
-#include <regex>
-
-#include <unistd.h>
 
 #define PUB_TCP_PREFIX "tcp://*:"
 #define TOPIC_PATTERN "[a-zA-Z0-9-_./]+"
@@ -60,24 +56,20 @@ namespace ezmq
     EZMQErrorCode EZMQPublisher::start()
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        if(nullptr == mContext)
-        {
-            EZMQ_LOG(ERROR, TAG, "Context is null");
-            return EZMQ_ERROR;
-        }
-
         try
         {
             std::lock_guard<std::recursive_mutex> lock(mPubLock);
             if(nullptr == mPublisher)
             {
-                mPublisher = new zmq::socket_t(*mContext, ZMQ_PUB);
+                VERIFY_NON_NULL(mContext)
+                mPublisher = new(std::nothrow) zmq::socket_t(*mContext, ZMQ_PUB);
+                ALLOC_ASSERT(mPublisher)
                 mPublisher->bind(getSocketAddress());
             }
         }
-        catch (std::exception e)
+        catch (std::exception &e)
         {
-            EZMQ_LOG(ERROR, TAG, "caught exception");
+            EZMQ_LOG_V(ERROR, TAG, "[start] caught exception %s", e.what());
             delete mPublisher;
             mPublisher = nullptr;
             return EZMQ_ERROR;
@@ -89,12 +81,6 @@ namespace ezmq
     EZMQErrorCode EZMQPublisher::publish(ezmq::Event event)
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        if(!mPublisher)
-        {
-            EZMQ_LOG(ERROR, TAG, "publisher is null");
-            return EZMQ_ERROR;
-        }
-
         std::string eventStr;
         bool result  = event.SerializeToString(&eventStr);
         if (false == result)
@@ -108,18 +94,12 @@ namespace ezmq
         std::lock_guard<std::recursive_mutex> lock(mPubLock);
         try
         {
-            if (mPublisher)
-            {
-                result = mPublisher->send(zmqMsg);
-            }
-            else
-            {
-                return EZMQ_ERROR;
-            }
+            VERIFY_NON_NULL(mPublisher)
+            result = mPublisher->send(zmqMsg);
         }
-        catch(std::exception e)
+        catch(std::exception &e)
         {
-            EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
+            EZMQ_LOG_V(ERROR, TAG, "[publish] caught exception %s", e.what());
             return EZMQ_ERROR;
         }
         if (false == result)
@@ -134,12 +114,6 @@ namespace ezmq
     EZMQErrorCode EZMQPublisher::publish( std::string topic, ezmq::Event event)
     {
         EZMQ_SCOPE_LOGGER(TAG, "publish [Topic]");
-        if(!mPublisher)
-        {
-            EZMQ_LOG(ERROR, TAG, "publisher is null");
-            return EZMQ_ERROR;
-        }
-
         //Validate Topic
         topic = sanitizeTopic(topic);
         if(topic.empty())
@@ -163,21 +137,14 @@ namespace ezmq
         std::lock_guard<std::recursive_mutex> lock(mPubLock);
         try
         {
-            if (mPublisher)
-            {
-                result = zmqMultipart.send(*mPublisher);
-            }
-            else
-            {
-                return EZMQ_ERROR;
-            }
+            VERIFY_NON_NULL(mPublisher)
+            result = zmqMultipart.send(*mPublisher);
         }
-        catch(std::exception e)
+        catch(std::exception &e)
         {
             EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
             return EZMQ_ERROR;
         }
-
         if (false == result)
         {
             EZMQ_LOG_V(ERROR, TAG, "Publish failed");
@@ -209,23 +176,11 @@ namespace ezmq
     EZMQErrorCode EZMQPublisher::stop()
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        if (nullptr == mPublisher)
-        {
-            EZMQ_LOG(ERROR, TAG, "publisher is null");
-            return EZMQ_ERROR;
-        }
-
         EZMQErrorCode result = EZMQ_ERROR;
         std::lock_guard<std::recursive_mutex> lock(mPubLock);
-        if(mPublisher)
-        {
-            // Sync close
-            result = syncClose();
-        }
-        else
-        {
-            return result;
-        }
+
+        // Sync close
+        result = syncClose();
         delete mPublisher;
         mPublisher = nullptr;
         EZMQ_LOG(DEBUG, TAG, "publisher stopped");
@@ -276,12 +231,14 @@ namespace ezmq
     EZMQErrorCode EZMQPublisher::syncClose()
     {
         zmq::monitor_t monitor;
+        VERIFY_NON_NULL(mPublisher)
         monitor.init(*mPublisher, getMonitorAddress(), ZMQ_EVENT_CLOSED);
         try
         {
+            VERIFY_NON_NULL(mPublisher)
             mPublisher->close();
         }
-        catch(std::exception e)
+        catch(std::exception &e)
         {
             EZMQ_LOG_V(ERROR, TAG, "caught exception while closing publisher: %s", e.what());
             return EZMQ_ERROR;
@@ -298,3 +255,4 @@ namespace ezmq
         return EZMQ_OK;
     }
 }
+

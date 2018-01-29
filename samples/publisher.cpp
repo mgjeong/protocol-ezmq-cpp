@@ -15,13 +15,12 @@
  *
  *******************************************************************************/
 
+#include <iostream>
+#include <unistd.h>
 #include "EZMQAPI.h"
 #include "EZMQPublisher.h"
 #include "EZMQErrorCodes.h"
 #include "Event.pb.h"
-
-#include <iostream>
-#include <unistd.h>
 
 using namespace std;
 using namespace ezmq;
@@ -127,8 +126,12 @@ int main(int argc, char* argv[])
     }
 
     //Create EZMQ Publisher
-    publisher = new EZMQPublisher(port, startCB,  stopCB,  errorCB);
-
+    publisher = new(std::nothrow) EZMQPublisher(port, startCB,  stopCB,  errorCB);
+    if(NULL == publisher)
+    {
+        std::cout<<"Publisher creation failed !!"<<endl;
+        abort();
+    }
     std::cout<<"Publisher created !!"<<endl;
 
     //Start EZMQ Publisher
@@ -168,3 +171,4 @@ int main(int argc, char* argv[])
     }
 return 0;
 }
+

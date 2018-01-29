@@ -19,14 +19,14 @@
 #define _POSIX_C_SOURCE 200809L
 #endif
 
-#include "EZMQLogger.h"
-
 #include <time.h>
 #include <sys/time.h>
 #ifdef HAVE_WINDOWS_H
 #include <windows.h>
 #endif
 #include "string.h"
+
+#include "EZMQLogger.h"
 
 // log level
 static int g_level = DEBUG;
