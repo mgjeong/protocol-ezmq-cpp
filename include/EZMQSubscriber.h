@@ -41,12 +41,12 @@ namespace ezmq
     /**
     * Callbacks to get all the subscribed events.
     */
-    typedef std::function<void(const EZMQMessage &event)> EZMQSubCB;
+    typedef std::function<void(ezmq::Event event)> EZMQSubCB;
 
     /**
     * Callbacks to get all the subscribed events for a specific topic.
     */
-    typedef std::function<void(std::string topic, const EZMQMessage &event)> EZMQSubTopicCB;
+    typedef std::function<void(std::string topic, ezmq::Event event)> EZMQSubTopicCB;
 
     /**
     * @class  EZMQSubscriber
