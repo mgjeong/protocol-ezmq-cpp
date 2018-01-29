@@ -33,8 +33,7 @@ namespace ezmq
     {
         EZMQ_OK = 0,
         EZMQ_ERROR,
-        EZMQ_INVALID_TOPIC,
-        EZMQ_INVALID_CONTENT_TYPE
+        EZMQ_INVALID_TOPIC
     } EZMQErrorCode;
 
     /**
