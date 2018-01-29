@@ -50,7 +50,7 @@ install_dependencies() {
             echo -e " $ sudo apt-get install g++-4.8-aarch64-linux-gnu"
             echo -e " $ cd /usr/bin"
             echo -e " $ sudo ln -s aarch64-linux-gnu-g++-4.8 aarch64-linux-gnu-g++"
-            echo -e " $ sudo ln -s aarch64-linux-gnu-gcc-4.8 arch64-linux-gnu-gcc${NO_COLOUR}"
+            echo -e " $ sudo ln -s aarch64-linux-gnu-gcc-4.8 aarch64-linux-gnu-gcc${NO_COLOUR}"
             exit 0
         fi
     elif [ "armhf" == ${EZMQ_TARGET_ARCH} ]; then
