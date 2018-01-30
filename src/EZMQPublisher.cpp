@@ -16,14 +16,19 @@
  *******************************************************************************/
 
 #include <regex>
+#include "zmq_addon.hpp"
 
 #include "EZMQAPI.h"
 #include "EZMQPublisher.h"
 #include "EZMQLogger.h"
-#include "zmq_addon.hpp"
+#include "EZMQByteData.h"
 
 #define PUB_TCP_PREFIX "tcp://*:"
 #define TOPIC_PATTERN "[a-zA-Z0-9-_./]+"
+#define EZMQ_VERSION 1
+#define EZMQ_HEADER 0x00
+#define CONTENT_TYPE_OFFSET 5
+#define VERSION_OFFSET 2
 #define TAG "EZMQPublisher"
 
 #ifdef __GNUC__
@@ -45,11 +50,11 @@ namespace ezmq
 
     EZMQPublisher::~EZMQPublisher()
     {
-        stop();
         if(mPublisher)
         {
-           delete mPublisher;
-           mPublisher = nullptr;
+            stop();
+            delete mPublisher;
+            mPublisher = nullptr;
         }
     }
 
@@ -78,24 +83,70 @@ namespace ezmq
         return EZMQ_OK;
     }
 
-    EZMQErrorCode EZMQPublisher::publish(ezmq::Event event)
+    EZMQErrorCode EZMQPublisher::publishInternal( std::string topic, const EZMQMessage &event)
     {
-        EZMQ_SCOPE_LOGGER(TAG, __func__);
-        std::string eventStr;
-        bool result  = event.SerializeToString(&eventStr);
-        if (false == result)
+        // Form EZMQ header
+        unsigned char ezmqHeader = EZMQ_HEADER;
+        unsigned char version = EZMQ_VERSION ;
+        version = version << VERSION_OFFSET;
+        ezmqHeader =  ezmqHeader | version;
+        unsigned char contentType;
+        if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
         {
-            return EZMQ_ERROR;
+            contentType = EZMQ_CONTENT_TYPE_PROTOBUF;
+        }
+        else if(EZMQ_CONTENT_TYPE_BYTEDATA == event.getContentType())
+        {
+            contentType = EZMQ_CONTENT_TYPE_BYTEDATA;
+        }
+        else
+        {
+            EZMQ_LOG(ERROR, TAG, "Not a supported content-type");
+            return EZMQ_INVALID_CONTENT_TYPE;
+        }
+        contentType = contentType << CONTENT_TYPE_OFFSET;
+        ezmqHeader =  ezmqHeader | contentType;
+
+        zmq::multipart_t zmqMultipart;
+        // EZMQ Topic [ZMQMessage]
+        if(!(topic.empty()))
+        {
+            zmqMultipart.addstr(topic);
         }
 
-        // create a zmq message from the serialized string
-        zmq::message_t zmqMsg (eventStr.size());
-        memcpy ((void *) zmqMsg.data (), eventStr.c_str(), eventStr.size());
+        //EZMQ header [ZMQMessage]
+        zmqMultipart.add(zmq::message_t((void *)(&ezmqHeader), sizeof(ezmqHeader)));
+
+        //EZMQ Data [ZMQMessage]
+        if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
+        {
+            const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+            std::string eventStr;
+            bool result = protoEvent->SerializeToString(&eventStr);
+            if (false == result)
+            {
+                return EZMQ_ERROR;
+            }
+            zmqMultipart.add(zmq::message_t(eventStr.c_str(), eventStr.size()));
+        }
+        else if(EZMQ_CONTENT_TYPE_BYTEDATA == event.getContentType())
+        {
+            const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+            if(NULL == byteData->getByteData())
+            {
+                EZMQ_LOG(ERROR, TAG, "[ByteData] Byte Data is NULL");
+                return EZMQ_ERROR;
+            }
+            zmqMultipart.add(zmq::message_t(byteData->getByteData(), byteData->getLength()));
+        }
+
+        //send data [ZMQMessage] on socket
         std::lock_guard<std::recursive_mutex> lock(mPubLock);
+        bool result = false;
         try
         {
             VERIFY_NON_NULL(mPublisher)
-            result = mPublisher->send(zmqMsg);
+            result = zmqMultipart.send(*mPublisher);
         }
         catch(std::exception &e)
         {
@@ -104,14 +155,20 @@ namespace ezmq
         }
         if (false == result)
         {
-            EZMQ_LOG(ERROR, TAG, "Published without topic failed");
+            EZMQ_LOG(ERROR, TAG, "Publish failed");
             return EZMQ_ERROR;
         }
-        EZMQ_LOG(DEBUG, TAG, "Published without topic");
+        EZMQ_LOG(DEBUG, TAG, "Published data");
         return EZMQ_OK;
     }
 
-    EZMQErrorCode EZMQPublisher::publish( std::string topic, ezmq::Event event)
+    EZMQErrorCode EZMQPublisher::publish(const EZMQMessage &event)
+    {
+        EZMQ_SCOPE_LOGGER(TAG, __func__);
+        return publishInternal("", event);
+    }
+
+    EZMQErrorCode EZMQPublisher::publish( std::string topic, const EZMQMessage &event)
     {
         EZMQ_SCOPE_LOGGER(TAG, "publish [Topic]");
         //Validate Topic
@@ -120,40 +177,10 @@ namespace ezmq
         {
             return EZMQ_INVALID_TOPIC;
         }
-
-        //prepare a multi part message with topic
-        zmq::multipart_t zmqMultipart(topic);
-
-        // create a zmq message from the serialized string
-        std::string eventStr;
-        bool result  = event.SerializeToString(&eventStr);
-         if (false == result)
-        {
-            return EZMQ_ERROR;
-        }
-        zmqMultipart.add(zmq::message_t(eventStr.c_str(), eventStr.size()));
-
-        //publish on the socket
-        std::lock_guard<std::recursive_mutex> lock(mPubLock);
-        try
-        {
-            VERIFY_NON_NULL(mPublisher)
-            result = zmqMultipart.send(*mPublisher);
-        }
-        catch(std::exception &e)
-        {
-            EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
-            return EZMQ_ERROR;
-        }
-        if (false == result)
-        {
-            EZMQ_LOG_V(ERROR, TAG, "Publish failed");
-            return EZMQ_ERROR;
-        }
-        return EZMQ_OK;
+        return publishInternal(topic, event);
     }
 
-    EZMQErrorCode EZMQPublisher::publish( std::list<std::string> topics, ezmq::Event event)
+    EZMQErrorCode EZMQPublisher::publish( std::list<std::string> topics, const EZMQMessage &event)
     {
         EZMQ_SCOPE_LOGGER(TAG, "publish [List Topic]");
         if(!topics.size())

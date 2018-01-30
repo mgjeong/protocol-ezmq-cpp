@@ -212,6 +212,9 @@ Event::Event()
   }
   SharedCtor();
   // @@protoc_insertion_point(constructor:ezmq.Event)
+
+  //setting ezmq content-type as protobuf
+  mContentType = EZMQ_CONTENT_TYPE_PROTOBUF;
 }
 Event::Event(const Event& from)
   : ::google::protobuf::Message(),

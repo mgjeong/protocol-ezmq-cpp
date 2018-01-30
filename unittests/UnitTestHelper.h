@@ -22,6 +22,8 @@
 #include <HippoMocks/hippomocks.h>
 
 #include "Event.pb.h"
+#include "EZMQMessage.h"
+#include "EZMQByteData.h"
 
 class TestWithMock: public testing::Test
 {
@@ -75,6 +77,14 @@ ezmq::Event getProtoBufEvent()
     readin2->set_pushed(1);
 
     return event;
+}
+
+ezmq::EZMQByteData getByteData()
+{
+    //Form a byte data event
+    char byteArray[] = { 0x40, 0x05, 0x10, 0x11, 0x12 };
+    ezmq::EZMQByteData byteData((uint8_t *) byteArray, sizeof(byteArray));
+    return byteData;
 }
 
 #endif // UNITTESTHELPER_H

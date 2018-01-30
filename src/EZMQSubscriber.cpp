@@ -20,10 +20,14 @@
 #include "EZMQAPI.h"
 #include "EZMQSubscriber.h"
 #include "EZMQLogger.h"
+#include "EZMQByteData.h"
 
 #define TCP_PREFIX "tcp://"
 #define INPROC_PREFIX "inproc://shutdown-"
 #define TOPIC_PATTERN "[a-zA-Z0-9-_./]+"
+#define CONTENT_TYPE_OFFSET 5
+#define VERSION_OFFSET 2
+#define VERSION_MASK 0x07
 #define TAG "EZMQSubscriber"
 
 #ifdef __GNUC__
@@ -46,24 +50,122 @@ namespace ezmq
         isReceiverStarted = false;
     }
 
-    EZMQSubscriber::EZMQSubscriber(std::string serviceName, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback):
-        mServiceName(serviceName), mSubCallback(subCallback), mSubTopicCallback(topicCallback)
-    {
-        //TBD
-    }
-
     EZMQSubscriber::~EZMQSubscriber()
     {
         stop();
     }
 
+    void EZMQSubscriber::parseSocketData()
+    {
+        zmq::message_t zFrame1;
+        zmq::message_t zFrame2;
+        zmq::message_t zFrame3;
+        void *data;
+        size_t size;
+        EZMQMessage msg;
+        ezmq::Event event;
+        EZMQByteData byteData{NULL,0};
+        std::string topic;
+        int version;
+        int contentType;
+        bool isTopic = false;
+        unsigned char *ezmqHeader ;
+
+        std::lock_guard<std::recursive_mutex> lock(mSubLock);
+        if(mSubscriber)
+        {
+            try
+            {
+                mSubscriber->recv(&zFrame1);
+                if(zFrame1.more())
+                {
+                    mSubscriber->recv(&zFrame2);
+                    if(zFrame2.more())
+                    {
+                        isTopic = true;
+                        mSubscriber->recv(&zFrame3);
+                    }
+                }
+            }
+            catch (std::exception &e)
+            {
+                EZMQ_LOG_V(ERROR, TAG, "[receive] caught exception: %s", e.what());
+                isReceiverStarted = false;
+                return;
+            }
+        }
+        else
+        {
+            return;
+        }
+
+        if(false == isTopic)
+        {
+            //header
+            ezmqHeader = (unsigned char *)zFrame1.data();
+
+            //data
+            data = zFrame2.data();
+            size = zFrame2.size();
+        }
+        else
+        {
+            //header
+            ezmqHeader = (unsigned char *)zFrame2.data();
+
+            //topic
+            std::string topicStr(static_cast<char*>(zFrame1.data()), zFrame1.size());
+            topic = topicStr;
+
+            //data
+            data = zFrame3.data();
+            size = zFrame3.size();
+        }
+
+        contentType = ezmqHeader[0] >> CONTENT_TYPE_OFFSET;
+        version = (ezmqHeader[0] >> VERSION_OFFSET) & VERSION_MASK;
+
+        //data
+        if(EZMQ_CONTENT_TYPE_PROTOBUF == contentType)
+        {
+            event.mContentType = EZMQ_CONTENT_TYPE_PROTOBUF;
+            event.mVersion = version;
+            std::string msgStr(static_cast<char*>(data), size);
+            event.ParseFromString(msgStr);
+            //call application callback
+            if(false == isTopic)
+            {
+                mSubCallback(event);
+            }
+            else
+            {
+                mSubTopicCallback(topic, event);
+            }
+        }
+        else if(EZMQ_CONTENT_TYPE_BYTEDATA == contentType)
+        {
+            byteData.mContentType = EZMQ_CONTENT_TYPE_BYTEDATA;
+            byteData.mVersion = version;
+            byteData.mData = (uint8_t *)data;
+            byteData.mDataLength = size;
+            //call application callback
+            if(false == isTopic)
+            {
+                mSubCallback(byteData);
+            }
+            else
+            {
+                mSubTopicCallback(topic, byteData);
+            }
+        }
+        else
+        {
+            EZMQ_LOG_V(ERROR, TAG, "[receive] Not a supported type: %d", contentType);
+        }
+    }
+
     void EZMQSubscriber::receive()
     {
-        zmq::message_t zMsg;
-        zmq::message_t zTopic;
-        ezmq::Event event;
-        std::string topic;
-        bool more = false;
         while(isReceiverStarted)
         {
             if (nullptr == mSubscriber || mPollItems.empty())
@@ -75,42 +177,7 @@ namespace ezmq
             zmq::poll(mPollItems);
             if (mPollItems[1].revents & ZMQ_POLLIN)
             {
-                std::lock_guard<std::recursive_mutex> lock(mSubLock);
-                if(mSubscriber)
-                {
-                    try
-                    {
-                        mSubscriber->recv(&zMsg);
-                        more = false;
-                        if(zMsg.more())
-                        {
-                            more = true;
-                            std::string topicStr(static_cast<char*>(zMsg.data()), zMsg.size());
-                            topic = topicStr;
-                            mSubscriber->recv(&zMsg);
-                        }
-                    }
-                    catch (std::exception &e)
-                    {
-                        EZMQ_LOG_V(ERROR, TAG, "[receive] caught exception: %s", e.what());
-                        isReceiverStarted = false;
-                        break;
-                    }
-                }
-
-                //convert data to ezmq event
-                std::string msgStr(static_cast<char*>(zMsg.data()), zMsg.size());
-                event.ParseFromString(msgStr);
-
-                //call  application callback
-                if(more)
-                {
-                    mSubTopicCallback(topic, event);
-                }
-                else
-                {
-                    mSubCallback(event);
-                }
+                parseSocketData();
             }
             else if(mPollItems[0].revents & ZMQ_POLLIN)
             {
@@ -356,20 +423,15 @@ namespace ezmq
         return EZMQ_OK;
     }
 
-        std::string& EZMQSubscriber::getIp()
-        {
-            return mIp;
-        }
+    std::string& EZMQSubscriber::getIp()
+    {
+        return mIp;
+    }
 
-        int EZMQSubscriber::getPort()
-        {
-            return mPort;
-        }
-
-        std::string  EZMQSubscriber::getServiceName()
-        {
-            return mServiceName;
-        }
+    int EZMQSubscriber::getPort()
+    {
+        return mPort;
+    }
 
     std::string EZMQSubscriber::getSocketAddress()
     {

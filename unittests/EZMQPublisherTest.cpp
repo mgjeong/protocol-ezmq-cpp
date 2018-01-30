@@ -57,6 +57,7 @@ class EZMQPublisherTest: public TestWithMock
         void TearDown()
         {
             mPublisher->stop();
+            delete mPublisher;
             apiInstance->terminate();
             TestWithMock::TearDown();
         }
@@ -94,6 +95,17 @@ TEST_F(EZMQPublisherTest, publish)
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
 }
 
+TEST_F(EZMQPublisherTest, publishByteData)
+{
+    ezmq::EZMQByteData event = getByteData();
+    EXPECT_EQ(EZMQ_OK, mPublisher->start());
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
+
+    ezmq::EZMQByteData byteData(NULL, 0);
+    ezmq::EZMQByteData byteData2(NULL, 10);
+    EXPECT_EQ(EZMQ_ERROR, mPublisher->publish(byteData));
+    EXPECT_EQ(EZMQ_ERROR, mPublisher->publish(byteData2));
+}
 
 TEST_F(EZMQPublisherTest, publishOnTopic)
 {
@@ -102,69 +114,93 @@ TEST_F(EZMQPublisherTest, publishOnTopic)
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(mTopic, event));
 }
 
+TEST_F(EZMQPublisherTest, publishByteDataOnTopic)
+{
+    ezmq::EZMQByteData event = getByteData();
+    EXPECT_EQ(EZMQ_OK, mPublisher->start());
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(mTopic, event));
+}
+
 TEST_F(EZMQPublisherTest, publishOnTopic1)
 {
     EXPECT_EQ(EZMQ_OK, mPublisher->start());
     ezmq::Event event = getProtoBufEvent();
+    ezmq::EZMQByteData byteEvent = getByteData();
 
     // Empty topic test
     std::string testingTopic = "";
     EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(testingTopic, byteEvent));
 
     // Numeric test
     testingTopic = "123";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Alpha-Numeric test
     testingTopic = "1a2b3";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Alphabet forward slash test
     testingTopic = "topic/";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Alphabet-Numeric, forward slash test
     testingTopic = "topic/13/4jtjos/";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Alphabet-Numeric, forward slash test
     testingTopic = "123a/1this3/4jtjos";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Topic contain forward slash at last
     testingTopic = "topic/122/livingroom/";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Topic contain -
     testingTopic = "topic/122/livingroom/-";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Topic contain _
     testingTopic = "topic/122/livingroom_";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 
     // Topic contain .
     testingTopic = "topic/122.livingroom.";
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(testingTopic, byteEvent));
 }
 
 TEST_F(EZMQPublisherTest, publishNegative)
 {
     EXPECT_EQ(EZMQ_OK, mPublisher->start());
     ezmq::Event event = getProtoBufEvent();
+    ezmq::EZMQByteData byteEvent = getByteData();
+
     EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish("", event));
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish("", byteEvent));
 
     std::list<std::string> topicList;
     EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topicList, event));
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topicList, byteEvent));
 
     topicList.push_back("topic1");
     topicList.push_back("");
     EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topicList, event));
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topicList, byteEvent));
 
     topicList.clear();
     topicList.push_back("topic1");
     topicList.push_back("topic2");
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(topicList, event));
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(topicList, byteEvent));
 }
 
 TEST_F(EZMQPublisherTest, getPort)

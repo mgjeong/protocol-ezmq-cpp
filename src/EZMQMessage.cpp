@@ -14,40 +14,33 @@
  * limitations under the License.
  *
  *******************************************************************************/
+#include "EZMQMessage.h"
+#include "Event.pb.h"
+#include "EZMQLogger.h"
 
-/**
- * @file   EZMQErrorCodes.h
- *
- * @brief   This file contains error codes of EZMQ stack possibly return to application.
- */
-#ifndef EZMQ_ERROR_CODES_H_
-#define EZMQ_ERROR_CODES_H_
+#define TAG "EZMQMessage"
 
 namespace ezmq
 {
-    /**
-    * @enum EZMQErrorCode
-    * EZMQ stack error codes.
-    */
-    typedef enum
+    EZMQContentType EZMQMessage::getContentType() const
     {
-        EZMQ_OK = 0,
-        EZMQ_ERROR,
-        EZMQ_INVALID_TOPIC,
-        EZMQ_INVALID_CONTENT_TYPE
-    } EZMQErrorCode;
+        return mContentType;
+    }
 
-    /**
-    * @enum EZMQStatusCode
-    * EZMQ Service status codes.
-    */
-    typedef enum
+    EZMQErrorCode EZMQMessage::setContentType(EZMQContentType type)
     {
-        EZMQ_Unknown = 0,
-        EZMQ_Constructed,
-        EZMQ_Initialized,
-        EZMQ_Terminated
-    } EZMQStatusCode;
+        if(type > EZMQ_CONTENT_TYPE_BYTEDATA)
+        {
+            EZMQ_LOG(ERROR, TAG, "Not a supported Content-Type");
+            return EZMQ_INVALID_CONTENT_TYPE;
+        }
+        mContentType = type;
+        return EZMQ_OK;
+    }
+
+    int EZMQMessage::getEZMQVersion() const
+    {
+        return mVersion;
+    }
 }
-#endif  // EZMQ_ERROR_CODES_H_
 

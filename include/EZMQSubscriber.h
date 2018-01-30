@@ -35,18 +35,19 @@
 #include "zmq.hpp"
 
 #include "EZMQErrorCodes.h"
+#include "EZMQMessage.h"
 
 namespace ezmq
 {
     /**
     * Callbacks to get all the subscribed events.
     */
-    typedef std::function<void(ezmq::Event event)> EZMQSubCB;
+    typedef std::function<void(const EZMQMessage &event)> EZMQSubCB;
 
     /**
     * Callbacks to get all the subscribed events for a specific topic.
     */
-    typedef std::function<void(std::string topic, ezmq::Event event)> EZMQSubTopicCB;
+    typedef std::function<void(std::string topic, const EZMQMessage &event)> EZMQSubTopicCB;
 
     /**
     * @class  EZMQSubscriber
@@ -217,6 +218,7 @@ namespace ezmq
             std::string getSocketAddress();
             std::string getInProcUniqueAddress();
             void receive();
+            void parseSocketData();
             std::string  sanitizeTopic(std::string topic);
     };
 }

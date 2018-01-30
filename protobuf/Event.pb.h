@@ -47,6 +47,9 @@
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+
+#include "EZMQMessage.h"
+
 namespace ezmq {
 class Event;
 class EventDefaultTypeInternal;
@@ -75,7 +78,8 @@ void InitDefaults();
 
 // ===================================================================
 
-class Event : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ezmq.Event) */ {
+//Inheriting the EZMQMessage [This change is specifically done for EZMQ Library]
+class Event : public EZMQMessage, public ::google::protobuf::Message {
  public:
   Event();
   virtual ~Event();

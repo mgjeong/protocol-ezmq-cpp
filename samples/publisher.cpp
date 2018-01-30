@@ -19,6 +19,8 @@
 #include <unistd.h>
 #include "EZMQAPI.h"
 #include "EZMQPublisher.h"
+#include "EZMQMessage.h"
+#include "EZMQByteData.h"
 #include "EZMQErrorCodes.h"
 #include "Event.pb.h"
 
@@ -156,7 +158,8 @@ int main(int argc, char* argv[])
         if (topic.empty())
         {
             result = publisher->publish(event);
-        } else
+        }
+        else
         {
             result = publisher->publish(topic, event);
         }
@@ -168,6 +171,12 @@ int main(int argc, char* argv[])
         cout<<"Event "<<i <<" Published" <<endl;
         sleep(2);
         i++;
+    }
+
+    if(publisher)
+    {
+        cout<<"-- Destroying publisher-- "<<endl;
+        delete publisher;
     }
 return 0;
 }
