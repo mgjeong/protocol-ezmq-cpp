@@ -30,7 +30,7 @@ EZMQ_WITH_DEP=false
 
 install_dependencies() {
     # download required tool chain for cross compilation [arm/arm64/armhf]
-    if [ "arm" == ${EZMQ_TARGET_ARCH} ]; then
+    if [ "arm" = ${EZMQ_TARGET_ARCH} ]; then
         if [ -x "/usr/bin/arm-linux-gnueabi-g++" ] && [ -x "/usr/bin/arm-linux-gnueabi-gcc" ]; then
             echo -e "${BLUE}Cross compile tool-chain found for arm${NO_COLOUR}"
         else
@@ -40,7 +40,7 @@ install_dependencies() {
             echo -e " $ sudo apt-get install g++-arm-linux-gnueabi${NO_COLOUR}"
             exit 0
         fi
-    elif [ "arm64" == ${EZMQ_TARGET_ARCH} ]; then
+    elif [ "arm64" = ${EZMQ_TARGET_ARCH} ]; then
         if [ -x "/usr/bin/aarch64-linux-gnu-g++-4.8" ] && [ -x "/usr/bin/aarch64-linux-gnu-gcc-4.8" ] && [ -x "/usr/bin/aarch64-linux-gnu-g++" ] && [ -x "/usr/bin/aarch64-linux-gnu-gcc" ]; then
             echo -e "${BLUE}Cross compile tool-chain found for arm64${NO_COLOUR}"
         else
@@ -53,7 +53,7 @@ install_dependencies() {
             echo -e " $ sudo ln -s aarch64-linux-gnu-gcc-4.8 aarch64-linux-gnu-gcc${NO_COLOUR}"
             exit 0
         fi
-    elif [ "armhf" == ${EZMQ_TARGET_ARCH} ]; then
+    elif [ "armhf" = ${EZMQ_TARGET_ARCH} ]; then
         if [ -x "/usr/bin/arm-linux-gnueabihf-g++-4.8" ] && [ -x "/usr/bin/arm-linux-gnueabihf-gcc-4.8" ] && [ -x "/usr/bin/arm-linux-gnueabihf-g++" ] && [ -x "/usr/bin/arm-linux-gnueabihf-gcc" ]; then
             echo -e "${BLUE}Cross compile tool-chain found for armhf${NO_COLOUR}"
         else
@@ -84,13 +84,13 @@ install_dependencies() {
     ./version.sh
     chmod +x autogen.sh
     ./autogen.sh
-    if [ "arm" == ${EZMQ_TARGET_ARCH} ]; then
+    if [ "arm" = ${EZMQ_TARGET_ARCH} ]; then
         echo -e "${BLUE}ZeroMQ configuring for arm${NO_COLOUR}"
         ./configure --host=arm-none-linux-gnueabi CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++
-    elif [ "arm64" == ${EZMQ_TARGET_ARCH} ]; then
+    elif [ "arm64" = ${EZMQ_TARGET_ARCH} ]; then
         echo -e "${BLUE}ZeroMQ configuring for arm64${NO_COLOUR}"
         ./configure --host=aarch64-unknown-linux-gnu CC=/usr/bin/aarch64-linux-gnu-gcc-4.8 CXX=/usr/bin/aarch64-linux-gnu-g++-4.8
-    elif [ "armhf" == ${EZMQ_TARGET_ARCH} ]; then
+    elif [ "armhf" = ${EZMQ_TARGET_ARCH} ]; then
         echo -e "${BLUE}ZeroMQ configuring for armhf${NO_COLOUR}"
         ./configure --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8
     else
@@ -118,15 +118,15 @@ install_dependencies() {
     cd protobuf-3.4.0/
     chmod +x autogen.sh
     ./autogen.sh
-    if [ "arm" == ${EZMQ_TARGET_ARCH} ]; then
+    if [ "arm" = ${EZMQ_TARGET_ARCH} ]; then
         echo -e "${BLUE}Protobuf configuring for arm${NO_COLOUR}"
         ./configure --host=arm-linux CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++
         make -j 4
-    elif [ "arm64" == ${EZMQ_TARGET_ARCH} ]; then
+    elif [ "arm64" = ${EZMQ_TARGET_ARCH} ]; then
         echo -e "${BLUE}Protobuf configuring for arm64${NO_COLOUR}"
         ./configure --host=aarch64-unknown-linux-gnu CC=/usr/bin/aarch64-linux-gnu-gcc-4.8 CXX=/usr/bin/aarch64-linux-gnu-g++-4.8
         make -j 4
-    elif [ "armhf" == ${EZMQ_TARGET_ARCH} ]; then
+    elif [ "armhf" = ${EZMQ_TARGET_ARCH} ]; then
         echo -e "${BLUE}Protobuf configuring for armhf${NO_COLOUR}"
         ./configure --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8
         make -j 4
@@ -137,7 +137,7 @@ install_dependencies() {
     fi
 
     #handle protobuf error for cross compilation
-    if [ "arm" == ${EZMQ_TARGET_ARCH} ] || [ "arm64" == ${EZMQ_TARGET_ARCH} ] || [ "armhf" == ${EZMQ_TARGET_ARCH} ] || [ "armhf-qemu" == ${EZMQ_TARGET_ARCH} ]; then
+    if [ "arm" = ${EZMQ_TARGET_ARCH} ] || [ "arm64" = ${EZMQ_TARGET_ARCH} ] || [ "armhf" = ${EZMQ_TARGET_ARCH} ] || [ "armhf-qemu" = ${EZMQ_TARGET_ARCH} ]; then
         echo -e "${BLUE}Copying libs from protobuf built directory to /usr/local/lib${NO_COLOUR}"
         sudo cp src/.libs/protoc /usr/bin
         sudo cp src/.libs/* /usr/local/lib
@@ -261,17 +261,17 @@ process_cmd_args() {
                 ;;
             --target_arch=*)
                 EZMQ_TARGET_ARCH="${1#*=}";
-                if [ "x86" == ${EZMQ_TARGET_ARCH} ]; then
+                if [ "x86" = ${EZMQ_TARGET_ARCH} ]; then
                     build_x86; exit 0;
-                elif [ "x86_64" == ${EZMQ_TARGET_ARCH} ]; then
+                elif [ "x86_64" = ${EZMQ_TARGET_ARCH} ]; then
                     build_x86_64; exit 0;
-                elif [ "arm" == ${EZMQ_TARGET_ARCH} ]; then
+                elif [ "arm" = ${EZMQ_TARGET_ARCH} ]; then
                     build_arm; exit 0;
-                elif [ "arm64" == ${EZMQ_TARGET_ARCH} ]; then
+                elif [ "arm64" = ${EZMQ_TARGET_ARCH} ]; then
                     build_arm64; exit 0;
-                elif [ "armhf" == ${EZMQ_TARGET_ARCH} ]; then
+                elif [ "armhf" = ${EZMQ_TARGET_ARCH} ]; then
                     build_armhf; exit 0;
-                elif [ "armhf-qemu" == ${EZMQ_TARGET_ARCH} ]; then
+                elif [ "armhf-qemu" = ${EZMQ_TARGET_ARCH} ]; then
                     build_armhf_qemu; exit 0;
                 else
                     echo -e "${RED}Not a supported architecture${NO_COLOUR}"
