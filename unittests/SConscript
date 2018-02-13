@@ -84,8 +84,14 @@ ezmq_sub_test = ezmq_test_env.Program('ezmq_sub_test',
 Alias("ezmq_sub_test", ezmq_sub_test)
 ezmq_test_env.AppendTarget('ezmq_sub_test')
 
+ezmq_byteData_test_src = ezmq_test_env.Glob('./EZMQByteDataTest.cpp')
+ezmq_byteData_test = ezmq_test_env.Program('ezmq_byteData_test',
+                                         ezmq_byteData_test_src)
+Alias("ezmq_byteData_test", ezmq_byteData_test)
+ezmq_test_env.AppendTarget('ezmq_byteData_test')
+
 if env.get('TEST') == '1':
 	run_test(ezmq_test_env, '', 'unittests/ezmq_api_test', ezmq_api_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_pub_test', ezmq_pub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_sub_test', ezmq_sub_test)
-
+	run_test(ezmq_test_env, '', 'unittests/ezmq_byteData_test', ezmq_sub_test)

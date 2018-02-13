@@ -14,40 +14,44 @@
  * limitations under the License.
  *
  *******************************************************************************/
+#include <iostream>
 
-/**
- * @file   EZMQErrorCodes.h
- *
- * @brief   This file contains error codes of EZMQ stack possibly return to application.
- */
-#ifndef EZMQ_ERROR_CODES_H_
-#define EZMQ_ERROR_CODES_H_
+#include "EZMQByteData.h"
+#include "EZMQLogger.h"
+
+#define TAG "EZMQByteData"
 
 namespace ezmq
 {
-    /**
-    * @enum EZMQErrorCode
-    * EZMQ stack error codes.
-    */
-    typedef enum
+    EZMQByteData::EZMQByteData(const uint8_t *data,  size_t length):mData(data), mDataLength(length)
     {
-        EZMQ_OK = 0,
-        EZMQ_ERROR,
-        EZMQ_INVALID_TOPIC,
-        EZMQ_INVALID_CONTENT_TYPE
-    } EZMQErrorCode;
+        mContentType = EZMQ_CONTENT_TYPE_BYTEDATA;
+    }
 
-    /**
-    * @enum EZMQStatusCode
-    * EZMQ Service status codes.
-    */
-    typedef enum
+    EZMQByteData::~EZMQByteData()
     {
-        EZMQ_Unknown = 0,
-        EZMQ_Constructed,
-        EZMQ_Initialized,
-        EZMQ_Terminated
-    } EZMQStatusCode;
+    }
+
+    size_t EZMQByteData::getLength() const
+    {
+        return mDataLength;
+    }
+
+    const uint8_t * EZMQByteData::getByteData() const
+    {
+        return mData;
+    }
+
+    EZMQErrorCode EZMQByteData::setByteData(const uint8_t * data, size_t dataLength)
+    {
+        VERIFY_NON_NULL(data)
+        if(dataLength == 0)
+        {
+            return EZMQ_ERROR;
+        }
+        mData = data;
+        mDataLength = dataLength;
+        return EZMQ_OK;
+    }
 }
-#endif  // EZMQ_ERROR_CODES_H_
 

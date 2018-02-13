@@ -206,6 +206,7 @@ generate_report_EZMQ()
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_api_test"
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_pub_test"
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_sub_test"
+                "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_byteData_test"
                );
 
     for exe in ${tests_list[@]}; do
@@ -234,6 +235,8 @@ generate_report_EZMQ()
         -e "include.*" \
         -e "protobuf.*" \
         -e "unittests.*" \
+        -e "samples.*" \
+        -e "src/logger.*" \
         ${report_flags} -o ${test_report_file}
 
     if [  $? -eq 0 ]; then

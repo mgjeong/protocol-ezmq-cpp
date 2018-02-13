@@ -24,12 +24,12 @@
 
 using namespace ezmq;
 
-void subCB(ezmq::Event /*event*/)
+void subCB(const EZMQMessage &/*event*/)
 {
     EZMQ_LOG(DEBUG, TAG, "Event received");
 }
 
-void subTopicCB(std::string topic, ezmq::Event /*event*/)
+void subTopicCB(std::string topic, const EZMQMessage &/*event*/)
 {
     EZMQ_LOG(DEBUG, TAG, "Event received");
     EZMQ_LOG_V(DEBUG, TAG, "Topic: %s", topic.c_str());
@@ -55,6 +55,7 @@ protected:
     void TearDown()
     {
         mSubscriber->stop();
+        delete mSubscriber;
         apiInstance->terminate();
         TestWithMock::TearDown();
     }

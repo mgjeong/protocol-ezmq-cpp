@@ -25,6 +25,8 @@
 #include "EZMQSubscriber.h"
 #include "EZMQErrorCodes.h"
 #include "Event.pb.h"
+#include "EZMQMessage.h"
+#include "EZMQByteData.h"
 
 using namespace std;
 using namespace ezmq;
@@ -35,7 +37,7 @@ bool isStarted;
 std::mutex m_mutex;
 std::condition_variable m_cv;
 
-void printEvent(ezmq::Event event)
+void printEvent(const ezmq::Event &event)
 {
     cout<<"--------------------------------------"<<endl;
     cout<<"Device:  " << event.device()<<endl;
@@ -52,17 +54,56 @@ void printEvent(ezmq::Event event)
     }
     cout<<"----------------------------------------"<<endl;
 }
-void subCB(ezmq::Event event)
+
+void printByteData(const ezmq::EZMQByteData &byteData)
 {
-    cout<<"App: Event received "<<endl;
-    printEvent(event);
+    cout<<"--------------------------------------"<<endl;
+    int size = byteData.getLength();
+    cout<<"Byte data length: "<<size<<endl;
+    const uint8_t *mData =byteData.getByteData();
+    int i=0;
+    while (i<size)
+    {
+        int data = mData[i];
+        cout<<"  "<< data;
+        i++;
+    }
+    cout<<"\n----------------------------------------"<<endl;
 }
 
-void subTopicCB(std::string topic, ezmq::Event event)
+void subCB(const EZMQMessage &event)
+{
+    cout<<"App: Event received "<<endl;
+    if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
+    {
+        cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
+        const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+        printEvent(*protoEvent);
+    }
+    else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
+    {
+        cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
+        const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+        printByteData(*byteData);
+    }
+}
+
+void subTopicCB(std::string topic, const EZMQMessage &event)
 {
     cout<<"App: Event received "<<endl;
     cout<<"Topic: "<<topic<<endl;
-    printEvent(event);
+    if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
+    {
+        cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
+        const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+        printEvent(*protoEvent);
+    }
+    else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
+    {
+        cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
+        const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+        printByteData(*byteData);
+    }
 }
 
 void sigint(int /*signal*/)
