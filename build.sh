@@ -27,6 +27,7 @@ PROJECT_ROOT=$(pwd)
 DEP_ROOT=$(pwd)/dependencies
 EZMQ_TARGET_ARCH="$(uname -m)"
 EZMQ_WITH_DEP=false
+EZMQ_BUILD_MODE="release"
 
 install_dependencies() {
     # download required tool chain for cross compilation [arm/arm64/armhf]
@@ -152,8 +153,11 @@ build_x86() {
         install_dependencies
     fi
     cd $PROJECT_ROOT
-    cd $PROJECT_ROOT
-    scons TARGET_OS=linux TARGET_ARCH=x86
+    if [ "debug" = ${EZMQ_BUILD_MODE} ]; then
+        scons TARGET_OS=linux TARGET_ARCH=x86 RELEASE=0 LOGGING=true
+    else
+        scons TARGET_OS=linux TARGET_ARCH=x86
+    fi
 }
 
 build_x86_64() {
@@ -162,7 +166,11 @@ build_x86_64() {
         install_dependencies
     fi
     cd $PROJECT_ROOT
-    scons TARGET_OS=linux TARGET_ARCH=x86_64
+    if [ "debug" = ${EZMQ_BUILD_MODE} ]; then
+        scons TARGET_OS=linux TARGET_ARCH=x86_64 RELEASE=0 LOGGING=true
+    else
+        scons TARGET_OS=linux TARGET_ARCH=x86_64
+    fi
 }
 
 build_arm() {
@@ -171,7 +179,11 @@ build_arm() {
         install_dependencies
     fi
     cd $PROJECT_ROOT
-    scons TARGET_ARCH=arm TC_PREFIX=/usr/bin/arm-linux-gnueabi- TC_PATH=/usr/bin/
+    if [ "debug" = ${EZMQ_BUILD_MODE} ]; then
+        scons TARGET_ARCH=arm TC_PREFIX=/usr/bin/arm-linux-gnueabi- TC_PATH=/usr/bin/ RELEASE=0 LOGGING=true
+    else
+        scons TARGET_ARCH=arm TC_PREFIX=/usr/bin/arm-linux-gnueabi- TC_PATH=/usr/bin/
+    fi
 }
 
 build_arm64() {
@@ -180,7 +192,11 @@ build_arm64() {
         install_dependencies
     fi
     cd $PROJECT_ROOT
-    scons TARGET_ARCH=arm64 TC_PREFIX=/usr/bin/aarch64-linux-gnu- TC_PATH=/usr/bin/
+    if [ "debug" = ${EZMQ_BUILD_MODE} ]; then
+        scons TARGET_ARCH=arm64 TC_PREFIX=/usr/bin/aarch64-linux-gnu- TC_PATH=/usr/bin/ RELEASE=0 LOGGING=true
+    else
+        scons TARGET_ARCH=arm64 TC_PREFIX=/usr/bin/aarch64-linux-gnu- TC_PATH=/usr/bin/
+    fi
 }
 
 build_armhf() {
@@ -189,7 +205,12 @@ build_armhf() {
         install_dependencies
     fi
     cd $PROJECT_ROOT
-    scons TARGET_ARCH=armhf TC_PREFIX=/usr/bin/arm-linux-gnueabihf- TC_PATH=/usr/bin/
+    if [ "debug" = ${EZMQ_BUILD_MODE} ]; then
+        scons TARGET_ARCH=armhf TC_PREFIX=/usr/bin/arm-linux-gnueabihf- TC_PATH=/usr/bin/ RELEASE=0 LOGGING=true
+    else
+        scons TARGET_ARCH=armhf TC_PREFIX=/usr/bin/arm-linux-gnueabihf- TC_PATH=/usr/bin/
+    fi
+
 }
 
 build_armhf_qemu() {
@@ -198,7 +219,12 @@ build_armhf_qemu() {
         install_dependencies
     fi
     cd $PROJECT_ROOT
-    scons TARGET_ARCH=armhf
+    if [ "debug" = ${EZMQ_BUILD_MODE} ]; then
+        scons TARGET_ARCH=armhf RELEASE=0 LOGGING=true
+    else
+        scons TARGET_ARCH=armhf
+    fi
+
     if [ -x "/usr/bin/qemu-arm-static" ]; then
         echo -e "${BLUE}qemu-arm-static found, copying it to current directory${NO_COLOUR}"
         cp /usr/bin/qemu-arm-static .
@@ -225,18 +251,40 @@ usage() {
     echo -e "${GREEN}Options:${NO_COLOUR}"
     echo "  --target_arch=[x86|x86_64|arm|arm64|armhf|armhf-qemu]        :  Choose Target Architecture"
     echo "  --with_dependencies=(default: false)                         :  Build ezmq along with dependencies [zmq and protobuf]"
+    echo "  --build_mode=[release|debug](default: release)               :  Build ezmq library and samples in release or debug mode"
     echo "  -c                                                           :  Clean ezmq Repository and its dependencies"
     echo "  -h / --help                                                  :  Display help and exit"
     echo -e "${GREEN}Examples: ${NO_COLOUR}"
     echo -e "${BLUE}  build:-${NO_COLOUR}"
     echo "  $ ./build.sh --target_arch=x86_64"
     echo "  $ ./build.sh --with_dependencies=true --target_arch=x86_64 "
+    echo -e "${BLUE}  debug mode build:-${NO_COLOUR}"
+    echo "  $ ./build.sh --target_arch=x86_64 --build_mode=debug"
     echo -e "${BLUE}  clean:-${NO_COLOUR}"
     echo "  $ ./build.sh -c"
     echo -e "${BLUE}  help:-${NO_COLOUR}"
     echo "  $ ./build.sh -h"
     echo -e "${GREEN}Notes: ${NO_COLOUR}"
     echo "  - While building newly for any architecture use -with_dependencies=true option."
+}
+
+build() {
+    if [ "x86" = ${EZMQ_TARGET_ARCH} ]; then
+         build_x86; exit 0;
+    elif [ "x86_64" = ${EZMQ_TARGET_ARCH} ]; then
+         build_x86_64; exit 0;
+    elif [ "arm" = ${EZMQ_TARGET_ARCH} ]; then
+         build_arm; exit 0;
+    elif [ "arm64" = ${EZMQ_TARGET_ARCH} ]; then
+         build_arm64; exit 0;
+    elif [ "armhf" = ${EZMQ_TARGET_ARCH} ]; then
+         build_armhf; exit 0;
+    elif [ "armhf-qemu" = ${EZMQ_TARGET_ARCH} ]; then
+         build_armhf_qemu; exit 0;
+    else
+         echo -e "${RED}Not a supported architecture${NO_COLOUR}"
+         usage; exit 1;
+    fi
 }
 
 process_cmd_args() {
@@ -250,34 +298,24 @@ process_cmd_args() {
             --with_dependencies=*)
                 EZMQ_WITH_DEP="${1#*=}";
                 if [ ${EZMQ_WITH_DEP} = true ]; then
-                    echo -e "${BLUE}Build with depedencies${NO_COLOUR}"
+                    echo -e "${GREEN}Build with depedencies${NO_COLOUR}"
                 elif [ ${EZMQ_WITH_DEP} = false ]; then
-                    echo -e "${BLUE}Build without depedencies${NO_COLOUR}"
+                    echo -e "${GREEN}Build without depedencies${NO_COLOUR}"
                 else
-                    echo -e "${BLUE}Build without depedencies${NO_COLOUR}"
+                    echo -e "${GREEN}Build without depedencies${NO_COLOUR}"
                     shift 1; exit 0
                 fi
                 shift 1;
                 ;;
             --target_arch=*)
                 EZMQ_TARGET_ARCH="${1#*=}";
-                if [ "x86" = ${EZMQ_TARGET_ARCH} ]; then
-                    build_x86; exit 0;
-                elif [ "x86_64" = ${EZMQ_TARGET_ARCH} ]; then
-                    build_x86_64; exit 0;
-                elif [ "arm" = ${EZMQ_TARGET_ARCH} ]; then
-                    build_arm; exit 0;
-                elif [ "arm64" = ${EZMQ_TARGET_ARCH} ]; then
-                    build_arm64; exit 0;
-                elif [ "armhf" = ${EZMQ_TARGET_ARCH} ]; then
-                    build_armhf; exit 0;
-                elif [ "armhf-qemu" = ${EZMQ_TARGET_ARCH} ]; then
-                    build_armhf_qemu; exit 0;
-                else
-                    echo -e "${RED}Not a supported architecture${NO_COLOUR}"
-                    usage; exit 1;
-                    fi
-                    shift 1
+                echo -e "${GREEN}Target Arch is: $EZMQ_TARGET_ARCH${NO_COLOUR}"
+                shift 1
+                ;;
+            --build_mode=*)
+                EZMQ_BUILD_MODE="${1#*=}";
+                echo -e "${GREEN}Build mode is: $EZMQ_BUILD_MODE${NO_COLOUR}"
+                shift 1;
                 ;;
             -c)
                 clean_ezmq
@@ -306,4 +344,5 @@ process_cmd_args() {
 }
 
 process_cmd_args "$@"
+build
 
