@@ -54,8 +54,8 @@ if not ezmq_test_env.get('RELEASE'):
 
 ezmq_test_env.AppendUnique(CPPPATH=[
     '../extlibs/hippomocks/hippomocks',
-	'../extlibs/zmq',
-	'../protobuf',
+    '../extlibs/zmq',
+    '../protobuf',
     '../include',
     '../include/logger',
     '../src',
@@ -94,4 +94,4 @@ if env.get('TEST') == '1':
 	run_test(ezmq_test_env, '', 'unittests/ezmq_api_test', ezmq_api_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_pub_test', ezmq_pub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_sub_test', ezmq_sub_test)
-	run_test(ezmq_test_env, '', 'unittests/ezmq_byteData_test', ezmq_sub_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_byteData_test', ezmq_bytedata_test)
