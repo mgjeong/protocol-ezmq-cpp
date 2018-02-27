@@ -32,6 +32,7 @@ else:
 
 ezmq_env.AppendUnique(CPPPATH=[
          './extlibs/zmq',
+         './extlibs/hippomocks/hippomocks',
         './protobuf',
         './include',
         './include/logger',
@@ -69,6 +70,6 @@ if target_os == 'linux':
 
 # Go to build EZMQ unit test cases
 if target_os == 'linux':
-    if target_arch in ['x86', 'x86_64']:
+    if target_arch in ['x86', 'x86_64', 'armhf']:
         SConscript('unittests/SConscript')
 

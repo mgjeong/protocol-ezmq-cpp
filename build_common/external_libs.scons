@@ -24,10 +24,10 @@ if target_os not in ['windows']:
     env.AppendUnique(LIBPATH = [os.path.join(src_dir, 'deps', target_os, 'lib', target_arch)])
 
 # gtest build/fetch
-if target_arch in ['x86', 'x86_64']:
+if target_arch in ['x86', 'x86_64', 'armhf']:
          SConscript(os.path.join(src_dir, 'extlibs', 'gtest', 'SConscript'))
 
 # hippmocks build/fetch
-if target_arch in ['x86', 'x86_64']:
+if target_arch in ['x86', 'x86_64', 'armhf']:
          SConscript(os.path.join(src_dir, 'extlibs', 'hippomocks', 'SConscript'))
 
