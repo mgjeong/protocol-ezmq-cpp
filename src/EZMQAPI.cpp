@@ -33,7 +33,15 @@ namespace ezmq
         EZMQ_SCOPE_LOGGER(TAG, __func__);
         if(nullptr == mContext)
         {
-            mContext = std::make_shared<zmq::context_t>(1);
+            try
+            {
+                mContext = std::make_shared<zmq::context_t>(1);
+            }
+            catch(std::exception &e)
+            {
+                EZMQ_LOG(ERROR, TAG, "Caught exception");
+                return EZMQ_ERROR;
+            }
         }
         VERIFY_NON_NULL(mContext)
         mStatus = EZMQ_Initialized;

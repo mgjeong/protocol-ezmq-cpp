@@ -57,39 +57,54 @@ TEST_F(EZMQByteDataTest, setByteDataNegative)
 {
     char byteArray[] = { 0x40, 0x05, 0x10, 0x11, 0x12 };
     EZMQByteData *byteData = new EZMQByteData((uint8_t *) byteArray, sizeof(byteArray));
-    EXPECT_EQ(EZMQ_ERROR, byteData->setByteData(NULL, sizeof(byteArray)));
-    EXPECT_EQ(EZMQ_ERROR, byteData->setByteData((uint8_t *) byteArray, 0));
-    delete byteData;
+    if(byteData)
+    {
+        EXPECT_EQ(EZMQ_ERROR, byteData->setByteData(NULL, sizeof(byteArray)));
+        EXPECT_EQ(EZMQ_ERROR, byteData->setByteData((uint8_t *) byteArray, 0));
+        delete byteData;
+    }
 }
 
 TEST_F(EZMQByteDataTest, constructByteDataPointer)
 {
     char byteArray[] = { 0x40, 0x05, 0x10, 0x11, 0x12 };
     EZMQByteData *byteData = new EZMQByteData((uint8_t *) byteArray, sizeof(byteArray));
-    EXPECT_EQ(EZMQ_CONTENT_TYPE_BYTEDATA, byteData->getContentType());
-    delete byteData;
+    if(byteData)
+    {
+        EXPECT_EQ(EZMQ_CONTENT_TYPE_BYTEDATA, byteData->getContentType());
+        delete byteData;
+    }
 }
 
 TEST_F(EZMQByteDataTest, constructByteDataNull)
 {
     EZMQByteData *byteData = new EZMQByteData(NULL,0);
-    EXPECT_EQ(EZMQ_CONTENT_TYPE_BYTEDATA, byteData->getContentType());
-    delete byteData;
+    if(byteData)
+    {
+        EXPECT_EQ(EZMQ_CONTENT_TYPE_BYTEDATA, byteData->getContentType());
+        delete byteData;
+    }
 }
 
 TEST_F(EZMQByteDataTest, setContentTypel)
 {
     EZMQByteData *byteData = new EZMQByteData(NULL,0);
-    byteData->setContentType(EZMQ_CONTENT_TYPE_BYTEDATA);
-    EXPECT_EQ(EZMQ_CONTENT_TYPE_BYTEDATA, byteData->getContentType());
-    delete byteData;
+    if(byteData)
+    {
+        byteData->setContentType(EZMQ_CONTENT_TYPE_BYTEDATA);
+        EXPECT_EQ(EZMQ_CONTENT_TYPE_BYTEDATA, byteData->getContentType());
+        delete byteData;
+    }
 }
 
 TEST_F(EZMQByteDataTest, setInvalidContentType)
 {
     EZMQByteData *byteData = new EZMQByteData(NULL,0);
-    EXPECT_EQ(EZMQ_INVALID_CONTENT_TYPE,
-        byteData->setContentType(EZMQ_CONTENT_TYPE_JSON));
-    delete byteData;
+    if(byteData)
+    {
+        EXPECT_EQ(EZMQ_INVALID_CONTENT_TYPE,
+            byteData->setContentType(EZMQ_CONTENT_TYPE_JSON));
+        delete byteData;
+    }
 }
 
