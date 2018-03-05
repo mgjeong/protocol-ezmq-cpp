@@ -435,7 +435,15 @@ namespace ezmq
 
     std::string EZMQSubscriber::getSocketAddress()
     {
-        return TCP_PREFIX + mIp + ":"  + std::to_string(mPort);
+        try
+        {
+            return TCP_PREFIX + mIp + ":"  + std::to_string(mPort);
+        }
+        catch(std::exception &e)
+        {
+            EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
+        }
+        return "";
     }
 
     std::string EZMQSubscriber::getInProcUniqueAddress()

@@ -108,36 +108,54 @@ namespace ezmq
         ezmqHeader =  ezmqHeader | contentType;
 
         zmq::multipart_t zmqMultipart;
-        // EZMQ Topic [ZMQMessage]
-        if(!(topic.empty()))
+        try
         {
-            zmqMultipart.addstr(topic);
-        }
-
-        //EZMQ header [ZMQMessage]
-        zmqMultipart.add(zmq::message_t((void *)(&ezmqHeader), sizeof(ezmqHeader)));
-
-        //EZMQ Data [ZMQMessage]
-        if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
-        {
-            const Event *protoEvent =  dynamic_cast<const Event*>(&event);
-            std::string eventStr;
-            bool result = protoEvent->SerializeToString(&eventStr);
-            if (false == result)
+            // EZMQ Topic [ZMQMessage]
+            if(!(topic.empty()))
             {
-                return EZMQ_ERROR;
+                zmqMultipart.addstr(topic);
             }
-            zmqMultipart.add(zmq::message_t(eventStr.c_str(), eventStr.size()));
-        }
-        else if(EZMQ_CONTENT_TYPE_BYTEDATA == event.getContentType())
-        {
-            const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
-            if(NULL == byteData->getByteData())
+
+            //EZMQ header [ZMQMessage]
+            zmqMultipart.add(zmq::message_t((void *)(&ezmqHeader), sizeof(ezmqHeader)));
+
+            //EZMQ Data [ZMQMessage]
+            if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
             {
-                EZMQ_LOG(ERROR, TAG, "[ByteData] Byte Data is NULL");
-                return EZMQ_ERROR;
+                const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+                if(NULL == protoEvent)
+                {
+                    EZMQ_LOG(ERROR, TAG, "[protoEvent] dynamic_cast failed");
+                    return EZMQ_ERROR;
+                }
+                std::string eventStr;
+                bool result = protoEvent->SerializeToString(&eventStr);
+                if (false == result)
+                {
+                    return EZMQ_ERROR;
+                }
+                zmqMultipart.add(zmq::message_t(eventStr.c_str(), eventStr.size()));
             }
-            zmqMultipart.add(zmq::message_t(byteData->getByteData(), byteData->getLength()));
+            else if(EZMQ_CONTENT_TYPE_BYTEDATA == event.getContentType())
+            {
+                const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+                if(NULL == byteData)
+                {
+                    EZMQ_LOG(ERROR, TAG, "[ByteData] dynamic_cast failed");
+                    return EZMQ_ERROR;
+                }
+                if(NULL == byteData->getByteData())
+                {
+                    EZMQ_LOG(ERROR, TAG, "[ByteData] Byte Data is NULL");
+                    return EZMQ_ERROR;
+                }
+                zmqMultipart.add(zmq::message_t(byteData->getByteData(), byteData->getLength()));
+            }
+        }
+        catch(std::exception &e)
+        {
+            EZMQ_LOG_V(ERROR, TAG, "[publish] caught exception %s", e.what());
+            return EZMQ_ERROR;
         }
 
         //send data [ZMQMessage] on socket
@@ -221,7 +239,15 @@ namespace ezmq
 
     std::string EZMQPublisher::getSocketAddress()
     {
-        return PUB_TCP_PREFIX + std::to_string(mPort);
+        try
+        {
+            return PUB_TCP_PREFIX + std::to_string(mPort);
+        }
+        catch(std::exception &e)
+        {
+            EZMQ_LOG_V(ERROR, TAG, "caught exception: %s", e.what());
+        }
+        return "";
     }
 
     std::string EZMQPublisher::sanitizeTopic(std::string topic)
