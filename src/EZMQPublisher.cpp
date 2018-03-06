@@ -265,11 +265,18 @@ namespace ezmq
         return "";
     }
 #endif
-
-        if (topic.at(topic.length()-1) != '/')
+        try
         {
-            topic = topic + "/";
+            if (topic.at(topic.length()-1) != '/')
+            {
+                topic = topic + "/";
+            }
         }
+        catch(std::exception &e)
+        {
+            EZMQ_LOG_V(ERROR, TAG, "Allocation failed: %s", e.what());
+        }
+
         return topic;
     }
 
@@ -285,9 +292,9 @@ namespace ezmq
     {
         zmq::monitor_t monitor;
         VERIFY_NON_NULL(mPublisher)
-        monitor.init(*mPublisher, getMonitorAddress(), ZMQ_EVENT_CLOSED);
         try
         {
+            monitor.init(*mPublisher, getMonitorAddress(), ZMQ_EVENT_CLOSED);
             VERIFY_NON_NULL(mPublisher)
             mPublisher->close();
         }

@@ -468,10 +468,16 @@ namespace ezmq
         return "";
     }
 #endif
-
-        if (topic.at(topic.length()-1) != '/')
+        try
         {
-            topic = topic + "/";
+            if (topic.at(topic.length()-1) != '/')
+            {
+                topic = topic + "/";
+            }
+        }
+        catch(std::exception &e)
+        {
+            EZMQ_LOG_V(ERROR, TAG, "Allocation failed: %s", e.what());
         }
         return topic;
     }
