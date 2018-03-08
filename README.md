@@ -27,7 +27,7 @@ and serialization / deserialization middlewares along with some added functional
 1. Goto: ~/protocol-ezmq-cpp/
 2. Run the script:
    ```
-   ./build.sh <options>
+   ./build.sh
    ```
 **Notes** </br>
 (a) For getting help about script option: **$ ./build.sh --help** </br>
