@@ -210,7 +210,19 @@ build_armhf() {
     else
         scons TARGET_ARCH=armhf TC_PREFIX=/usr/bin/arm-linux-gnueabihf- TC_PATH=/usr/bin/
     fi
+}
 
+build_armhf_native() {
+    echo -e "Building for armhf_native"
+    if [ ${EZMQ_WITH_DEP} = true ]; then
+        install_dependencies
+    fi
+    cd $PROJECT_ROOT
+    if [ "debug" = ${EZMQ_BUILD_MODE} ]; then
+        scons TARGET_ARCH=armhf RELEASE=0 LOGGING=true
+    else
+        scons TARGET_ARCH=armhf
+    fi
 }
 
 build_armhf_qemu() {
@@ -249,11 +261,11 @@ clean_ezmq() {
 usage() {
     echo -e "${BLUE}Usage:${NO_COLOUR} ./build_auto.sh <option>"
     echo -e "${GREEN}Options:${NO_COLOUR}"
-    echo "  --target_arch=[x86|x86_64|arm|arm64|armhf|armhf-qemu]        :  Choose Target Architecture"
-    echo "  --with_dependencies=(default: false)                         :  Build ezmq along with dependencies [zmq and protobuf]"
-    echo "  --build_mode=[release|debug](default: release)               :  Build ezmq library and samples in release or debug mode"
-    echo "  -c                                                           :  Clean ezmq Repository and its dependencies"
-    echo "  -h / --help                                                  :  Display help and exit"
+    echo "  --target_arch=[x86|x86_64|arm|arm64|armhf|armhf-qemu|armhf-native] :  Choose Target Architecture"
+    echo "  --with_dependencies=(default: false)                               :  Build ezmq along with dependencies [zmq and protobuf]"
+    echo "  --build_mode=[release|debug](default: release)                     :  Build ezmq library and samples in release or debug mode"
+    echo "  -c                                                                 :  Clean ezmq Repository and its dependencies"
+    echo "  -h / --help                                                        :  Display help and exit"
     echo -e "${GREEN}Examples: ${NO_COLOUR}"
     echo -e "${BLUE}  build:-${NO_COLOUR}"
     echo "  $ ./build_auto.sh --target_arch=x86_64"
@@ -281,6 +293,8 @@ build() {
          build_armhf; exit 0;
     elif [ "armhf-qemu" = ${EZMQ_TARGET_ARCH} ]; then
          build_armhf_qemu; exit 0;
+    elif [ "armhf-native" = ${EZMQ_TARGET_ARCH} ]; then
+         build_armhf_native; exit 0;
     else
          echo -e "${RED}Not a supported architecture${NO_COLOUR}"
          usage; exit 1;
