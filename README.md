@@ -24,15 +24,18 @@ and serialization / deserialization middlewares along with some added functional
   - [How to install](http://scons.org/doc/2.3.0/HTML/scons-user/c95.html)
 
 ## How to build ##
-1. Goto: ~/protocol-ezmq-cpp/
-2. Run the script:
-   ```
-   ./build.sh
-   ```
+1. Goto: ~/protocol-ezmq-cpp/</br>
+2. Following are the scripts for building ezmq library:</br>
+   (a) build.sh      : Native build for x86_64</br>
+   (b) build_arm.sh  : Cross build for armhf-qemu</br>
+   (c) build_auto.sh : Generic script for building</br>
+
 **Notes** </br>
-(a) For getting help about script option: **$ ./build.sh --help** </br>
+(a) For getting help about script [ build_auto.sh ] : **$ ./build_auto.sh --help** </br>
 (b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library. </br> 
-(c) For cross compiling ( arm|arm64|armhf ) use --cross_compile=true
+(c) For native build on RPI [Raspberry Pi] Borad, use the following flags in build_auto.sh: </br>
+    `$ /build_auto.sh --target_arch=armhf-native --with_dependencies=true``</br>
+       - Update flags as required.
 
 ## How to run ##
 
