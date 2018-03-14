@@ -27,15 +27,12 @@ and serialization / deserialization middlewares along with some added functional
 1. Goto: ~/protocol-ezmq-cpp/</br>
 2. Following are the scripts for building ezmq library:</br>
    (a) build.sh      : Native build for x86_64</br>
-   (b) build_arm.sh  : Cross build for armhf-qemu</br>
-   (c) build_auto.sh : Generic script for building</br>
+   (b) build_arm.sh  : Native build for armhf [Raspberry pi board]</br>
+   (c) build_auto.sh : Generic script</br>
 
 **Notes** </br>
 (a) For getting help about script [ build_auto.sh ] : **$ ./build_auto.sh --help** </br>
 (b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library. </br> 
-(c) For native build on RPI [Raspberry Pi] Borad, use the following flags in build_auto.sh: </br>
-    `$ /build_auto.sh --target_arch=armhf-native --with_dependencies=true``</br>
-       - Update flags as required.
 
 ## How to run ##
 
