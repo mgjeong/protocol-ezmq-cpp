@@ -26,9 +26,9 @@ and serialization / deserialization middlewares along with some added functional
 ## How to build ##
 1. Goto: ~/protocol-ezmq-cpp/</br>
 2. Following are the scripts for building ezmq library:</br>
-   (a) build.sh      : Native build for x86_64</br>
-   (b) build_arm.sh  : Native build for armhf [Raspberry pi board]</br>
-   (c) build_auto.sh : Generic script</br>
+   **(a) build.sh**      : Native build for x86_64</br>
+   **(b) build_arm.sh**  : Native build for armhf [Raspberry pi board]</br>
+   **(c) build_auto.sh** : Generic script</br>
 
 **Notes** </br>
 (a) For getting help about script [ build_auto.sh ] : **$ ./build_auto.sh --help** </br>
