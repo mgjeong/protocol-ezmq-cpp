@@ -31,7 +31,8 @@ and serialization / deserialization middlewares along with some added functional
    ```
 **Notes** </br>
 (a) For getting help about script option: **$ ./build.sh --help** </br>
-(b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library.
+(b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library. </br> 
+(c) For cross compiling ( arm|arm64|armhf ) use --cross_compile=true
 
 ## How to run ##
 
