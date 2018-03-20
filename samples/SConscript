@@ -25,16 +25,25 @@ ezmq_sample_env = env.Clone()
 # Build flags
 ######################################################################
 ezmq_sample_env.AppendUnique(CPPPATH=[
-	'../extlibs/zmq',
-	'../protobuf',
+    '../extlibs/zmq',
+    '../protobuf',
     '../include',
-    '../src'
+    '../src',
+    '../dependencies/libzmq/include',
+    '../dependencies/protobuf-3.4.0/src/',
 ])
 
-ezmq_sample_env.AppendUnique(
-    CXXFLAGS=['-O2', '-g', '-Wall', '-fmessage-length=0', '-std=c++0x', '-I/usr/local/include'])
-
-ezmq_sample_env.AppendUnique(LIBS=['ezmq', 'protobuf'])
+if target_os not in ['windows']:
+    ezmq_sample_env.AppendUnique(
+            CXXFLAGS=['-O2', '-g', '-Wall', '-fmessage-length=0', '-std=c++0x', '-I/usr/local/include'])
+    ezmq_sample_env.AppendUnique(LIBS=['ezmq', 'protobuf'])
+else:
+    ezmq_sample_env.AppendUnique(LIBS=File('#/dependencies/libzmq/bin/x64/Release/v140/static/libzmq.lib'))
+    ezmq_sample_env.AppendUnique(LIBS=File('#/dependencies/protobuf-3.4.0/cmake/build/solution/Release/libprotobuf.lib'))
+    if not env.get('RELEASE'):
+        ezmq_sample_env.AppendUnique(LIBS=File('#/out/windows/win32/amd64/debug/ezmq.lib'))
+    else:
+        ezmq_sample_env.AppendUnique(LIBS=File('#/out/windows/win32/amd64/release/ezmq.lib'))
 
 ####################################################################
 # Source files and Targets

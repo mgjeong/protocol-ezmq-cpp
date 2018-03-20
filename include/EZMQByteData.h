@@ -18,6 +18,7 @@
 #ifndef EZMQ_BYTEDATA_H_
 #define EZMQ_BYTEDATA_H_
 
+#include <stdint.h>
 #include "EZMQMessage.h"
 
 namespace ezmq

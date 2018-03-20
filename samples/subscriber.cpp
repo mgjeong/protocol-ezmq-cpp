@@ -16,10 +16,12 @@
  *******************************************************************************/
 
 #include <iostream>
-#include <unistd.h>
 #include <signal.h>
 #include <condition_variable>
 #include <memory>
+#ifdef __linux__
+#include <unistd.h>
+#endif
 
 #include "EZMQAPI.h"
 #include "EZMQSubscriber.h"

@@ -27,11 +27,16 @@
 
 class TestWithMock: public testing::Test
 {
-public:
-    MockRepository mocks;
+    public:
+        MockRepository mocks;
 
-protected:
+    protected:
+
+#ifdef __linux__
     virtual ~TestWithMock() noexcept(noexcept(std::declval<Test>().~Test())) {}
+#else
+    virtual ~TestWithMock() noexcept {}
+#endif
 
     virtual void TearDown() {
         try

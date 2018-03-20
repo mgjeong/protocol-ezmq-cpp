@@ -16,7 +16,15 @@
  *******************************************************************************/
 
 #include <regex>
+
+#if defined(_WIN32)
+#define ZMQ_STATIC
+#pragma once
 #include "zmq_addon.hpp"
+#undef ZMQ_STATIC
+#else
+#include "zmq_addon.hpp"
+#endif
 
 #include "EZMQAPI.h"
 #include "EZMQPublisher.h"
