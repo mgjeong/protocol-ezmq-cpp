@@ -116,6 +116,10 @@ namespace ezmq
             //topic
             std::string topicStr(static_cast<char*>(zFrame1.data()), zFrame1.size());
             topic = topicStr;
+            if (topic.at(topic.length()-1) == '/')
+            {
+                topic.erase(topic.length()-1);
+            }
 
             //data
             data = zFrame3.data();
