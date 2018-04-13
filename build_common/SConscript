@@ -173,9 +173,9 @@ if target_os in targets_support_cc:
         env.AppendUnique(CCFLAGS=['--sysroot=' + sys_root])
         env.AppendUnique(LINKFLAGS=['--sysroot=' + sys_root])
 
-print "tc_path: %s" % tc_path
-print "prefix: %s" % prefix
-print "sys_root: %s" % sys_root
+        print "tc_path: %s" % tc_path
+        print "prefix: %s" % prefix
+        print "sys_root: %s" % sys_root
 
 if target_os in ['windows']:
     # UnpackAll.py needs access to system PATH components that SCons

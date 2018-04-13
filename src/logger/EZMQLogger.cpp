@@ -20,10 +20,18 @@
 #endif
 
 #include <time.h>
+#ifdef __linux__
 #include <sys/time.h>
-#ifdef HAVE_WINDOWS_H
+#endif
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#if defined(_WIN32)
 #include <windows.h>
 #endif
+
 #include "string.h"
 
 #include "EZMQLogger.h"
@@ -34,7 +42,12 @@ static int g_level = DEBUG;
 static bool g_hidePrivateLogEntries = true;
 // Show 16 bytes, 2 chars/byte, spaces between bytes, null termination
 static const uint16_t LINE_BUFFER_SIZE = (16 * 2) + 16 + 1;
-static const char *LEVEL[] __attribute__ ((unused)) = {"DEBUG", "INFO", "WARNING", "ERROR", "FATAL"};
+
+#ifdef __linux__
+    static const char * LEVEL[] __attribute__ ((unused)) = {"\e[0;32mDEBUG\033[0m", "\e[0;33mINFO\033[0m", "\e[0;35mWARNING\033[0m", "\e[0;31mERROR\033[0m", "\e[0;31mFATAL\033[0m"};
+#elif defined(_MSC_VER)
+    static const char * LEVEL[] = {"DEBUG", "INFO", "WARNING", "ERROR", "FATAL"};
+#endif
 
 static bool AdjustAndVerifyLogLevel(int* level)
 {

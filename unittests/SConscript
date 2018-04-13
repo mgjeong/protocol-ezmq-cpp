@@ -26,14 +26,6 @@ Import('env')
 
 gtest_env = SConscript('#extlibs/gtest/SConscript')
 lib_env = gtest_env.Clone()
-
-if lib_env.get('RELEASE'):
-    lib_env.AppendUnique(CCFLAGS=['-Os'])
-else:
-    lib_env.AppendUnique(CCFLAGS=['-g'])
-    lib_env.AppendUnique(CPPDEFINES=['DEBUG_LOG'])
-
-
 ezmq_test_env = lib_env.Clone()
 target_os = ezmq_test_env.get('TARGET_OS')
 
@@ -41,16 +33,25 @@ target_os = ezmq_test_env.get('TARGET_OS')
 # Build flags
 ######################################################################
 
-ezmq_test_env.AppendUnique(LIBPATH=[lib_env.get('BUILD_DIR')])
-ezmq_test_env.AppendUnique(LIBS=['ezmq', 'protobuf'])
-
 if target_os not in ['windows']:
     ezmq_test_env.AppendUnique(
         CXXFLAGS=['-O2', '-g', '-Wall', '-fmessage-length=0', '-I/usr/local/include'])
-
-if not ezmq_test_env.get('RELEASE'):
-    ezmq_test_env.PrependUnique(LIBS=['gcov'])
-    ezmq_test_env.AppendUnique(CXXFLAGS=['--coverage'])
+    ezmq_test_env.AppendUnique(LIBPATH=[lib_env.get('BUILD_DIR')])
+    ezmq_test_env.AppendUnique(LIBS=['ezmq', 'protobuf'])
+    if not ezmq_test_env.get('RELEASE'):
+        ezmq_test_env.PrependUnique(LIBS=['gcov'])
+        ezmq_test_env.AppendUnique(CXXFLAGS=['--coverage'])
+        ezmq_test_env.AppendUnique(CCFLAGS=['-g'])
+        ezmq_test_env.AppendUnique(CPPDEFINES=['DEBUG_LOG'])
+    else:
+        ezmq_test_env.AppendUnique(CCFLAGS=['-Os'])
+else:
+    ezmq_test_env.AppendUnique(LIBS=File('#/dependencies/libzmq/bin/x64/Release/v140/static/libzmq.lib'))
+    ezmq_test_env.AppendUnique(LIBS=File('#/dependencies/protobuf-3.4.0/cmake/build/solution/Release/libprotobuf.lib'))
+    if not env.get('RELEASE'):
+        ezmq_test_env.AppendUnique(LIBS=File('#/out/windows/win32/amd64/debug/ezmq.lib'))
+    else:
+        ezmq_test_env.AppendUnique(LIBS=File('#/out/windows/win32/amd64/release/ezmq.lib'))
 
 ezmq_test_env.AppendUnique(CPPPATH=[
     '../extlibs/hippomocks/hippomocks',
@@ -59,7 +60,9 @@ ezmq_test_env.AppendUnique(CPPPATH=[
     '../include',
     '../include/logger',
     '../src',
-    '.'
+    '.',
+    '../dependencies/libzmq/include',
+    '../dependencies/protobuf-3.4.0/src/',
 ])
 
 ######################################################################
@@ -90,8 +93,14 @@ ezmq_byteData_test = ezmq_test_env.Program('ezmq_byteData_test',
 Alias("ezmq_byteData_test", ezmq_byteData_test)
 ezmq_test_env.AppendTarget('ezmq_byteData_test')
 
-if env.get('TEST') == '1':
+if env.get('TEST') == '1' and target_os =='linux':
 	run_test(ezmq_test_env, '', 'unittests/ezmq_api_test', ezmq_api_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_pub_test', ezmq_pub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_sub_test', ezmq_sub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_byteData_test', ezmq_bytedata_test)
+
+if env.get('TEST') == '1' and target_os =='windows':
+	run_test(ezmq_test_env, '', 'unittests/ezmq_api_test.exe', ezmq_api_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_pub_test.exe', ezmq_pub_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_sub_test.exe', ezmq_sub_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_byteData_test.exe', ezmq_byteData_test)

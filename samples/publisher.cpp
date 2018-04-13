@@ -16,13 +16,24 @@
  *******************************************************************************/
 
 #include <iostream>
+
+#ifdef __linux__
 #include <unistd.h>
+#endif
+
 #include "EZMQAPI.h"
 #include "EZMQPublisher.h"
 #include "EZMQMessage.h"
 #include "EZMQByteData.h"
 #include "EZMQErrorCodes.h"
 #include "Event.pb.h"
+
+#if defined(_WIN32)
+#define sleep(x) Sleep(x)
+#define DELAY 2000
+#else
+#define DELAY 2
+#endif
 
 using namespace std;
 using namespace ezmq;
@@ -169,7 +180,7 @@ int main(int argc, char* argv[])
             return 0;
         }
         cout<<"Event "<<i <<" Published" <<endl;
-        sleep(2);
+        sleep(DELAY);
         i++;
     }
 

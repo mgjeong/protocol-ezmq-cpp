@@ -39,6 +39,7 @@ namespace ezmq
             }
             catch(std::exception &e)
             {
+                UNUSED(e);
                 EZMQ_LOG(ERROR, TAG, "Caught exception");
                 return EZMQ_ERROR;
             }
