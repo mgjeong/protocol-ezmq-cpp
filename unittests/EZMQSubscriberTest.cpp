@@ -93,6 +93,15 @@ TEST_F(EZMQSubscriberTest, subscribeTopic)
     EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe(mTopic));
 }
 
+TEST_F(EZMQSubscriberTest, subscribeTopicIPPort)
+{
+    EXPECT_EQ(EZMQ_OK, mSubscriber->start());
+    EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe("107.108.81.118", 5562, "topic"));
+    EXPECT_EQ(EZMQ_ERROR, mSubscriber->subscribe("", 5562, "topic"));
+    EXPECT_EQ(EZMQ_ERROR, mSubscriber->subscribe("107.108.81.118", -1, "topic"));
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mSubscriber->subscribe("107.108.81.118", 5562, ""));
+}
+
 TEST_F(EZMQSubscriberTest, subscribeTopicList)
 {
     EXPECT_EQ(EZMQ_OK, mSubscriber->start());
