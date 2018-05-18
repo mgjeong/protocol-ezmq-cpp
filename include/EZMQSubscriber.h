@@ -140,7 +140,7 @@ namespace ezmq
             * characters _ - . and / (5) Topic will be appended with forward slash [/]
             * in case, if application has not appended it.
             */
-            EZMQErrorCode subscribe(const std::string &ip, const int &port, std::string topic);
+            EZMQErrorCode subscribe(const std::string &ip, const int &port, std::string &topic);
 
             /**
             * Un-subscribe all the events from publisher.
@@ -232,9 +232,9 @@ namespace ezmq
             std::recursive_mutex mSubLock;
 
             EZMQErrorCode subscribeInternal(std::string topic);
-            EZMQErrorCode subscribeInternal(const std::string &ip, const int &port, std::string topic);
+            EZMQErrorCode subscribeInternal(const std::string &ip, const int &port, std::string &topic);
             EZMQErrorCode unSubscribeInternal(std::string topic);
-            std::string getSocketAddress(std::string ip, int port);
+            std::string getSocketAddress(const std::string &ip, const int &port);
             std::string getInProcUniqueAddress();
             void receive();
             void parseSocketData();

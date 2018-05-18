@@ -224,8 +224,9 @@ namespace ezmq
             {
                 mSubscriber = new zmq::socket_t(*mContext, ZMQ_SUB);
                 ALLOC_ASSERT(mSubscriber)
-                mSubscriber->connect(getSocketAddress(mIp, mPort));
-                EZMQ_LOG_V(DEBUG, TAG, "Starting subscriber [Address]: %s", getSocketAddress(mIp, mPort).c_str());
+                std::string address = getSocketAddress(mIp, mPort);
+                mSubscriber->connect(address);
+                EZMQ_LOG_V(DEBUG, TAG, "Starting subscriber [Address]: %s", address.c_str());
 
                  // Register sockets to poller
                 zmq_pollitem_t subscriberPoller;
@@ -310,7 +311,7 @@ namespace ezmq
         return result;
     }
 
-    EZMQErrorCode EZMQSubscriber::subscribe(const std::string &ip, const int &port, std::string topic)
+    EZMQErrorCode EZMQSubscriber::subscribe(const std::string &ip, const int &port, std::string &topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, "subscribe [Topic]");
         if(ip.empty() || port < 0 )
@@ -327,7 +328,7 @@ namespace ezmq
         return subscribeInternal(ip, port, topic);
     }
 
-     EZMQErrorCode EZMQSubscriber::subscribeInternal(const std::string &ip, const int &port, std::string topic)
+     EZMQErrorCode EZMQSubscriber::subscribeInternal(const std::string &ip, const int &port, std::string &topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
         VERIFY_NON_NULL(mContext)
@@ -474,7 +475,7 @@ namespace ezmq
         return mPort;
     }
 
-    std::string EZMQSubscriber::getSocketAddress(std::string ip, int port)
+    std::string EZMQSubscriber::getSocketAddress(const std::string &ip, const int &port)
     {
         try
         {
