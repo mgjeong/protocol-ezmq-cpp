@@ -224,8 +224,9 @@ namespace ezmq
             {
                 mSubscriber = new zmq::socket_t(*mContext, ZMQ_SUB);
                 ALLOC_ASSERT(mSubscriber)
-                mSubscriber->connect(getSocketAddress());
-                EZMQ_LOG_V(DEBUG, TAG, "Starting subscriber [Address]: %s", getSocketAddress().c_str());
+                std::string address = getSocketAddress(mIp, mPort);
+                mSubscriber->connect(address);
+                EZMQ_LOG_V(DEBUG, TAG, "Starting subscriber [Address]: %s", address.c_str());
 
                  // Register sockets to poller
                 zmq_pollitem_t subscriberPoller;
@@ -308,6 +309,43 @@ namespace ezmq
             }
         }
         return result;
+    }
+
+    EZMQErrorCode EZMQSubscriber::subscribe(const std::string &ip, const int &port, std::string &topic)
+    {
+        EZMQ_SCOPE_LOGGER(TAG, "subscribe [Topic]");
+        if(ip.empty() || port < 0 )
+        {
+            return EZMQ_ERROR;
+        }
+        //Validate Topic
+        topic = sanitizeTopic(topic);
+        if(topic.empty())
+        {
+            return EZMQ_INVALID_TOPIC;
+        }
+        EZMQ_LOG_V(DEBUG, TAG, "IP: %s Port: %d Topic: %s",  ip.c_str(),  port, topic.c_str());
+        return subscribeInternal(ip, port, topic);
+    }
+
+     EZMQErrorCode EZMQSubscriber::subscribeInternal(const std::string &ip, const int &port, std::string &topic)
+    {
+        EZMQ_SCOPE_LOGGER(TAG, __func__);
+        VERIFY_NON_NULL(mContext)
+        std::lock_guard<std::recursive_mutex> lock(mSubLock);
+        try
+        {
+            VERIFY_NON_NULL(mSubscriber)
+            mSubscriber->connect(getSocketAddress(ip, port));
+            mSubscriber->setsockopt(ZMQ_SUBSCRIBE, topic.c_str(), topic.size());
+        }
+        catch (std::exception &e)
+        {
+            EZMQ_LOG_V(ERROR, TAG, "[Subscribe] caught exception: %s", e.what());
+            return EZMQ_ERROR;
+        }
+        EZMQ_LOG(DEBUG, TAG, "subscribed for events");
+        return EZMQ_OK;
     }
 
     EZMQErrorCode EZMQSubscriber::unSubscribe()
@@ -437,11 +475,11 @@ namespace ezmq
         return mPort;
     }
 
-    std::string EZMQSubscriber::getSocketAddress()
+    std::string EZMQSubscriber::getSocketAddress(const std::string &ip, const int &port)
     {
         try
         {
-            return TCP_PREFIX + mIp + ":"  + std::to_string(mPort);
+            return TCP_PREFIX + ip+ ":"  + std::to_string(port);
         }
         catch(std::exception &e)
         {

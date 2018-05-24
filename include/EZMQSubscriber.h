@@ -125,6 +125,24 @@ namespace ezmq
             EZMQErrorCode subscribe(std::list<std::string> topics);
 
             /**
+            * Subscribe for event/messages from given IP:Port on the given topic.
+            *
+            * @param ip - Target[Publisher] IP address.
+            * @param port - Target[Publisher] Port number.
+            * @param topic - Topic to be subscribed.
+            *
+            * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+            *
+            * note (1) It will be using same Subscriber socket for connecting to given
+            * ip:port. (2) To unsubcribe use un-subscribe API with the same topic. (3)
+            * Topic name should be as path format. For example: home/livingroom/ (4)
+            * Topic name can have letters [a-z, A-z], numerics [0-9] and special
+            * characters _ - . and / (5) Topic will be appended with forward slash [/]
+            * in case, if application has not appended it.
+            */
+            EZMQErrorCode subscribe(const std::string &ip, const int &port, std::string &topic);
+
+            /**
             * Un-subscribe all the events from publisher.
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
@@ -214,8 +232,9 @@ namespace ezmq
             std::recursive_mutex mSubLock;
 
             EZMQErrorCode subscribeInternal(std::string topic);
+            EZMQErrorCode subscribeInternal(const std::string &ip, const int &port, std::string &topic);
             EZMQErrorCode unSubscribeInternal(std::string topic);
-            std::string getSocketAddress();
+            std::string getSocketAddress(const std::string &ip, const int &port);
             std::string getInProcUniqueAddress();
             void receive();
             void parseSocketData();

@@ -93,6 +93,17 @@ TEST_F(EZMQSubscriberTest, subscribeTopic)
     EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe(mTopic));
 }
 
+TEST_F(EZMQSubscriberTest, subscribeTopicIPPort)
+{
+    std::string topic = "topic";
+    EXPECT_EQ(EZMQ_OK, mSubscriber->start());
+    EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe(mIp, mPort, topic));
+    EXPECT_EQ(EZMQ_ERROR, mSubscriber->subscribe("", mPort, topic));
+    EXPECT_EQ(EZMQ_ERROR, mSubscriber->subscribe(mIp, -1, topic));
+    topic = "";
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mSubscriber->subscribe(mIp, mPort, topic));
+}
+
 TEST_F(EZMQSubscriberTest, subscribeTopicList)
 {
     EXPECT_EQ(EZMQ_OK, mSubscriber->start());
