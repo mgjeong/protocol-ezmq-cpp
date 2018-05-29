@@ -88,24 +88,3 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
 		$ build_auto.bat
 		  OR
 		$ build_auto.bat --with_dependencies=false
-		
-	NOTE :: Known build errors:
-	1. gtest download failed error.
-		Downloading ...
-		scons: *** <urlopen error [Errno 1] _ssl.c:507: error:1407742E:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert protocol version> [https://github.com/google/googletest/archive/release-1.7.0.zip]  Stop.
-	
-	SOLUTION : 
-		Manually download "release-1.7.0.zip" file from here:
-		[https://github.com/google/googletest/archive/release-1.7.0.zip]
-		Place the zip file in location : "~/protocol-ezmq-cpp/extlibs/gtest"
-	
-	2. hippmocks download failed error.
-		Downloading ...
-		scons: *** <urlopen error [Errno 1] _ssl.c:507: error:1407742E:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert protocol version> [https://github.com/dascandy/hippomocks/archive/v5.0.zip]  Stop.
-	
-	SOLUTION : 
-		Manually download "v5.0.zip" file from here:
-		[https://github.com/dascandy/hippomocks/archive/v5.0.zip]
-		Place the zip file in location : "~/protocol-ezmq-cpp/extlibs/hippomocks"
-	
-	
