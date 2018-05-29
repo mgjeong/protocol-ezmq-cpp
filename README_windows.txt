@@ -18,7 +18,7 @@ Install dependencies from the web and add all to PATH variable.
 Trouble-shooting:
 1. If SCons can't find Python, try installing 32 bit version of Python.
 
-Building ezmq library and sample:
+################## Building ezmq library and sample: [Manually] ##################
 
 Make sure all the pre-requisite tools are installed and added to PATH variable.
 
@@ -74,17 +74,23 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
 
    (b) Subscriber:
        $ subscriber.exe
-	   
-5. For auto build of ezmq-cpp with/without dependency.
-    (a) Open window command line.
-    (b) $ cd C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC
-    (c) $ call vcvarsall.bat amd64
-        - The above script will turn cmd to visual studio terminal.
-    (d) $ cd ~/protocol-ezmq-cpp/
-    (e) To Build ezmq with its dependencies [ZMQ and Protobuf]: 
-         $ build_auto.bat --with_dependencies=true
-   
-        To build ezmq without dependencies:
-         $ build_auto.bat
-          OR
-         $ build_auto.bat --with_dependencies=false
+	
+################## Building ezmq library and sample: [Auto build script] ##################
+	
+1. Open window command line.
+
+2. $ cd C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC
+
+3. $ call vcvarsall.bat amd64
+     - The above script will turn cmd to visual studio terminal.
+
+4. $ cd ~/protocol-ezmq-cpp/
+
+5. To Build ezmq with its dependencies [ZMQ and Protobuf]: 
+    $ build_auto.bat --with_dependencies=true
+
+   To build ezmq without dependencies:
+    $ build_auto.bat
+     OR
+    $ build_auto.bat --with_dependencies=false
+
