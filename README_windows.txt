@@ -80,11 +80,11 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
     (b) $ cd C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC
     (c) $ call vcvarsall.bat amd64
         - The above script will turn cmd to visual studio terminal.
-		
-	(d) $ cd ~/protocol-ezmq-cpp/
-	(e) I. To Build with dependencies:
-		$ build_auto.bat --with_dependencies=true
-	    II. To build without dependencies:
-		$ build_auto.bat
-		  OR
-		$ build_auto.bat --with_dependencies=false
+    (d) $ cd ~/protocol-ezmq-cpp/
+    (e) To Build ezmq with its dependencies [ZMQ and Protobuf]: 
+         $ build_auto.bat --with_dependencies=true
+   
+        To build ezmq without dependencies:
+         $ build_auto.bat
+          OR
+         $ build_auto.bat --with_dependencies=false
