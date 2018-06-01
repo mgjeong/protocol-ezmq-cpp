@@ -36,6 +36,22 @@ void subTopicCB(std::string topic, const EZMQMessage &/*event*/)
     UNUSED(topic);
 }
 
+class EZMQSubCallback: public EZMQSUBCallback
+{
+   public:
+        void onMessageCB(const EZMQMessage &/*event*/)
+        {
+            EZMQ_LOG(DEBUG, TAG, "Event received");
+        }
+
+        void onMessageCB(const std::string &topic, const EZMQMessage &/*event*/)
+        {
+            EZMQ_LOG(DEBUG, TAG, "Event received");
+            EZMQ_LOG_V(DEBUG, TAG, "Topic: %s", topic.c_str());
+            UNUSED(topic);
+        }
+};
+
 class EZMQSubscriberTest: public TestWithMock
 {
 protected:
@@ -66,6 +82,15 @@ protected:
     std::string mIp;
     int mPort;
 };
+
+TEST_F(EZMQSubscriberTest, constructor)
+{
+    EZMQSubCallback *callback = new EZMQSubCallback();
+    EZMQSubscriber *subscriber = new(std::nothrow)  EZMQSubscriber(mIp, mPort, callback);
+    ALLOC_ASSERT(subscriber)
+    ASSERT_NE(nullptr, subscriber);
+}
+
 
 TEST_F(EZMQSubscriberTest, start)
 {

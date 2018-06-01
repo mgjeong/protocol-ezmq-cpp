@@ -45,8 +45,18 @@
 
 namespace ezmq
 {
-    EZMQPublisher::EZMQPublisher(int port, EZMQStartCB startCB, EZMQStopCB stopCB, EZMQErrorCB errorCB):
+    EZMQPublisher::EZMQPublisher(const int &port, EZMQStartCB startCB, EZMQStopCB stopCB, EZMQErrorCB errorCB):
         mPort(port), mStartCallback(startCB), mStopCallback(stopCB), mErrorCallback(errorCB)
+    {
+        mContext = EZMQAPI::getInstance()->getContext();
+        if(nullptr == mContext)
+        {
+             EZMQ_LOG(ERROR, TAG, "Context is null");
+        }
+        mPublisher = nullptr;
+    }
+
+    EZMQPublisher::EZMQPublisher(const int &port, EZMQPUBCallback *callback): mPort(port), mPubCallback(callback)
     {
         mContext = EZMQAPI::getInstance()->getContext();
         if(nullptr == mContext)
@@ -91,7 +101,7 @@ namespace ezmq
         return EZMQ_OK;
     }
 
-    EZMQErrorCode EZMQPublisher::publishInternal( std::string topic, const EZMQMessage &event)
+    EZMQErrorCode EZMQPublisher::publishInternal(std::string &topic, const EZMQMessage &event)
     {
         // Form EZMQ header
         unsigned char ezmqHeader = EZMQ_HEADER;
@@ -191,10 +201,11 @@ namespace ezmq
     EZMQErrorCode EZMQPublisher::publish(const EZMQMessage &event)
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        return publishInternal("", event);
+        std::string topic = "";
+        return publishInternal(topic, event);
     }
 
-    EZMQErrorCode EZMQPublisher::publish( std::string topic, const EZMQMessage &event)
+    EZMQErrorCode EZMQPublisher::publish(std::string &topic, const EZMQMessage &event)
     {
         EZMQ_SCOPE_LOGGER(TAG, "publish [Topic]");
         //Validate Topic
@@ -206,7 +217,7 @@ namespace ezmq
         return publishInternal(topic, event);
     }
 
-    EZMQErrorCode EZMQPublisher::publish( std::list<std::string> topics, const EZMQMessage &event)
+    EZMQErrorCode EZMQPublisher::publish(const std::list<std::string> &topics, const EZMQMessage &event)
     {
         EZMQ_SCOPE_LOGGER(TAG, "publish [List Topic]");
         if(!topics.size())
@@ -258,7 +269,7 @@ namespace ezmq
         return "";
     }
 
-    std::string EZMQPublisher::sanitizeTopic(std::string topic)
+    std::string EZMQPublisher::sanitizeTopic(std::string &topic)
     {
         if(topic.empty())
         {

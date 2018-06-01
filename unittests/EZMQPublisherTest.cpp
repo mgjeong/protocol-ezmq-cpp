@@ -39,6 +39,25 @@ void errorCB(EZMQErrorCode /*code*/)
     EZMQ_LOG(DEBUG, TAG, "error callback");
 }
 
+class EZMQPubCallback: public EZMQPUBCallback
+{
+   public:
+        void onStartCB(EZMQErrorCode errorCode)
+        {
+            std::cout << "onStartCB error code: "<< errorCode << std::endl;
+        }
+
+        void onStopCB(EZMQErrorCode errorCode)
+        {
+            std::cout << "onStopCB error code: "<< errorCode << std::endl;
+        }
+
+        void onErrorCB(EZMQErrorCode errorCode)
+        {
+            std::cout << "onErrorCB error code: "<< errorCode << std::endl;
+        }
+};
+
 class EZMQPublisherTest: public TestWithMock
 {
     protected:
@@ -70,6 +89,14 @@ class EZMQPublisherTest: public TestWithMock
 TEST_F(EZMQPublisherTest, constructor)
 {
     EZMQPublisher *instance = new(std::nothrow) EZMQPublisher(mPort, startCB, stopCB, errorCB);
+    ALLOC_ASSERT(instance)
+    ASSERT_NE(nullptr, instance);
+}
+
+TEST_F(EZMQPublisherTest, constructor1)
+{
+    EZMQPubCallback *callback = new EZMQPubCallback();
+    EZMQPublisher *instance = new(std::nothrow) EZMQPublisher(mPort, callback);
     ALLOC_ASSERT(instance)
     ASSERT_NE(nullptr, instance);
 }
@@ -184,8 +211,9 @@ TEST_F(EZMQPublisherTest, publishNegative)
     ezmq::Event event = getProtoBufEvent();
     ezmq::EZMQByteData byteEvent = getByteData();
 
-    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish("", event));
-    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish("", byteEvent));
+    std::string topic = "";
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topic, event));
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topic, byteEvent));
 
     std::list<std::string> topicList;
     EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topicList, event));
