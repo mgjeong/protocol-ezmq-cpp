@@ -294,7 +294,7 @@ namespace ezmq
         return subscribeInternal(topic);
     }
 
-    EZMQErrorCode EZMQSubscriber::subscribe(std::string &topic)
+    EZMQErrorCode EZMQSubscriber::subscribe(std::string topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, "subscribe [Topic]");
         //Validate Topic
@@ -347,7 +347,7 @@ namespace ezmq
         return result;
     }
 
-    EZMQErrorCode EZMQSubscriber::subscribe(const std::string &ip, const int &port, std::string &topic)
+    EZMQErrorCode EZMQSubscriber::subscribe(const std::string &ip, const int &port, std::string topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, "subscribe [Topic]");
         if(ip.empty() || port < 0 )
@@ -391,7 +391,7 @@ namespace ezmq
         return unSubscribeInternal(topic);
     }
 
-    EZMQErrorCode EZMQSubscriber::unSubscribe(std::string &topic)
+    EZMQErrorCode EZMQSubscriber::unSubscribe(std::string topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, "unSubscribe [Topic]");
         //Validate Topic

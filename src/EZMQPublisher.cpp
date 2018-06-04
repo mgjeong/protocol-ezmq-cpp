@@ -205,7 +205,7 @@ namespace ezmq
         return publishInternal(topic, event);
     }
 
-    EZMQErrorCode EZMQPublisher::publish(std::string &topic, const EZMQMessage &event)
+    EZMQErrorCode EZMQPublisher::publish(std::string topic, const EZMQMessage &event)
     {
         EZMQ_SCOPE_LOGGER(TAG, "publish [Topic]");
         //Validate Topic

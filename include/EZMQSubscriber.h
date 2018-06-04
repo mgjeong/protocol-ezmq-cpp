@@ -61,7 +61,7 @@ namespace ezmq
              *
              * @param event - Received message.
              */
-            virtual void onMessageCB(const EZMQMessage &event) = 0;
+            virtual void onMessageCB(const EZMQMessage &/*event*/) {}
 
             /**
              * Invoked when message is received for a specific topic..
@@ -69,7 +69,7 @@ namespace ezmq
              * @param topic - Topic for the received event.
              * @param event - Received message.
              */
-            virtual void onMessageCB(const std::string &topic, const EZMQMessage &event) = 0;
+            virtual void onMessageCB(const std::string &/*topic*/, const EZMQMessage &/*event*/) {}
     };
 
     /**
@@ -139,7 +139,7 @@ namespace ezmq
             *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
             *       numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode subscribe(std::string &topic);
+            EZMQErrorCode subscribe(std::string topic);
 
             /**
             * Subscribe for event/messages on given list of topics. On any of the topic
@@ -172,7 +172,7 @@ namespace ezmq
             * characters _ - . and / (5) Topic will be appended with forward slash [/]
             * in case, if application has not appended it.
             */
-            EZMQErrorCode subscribe(const std::string &ip, const int &port, std::string &topic);
+            EZMQErrorCode subscribe(const std::string &ip, const int &port, std::string topic);
 
             /**
             * Un-subscribe all the events from publisher.
@@ -191,7 +191,7 @@ namespace ezmq
             *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
             *       numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode unSubscribe(std::string &topic);
+            EZMQErrorCode unSubscribe(std::string topic);
 
             /**
             * Un-subscribe event/messages on given list of topics. On any of the topic

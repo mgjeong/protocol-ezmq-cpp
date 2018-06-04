@@ -58,21 +58,21 @@ namespace ezmq
              *
              * @param errorCode - EZMQ_OK on success, otherwise appropriate error code.
              */
-            virtual void onStartCB(EZMQErrorCode errorCode) = 0;
+            virtual void onStartCB(EZMQErrorCode /*errorCode*/) {};
 
             /**
              * Invoked on stop of SUB instance.
              *
              * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
              */
-            virtual void onStopCB(EZMQErrorCode errorCode) = 0;
+            virtual void onStopCB(EZMQErrorCode /*errorCode*/) {};
 
             /**
              * Invoked on error of PUB instance.
              *
              * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
              */
-            virtual void onErrorCB(EZMQErrorCode errorCode) = 0;
+            virtual void onErrorCB(EZMQErrorCode /*errorCode*/) {};
     };
 
     /**
@@ -134,7 +134,7 @@ namespace ezmq
             *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
             *       numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode publish(std::string &topic, const EZMQMessage &event);
+            EZMQErrorCode publish(std::string topic, const EZMQMessage &event);
 
             /**
             * Publish an events on list of topics on socket for subscribers. On any of
