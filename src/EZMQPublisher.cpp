@@ -311,8 +311,17 @@ namespace ezmq
             EZMQ_LOG_V(ERROR, TAG, "caught exception while closing publisher: %s", e.what());
             return EZMQ_ERROR;
         }
-
-        if(true == monitor.check_event(1000))
+        bool result = false;
+        try
+        {
+            result = monitor.check_event(1000);
+        }
+        catch(std::exception &e)
+        {
+            EZMQ_LOG_V(ERROR, TAG, "caught exception while checking event: %s", e.what());
+            return EZMQ_ERROR;
+        }
+        if(true == result)
         {
             EZMQ_LOG(DEBUG, TAG, "Received ZMQ_EVENT_CLOSED Event");
         }
