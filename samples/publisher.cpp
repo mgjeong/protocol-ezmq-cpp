@@ -38,6 +38,8 @@
 using namespace std;
 using namespace ezmq;
 
+EZMQPublisher *gPublisher  = nullptr;
+
 void startCB(EZMQErrorCode /*code*/)
 {
     cout<<"Start callback ";
@@ -95,11 +97,20 @@ void printError()
     cout<<"      ./publisher -port 5562 -t topic1"<<endl;
 }
 
+void sigint(int /*signal*/)
+{
+    if(gPublisher)
+    {
+        cout<<"-- Destroying publisher-- "<<endl;
+        delete gPublisher;
+        gPublisher = NULL;
+    }
+}
+
 int main(int argc, char* argv[])
 {
     int port = 5562;
     std::string topic="";
-    EZMQPublisher *publisher  = NULL;
     EZMQErrorCode result = EZMQ_ERROR;
 
     // get port from command line arguments
@@ -129,6 +140,9 @@ int main(int argc, char* argv[])
         }
     }
 
+    //this handler is added to check stop API
+    signal(SIGINT, sigint);
+
      //Initialize EZMQ stack
     EZMQAPI *obj = EZMQAPI::getInstance();
     result = obj->initialize();
@@ -139,8 +153,8 @@ int main(int argc, char* argv[])
     }
 
     //Create EZMQ Publisher
-    publisher = new(std::nothrow) EZMQPublisher(port, startCB,  stopCB,  errorCB);
-    if(NULL == publisher)
+    gPublisher = new(std::nothrow) EZMQPublisher(port, startCB,  stopCB,  errorCB);
+    if(NULL == gPublisher)
     {
         std::cout<<"Publisher creation failed !!"<<endl;
         abort();
@@ -148,7 +162,7 @@ int main(int argc, char* argv[])
     std::cout<<"Publisher created !!"<<endl;
 
     //Start EZMQ Publisher
-    result = publisher->start();
+    result = gPublisher->start();
     cout<<"Publisher start [Result] : "<<result<<endl;
     if(result != EZMQ_OK)
     {
@@ -166,13 +180,18 @@ int main(int argc, char* argv[])
     int i = 1;
     while(i <= 15)
     {
+        //This check is required while used ctrl+c for program termination
+        if(!gPublisher)
+        {
+            return -1;
+        }
         if (topic.empty())
         {
-            result = publisher->publish(event);
+            result = gPublisher->publish(event);
         }
         else
         {
-            result = publisher->publish(topic, event);
+            result = gPublisher->publish(topic, event);
         }
         if(result != EZMQ_OK)
         {
@@ -184,10 +203,10 @@ int main(int argc, char* argv[])
         i++;
     }
 
-    if(publisher)
+    if(gPublisher)
     {
         cout<<"-- Destroying publisher-- "<<endl;
-        delete publisher;
+        delete gPublisher;
     }
 return 0;
 }

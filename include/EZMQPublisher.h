@@ -47,6 +47,35 @@ namespace ezmq
     typedef std::function<void(EZMQErrorCode code)> EZMQErrorCB;
 
     /**
+     * Interface to receive callback from EZMQ.
+     * Note: As of now not being used.
+     */
+    class EZMQPUBCallback
+    {
+        public:
+            /**
+             * Invoked on start of PUB instance.
+             *
+             * @param errorCode - EZMQ_OK on success, otherwise appropriate error code.
+             */
+            virtual void onStartCB(EZMQErrorCode /*errorCode*/) {};
+
+            /**
+             * Invoked on stop of SUB instance.
+             *
+             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+             */
+            virtual void onStopCB(EZMQErrorCode /*errorCode*/) {};
+
+            /**
+             * Invoked on error of PUB instance.
+             *
+             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+             */
+            virtual void onErrorCB(EZMQErrorCode /*errorCode*/) {};
+    };
+
+    /**
     * @class  EZMQPublisher
     * @brief   This class Contains the APIs related to start, stop, publish APIs
     *               of EZMQ Publisher.
@@ -55,14 +84,22 @@ namespace ezmq
     {
         public:
             /**
-            *  Construtor of EZMQPublisher.
+            * Construtor of EZMQPublisher.
             *
             * @param port - Port to be used for publisher socket.
             * @param startCB- Start callback.
             * @param stopCB - Stop Callback.
             * @param errorCB - Error Callback.
             */
-            EZMQPublisher(int port, EZMQStartCB startCB, EZMQStopCB stopCB, EZMQErrorCB errorCB);
+            EZMQPublisher(const int &port, EZMQStartCB startCB, EZMQStopCB stopCB, EZMQErrorCB errorCB);
+
+            /**
+            * Construtor of EZMQPublisher.
+            *
+            * @param port - Port to be used for publisher socket.
+            * @param callback - Callback interface object.
+            */
+            EZMQPublisher(const int &port, EZMQPUBCallback *callback);
 
             /**
             * Destructor of EZMQPublisher.
@@ -113,7 +150,7 @@ namespace ezmq
             *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
             *       numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode publish( std::list<std::string> topics, const EZMQMessage &event);
+            EZMQErrorCode publish(const std::list<std::string> &topics, const EZMQMessage &event);
 
             /**
             * Stops PUB instance.
@@ -136,6 +173,7 @@ namespace ezmq
             EZMQStartCB mStartCallback;
             EZMQStopCB mStopCallback;
             EZMQErrorCB mErrorCallback;
+            EZMQPUBCallback *mPubCallback;
 
             //ZMQ socket
             zmq::socket_t *mPublisher;
@@ -144,9 +182,9 @@ namespace ezmq
             //Mutex
             std::recursive_mutex mPubLock;
 
-            EZMQErrorCode publishInternal( std::string topic, const EZMQMessage &event);
+            EZMQErrorCode publishInternal(std::string &topic, const EZMQMessage &event);
             std::string getSocketAddress();
-            std::string  sanitizeTopic(std::string topic);
+            std::string  sanitizeTopic(std::string &topic);
             EZMQErrorCode syncClose();
     };
 }

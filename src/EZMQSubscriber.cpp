@@ -36,8 +36,23 @@
 
 namespace ezmq
 {
-    EZMQSubscriber::EZMQSubscriber(std::string ip, int port, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback):
+    EZMQSubscriber::EZMQSubscriber(const std::string &ip, const int &port, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback):
         mIp(ip), mPort(port), mSubCallback(subCallback), mSubTopicCallback(topicCallback)
+    {
+        mContext = EZMQAPI::getInstance()->getContext();
+        if(nullptr == mContext)
+        {
+            EZMQ_LOG(ERROR, TAG, "[Constructor] Context is null");
+        }
+        mShutdownServer = nullptr;
+        mShutdownClient = nullptr;
+        mSubscriber = nullptr;
+        isReceiverStarted = false;
+        mCallback= NULL;
+    }
+
+    EZMQSubscriber::EZMQSubscriber(const std::string &ip, const int &port, EZMQSUBCallback *callback):
+        mIp(ip), mPort(port), mCallback(callback)
     {
         mContext = EZMQAPI::getInstance()->getContext();
         if(nullptr == mContext)
@@ -139,11 +154,21 @@ namespace ezmq
             //call application callback
             if(false == isTopic)
             {
-                mSubCallback(event);
+                if(NULL == mCallback)
+                {
+                    mSubCallback(event);
+                    return;
+                }
+                mCallback->onMessageCB(event);
             }
             else
             {
-                mSubTopicCallback(topic, event);
+                if(NULL == mCallback)
+                {
+                    mSubTopicCallback(topic, event);
+                    return;
+                }
+                mCallback->onMessageCB(topic, event);
             }
         }
         else if(EZMQ_CONTENT_TYPE_BYTEDATA == contentType)
@@ -155,11 +180,21 @@ namespace ezmq
             //call application callback
             if(false == isTopic)
             {
-                mSubCallback(byteData);
+                if(NULL == mCallback)
+                {
+                    mSubCallback(byteData);
+                    return;
+                }
+                mCallback->onMessageCB(byteData);
             }
             else
             {
-                mSubTopicCallback(topic, byteData);
+                if(NULL == mCallback)
+                {
+                    mSubTopicCallback(topic, byteData);
+                    return;
+                }
+                mCallback->onMessageCB(topic, byteData);
             }
         }
         else
@@ -255,7 +290,8 @@ namespace ezmq
     EZMQErrorCode EZMQSubscriber::subscribe()
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        return subscribeInternal("");
+        std::string topic = "";
+        return subscribeInternal(topic);
     }
 
     EZMQErrorCode EZMQSubscriber::subscribe(std::string topic)
@@ -271,7 +307,7 @@ namespace ezmq
         return subscribeInternal(topic);
     }
 
-    EZMQErrorCode EZMQSubscriber::subscribeInternal(std::string topic)
+    EZMQErrorCode EZMQSubscriber::subscribeInternal(std::string &topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
         VERIFY_NON_NULL(mContext)
@@ -290,7 +326,7 @@ namespace ezmq
         return EZMQ_OK;
     }
 
-    EZMQErrorCode EZMQSubscriber::subscribe(std::list<std::string> topics)
+    EZMQErrorCode EZMQSubscriber::subscribe(const std::list<std::string> &topics)
     {
         EZMQ_SCOPE_LOGGER(TAG, "subscribe [Topic List]");
         if(!topics.size())
@@ -311,7 +347,7 @@ namespace ezmq
         return result;
     }
 
-    EZMQErrorCode EZMQSubscriber::subscribe(const std::string &ip, const int &port, std::string &topic)
+    EZMQErrorCode EZMQSubscriber::subscribe(const std::string &ip, const int &port, std::string topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, "subscribe [Topic]");
         if(ip.empty() || port < 0 )
@@ -351,7 +387,8 @@ namespace ezmq
     EZMQErrorCode EZMQSubscriber::unSubscribe()
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
-        return unSubscribeInternal("");
+        std::string topic = "";
+        return unSubscribeInternal(topic);
     }
 
     EZMQErrorCode EZMQSubscriber::unSubscribe(std::string topic)
@@ -367,7 +404,7 @@ namespace ezmq
         return unSubscribeInternal(topic);
     }
 
-    EZMQErrorCode EZMQSubscriber::unSubscribeInternal(std::string topic)
+    EZMQErrorCode EZMQSubscriber::unSubscribeInternal(std::string &topic)
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
         VERIFY_NON_NULL(mContext)
@@ -385,7 +422,7 @@ namespace ezmq
         return EZMQ_OK;
     }
 
-    EZMQErrorCode EZMQSubscriber::unSubscribe(std::list<std::string> topics)
+    EZMQErrorCode EZMQSubscriber::unSubscribe(const std::list<std::string> &topics)
     {
         EZMQ_SCOPE_LOGGER(TAG, "unSubscribe [Topic list]");
         if(!topics.size())
@@ -501,7 +538,7 @@ namespace ezmq
         return address;
     }
 
-    std::string EZMQSubscriber::sanitizeTopic(std::string topic)
+    std::string EZMQSubscriber::sanitizeTopic(std::string &topic)
     {
         if(topic.empty())
         {

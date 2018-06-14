@@ -73,40 +73,44 @@ void printByteData(const ezmq::EZMQByteData &byteData)
     cout<<"\n----------------------------------------"<<endl;
 }
 
-void subCB(const EZMQMessage &event)
+class EZMQSubCallback: public EZMQSUBCallback
 {
-    cout<<"App: Event received "<<endl;
-    if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
-        const Event *protoEvent =  dynamic_cast<const Event*>(&event);
-        printEvent(*protoEvent);
-    }
-    else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
-        const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
-        printByteData(*byteData);
-    }
-}
+   public:
+        void onMessageCB(const EZMQMessage &event)
+        {
+            cout<<"App: Event received: onMessageCB "<<endl;
+            if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
+                const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+                printEvent(*protoEvent);
+            }
+            else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
+                const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+                printByteData(*byteData);
+            }
+        }
 
-void subTopicCB(std::string topic, const EZMQMessage &event)
-{
-    cout<<"App: Event received "<<endl;
-    cout<<"Topic: "<<topic<<endl;
-    if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
-        const Event *protoEvent =  dynamic_cast<const Event*>(&event);
-        printEvent(*protoEvent);
-    }
-    else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
-        const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
-        printByteData(*byteData);
-    }
-}
+        void onMessageCB(const std::string &topic, const EZMQMessage &event)
+        {
+            cout<<"App: Event received : onMessageCB"<<endl;
+            cout<<"Topic: "<<topic<<endl;
+            if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
+                const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+                printEvent(*protoEvent);
+            }
+            else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
+                const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+                printByteData(*byteData);
+            }
+        }
+};
 
 void sigint(int /*signal*/)
 {
@@ -186,7 +190,8 @@ int main(int argc, char* argv[])
     }
 
     //Create EZMQ Subscriber
-    subscriber =  new(std::nothrow) EZMQSubscriber(ip, port,  subCB,  subTopicCB);
+    EZMQSubCallback *callback = new EZMQSubCallback();
+    subscriber =  new(std::nothrow) EZMQSubscriber(ip, port, callback);
     if(NULL == subscriber)
     {
         std::cout<<"subscriber creation failed !!"<<endl;
