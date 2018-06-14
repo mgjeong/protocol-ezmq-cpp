@@ -424,7 +424,10 @@ namespace ezmq
             }
 
             //wait for shutdown msg to be sent to receiver thread
-            mThread.join();
+            if(isReceiverStarted)
+            {
+                mThread.join();
+            }
 
             // close shut down client socket
             if (mShutdownClient)
@@ -456,7 +459,10 @@ namespace ezmq
         }
 
         //clear the poll item vector
-        mPollItems.clear();
+        if(isReceiverStarted)
+        {
+            mPollItems.clear();
+        }
 
         //Reset receiver flag
         isReceiverStarted = false;
