@@ -116,6 +116,9 @@ $(document).ready(function(){initNavTree('_e_z_m_q_subscriber_8h.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_s_u_b_callback.html">ezmq::EZMQSUBCallback</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface to receive message callback from EZMQ subscriber.  <a href="classezmq_1_1_e_z_m_q_s_u_b_callback.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_subscriber.html">ezmq::EZMQSubscriber</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class Contains the APIs related to start, stop, subscribe APIs of EZMQ Subscriber.  <a href="classezmq_1_1_e_z_m_q_subscriber.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,14 +130,15 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:af98e586ad62392b207fcfc705a9766bd"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; void(ezmq::Event <br class="typebreak" />
-event)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceezmq.html#af98e586ad62392b207fcfc705a9766bd">ezmq::EZMQSubCB</a></td></tr>
-<tr class="memdesc:af98e586ad62392b207fcfc705a9766bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callbacks to get all the subscribed events.  <a href="#af98e586ad62392b207fcfc705a9766bd">More...</a><br /></td></tr>
-<tr class="separator:af98e586ad62392b207fcfc705a9766bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a478a37f477ef5b5ca530ea3c69f5f428"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; void(std::string <br class="typebreak" />
-topic, ezmq::Event event)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceezmq.html#a478a37f477ef5b5ca530ea3c69f5f428">ezmq::EZMQSubTopicCB</a></td></tr>
-<tr class="memdesc:a478a37f477ef5b5ca530ea3c69f5f428"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callbacks to get all the subscribed events for a specific topic.  <a href="#a478a37f477ef5b5ca530ea3c69f5f428">More...</a><br /></td></tr>
-<tr class="separator:a478a37f477ef5b5ca530ea3c69f5f428"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d35d3b40b911d5cee60d15136c3acbb"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; void(const <br class="typebreak" />
+EZMQMessage &amp;event)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceezmq.html#a8d35d3b40b911d5cee60d15136c3acbb">ezmq::EZMQSubCB</a></td></tr>
+<tr class="memdesc:a8d35d3b40b911d5cee60d15136c3acbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callbacks to get all the subscribed events.  <a href="#a8d35d3b40b911d5cee60d15136c3acbb">More...</a><br /></td></tr>
+<tr class="separator:a8d35d3b40b911d5cee60d15136c3acbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62a6623bbf7b6aa609d1606b6f5de18f"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; void(const <br class="typebreak" />
+std::string &amp;topic, const <br class="typebreak" />
+EZMQMessage &amp;event)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceezmq.html#a62a6623bbf7b6aa609d1606b6f5de18f">ezmq::EZMQSubTopicCB</a></td></tr>
+<tr class="memdesc:a62a6623bbf7b6aa609d1606b6f5de18f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callbacks to get all the subscribed events for a specific topic.  <a href="#a62a6623bbf7b6aa609d1606b6f5de18f">More...</a><br /></td></tr>
+<tr class="separator:a62a6623bbf7b6aa609d1606b6f5de18f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file provides APIs for subscriber: start, subscribe, stop. </p>
@@ -142,7 +146,7 @@ topic, ezmq::Event event)&gt;&#160;</td><td class="memItemRight" valign="bottom"
 </div><!-- doc-content -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
     <ul>
-        <li class="footer">Generated on Thu Dec 28 2017 11:01:51</li>
+        <li class="footer">Generated on Wed Jul 11 2018 15:36:57</li>
     </ul>
 </div>
 </body>
