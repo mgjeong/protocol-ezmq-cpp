@@ -22,6 +22,9 @@
 #ifdef __linux__
 #include <unistd.h>
 #endif
+#if defined(_WIN32)
+#include <signal.h>
+#endif
 
 #include "EZMQAPI.h"
 #include "EZMQSubscriber.h"
