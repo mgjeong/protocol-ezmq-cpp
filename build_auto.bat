@@ -64,6 +64,7 @@
 
 :WITH_NO_FLAG
     ECHO Dependency option not provided or set to false. Building with --with_dependencies=false.
+    ECHO Building in Release mode.
     GOTO DOWNLOAD_GTEST_HIPPMOCKS
 
 :DOWNLOAD_GTEST_HIPPMOCKS
@@ -95,17 +96,34 @@
 :BUILD_EZMQ_CPP
     :: Build protocol-ezmq-cpp
     cd %ezmq_cpp_dir%
-    call scons TARGET_OS=windows TARGET_ARCH=amd64
+	
+	IF "%~3"=="" GOTO RELEASE_BUILD
+	IF "%~3"=="--build_mode" (
+	IF "%~4"=="" GOTO ERROR_INVALID_PARAM
+	IF "%~4"=="Debug" GOTO DEBUG_BUILD
+	IF "%~4"=="debug" GOTO DEBUG_BUILD
+	)
+	GOTO RELEASE_BUILD
+	
+:DEBUG_BUILD
+	ECHO "BUILDING IN DEBUG MODE"
+	call scons TARGET_OS=windows TARGET_ARCH=amd64 RELEASE=0
     GOTO END
-
+	
+:RELEASE_BUILD
+	ECHO "BUILDING IN RELEASE MODE"
+	call scons TARGET_OS=windows TARGET_ARCH=amd64
+    GOTO END
+	
 :ERROR_INVALID_PARAM_VALUE
     ECHO The value of "%~1" was not found or INVALID. Please re run the batch file.
-    ECHO e.g. windows.bat --with_dependencies=true
+    ECHO e.g. build_auto.bat --with_dependencies=true
     GOTO END
 
 :ERROR_INVALID_PARAM
     ECHO Invalid parameter provided. Please re run the batch file.
-    ECHO e.g. windows.bat --with_dependencies=true
+    ECHO e.g. build_auto.bat --with_dependencies=true
+    ECHO e.g. build_auto.bat --with_dependencies=true --build_mode=debug
     GOTO END
 
 :END
