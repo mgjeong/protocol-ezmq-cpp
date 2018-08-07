@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['max_5flog_5fv_5fbuffer_5fsize',['MAX_LOG_V_BUFFER_SIZE',['../_e_z_m_q_logger_8h.html#a884f629f41c55c0ba7214b8e4e19b1c4',1,'EZMQLogger.h']]]
+  ['if_5fezmq_5fprint_5flog_5flevel',['IF_EZMQ_PRINT_LOG_LEVEL',['../_e_z_m_q_logger_8h.html#a95a23579df6b1f91f4ae8cb53902cf4c',1,'EZMQLogger.h']]],
+  ['info_5fprivate',['INFO_PRIVATE',['../_e_z_m_q_logger_8h.html#a9cb3405ac95f7e520b605d4abc8bdd20',1,'EZMQLogger.h']]]
 ];

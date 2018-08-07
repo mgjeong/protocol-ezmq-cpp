@@ -1,11 +1,12 @@
 var classezmq_1_1_e_z_m_q_publisher =
 [
-    [ "EZMQPublisher", "classezmq_1_1_e_z_m_q_publisher.html#a2a2c0bd91bcbbbbb8be0edc792b2dbf1", null ],
+    [ "EZMQPublisher", "classezmq_1_1_e_z_m_q_publisher.html#a3953bc0549b932c6b0cef45ba6b63920", null ],
+    [ "EZMQPublisher", "classezmq_1_1_e_z_m_q_publisher.html#a5dfdb64c863bc8c43f23178bfe86bb9b", null ],
     [ "~EZMQPublisher", "classezmq_1_1_e_z_m_q_publisher.html#a4d52fe93b21c04640b991f42fc4a176f", null ],
     [ "getPort", "classezmq_1_1_e_z_m_q_publisher.html#af59ad9b83875094af97b32f5a26d0c0f", null ],
-    [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#a5cef94aabfdefb82143a2bd626bef491", null ],
-    [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#ab409db3b1efa7bc07aa8df4a8e72969d", null ],
-    [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#af8a2a42ec9112a3f11620f677adf9c7d", null ],
+    [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95", null ],
+    [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#a84eb89dc1ada7f6644de2a05d2bc0796", null ],
+    [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#a0781c0de9aafecd15fd59eb28c703e3a", null ],
     [ "start", "classezmq_1_1_e_z_m_q_publisher.html#a6d19badbf84eca6ca31e005487a50e5a", null ],
     [ "stop", "classezmq_1_1_e_z_m_q_publisher.html#a13cc31ab048c67c4946525a97cdd5685", null ]
 ];
