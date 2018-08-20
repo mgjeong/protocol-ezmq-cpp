@@ -120,54 +120,55 @@ $(document).ready(function(){initNavTree('_e_z_m_q_byte_data_8h_source.html','')
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *******************************************************************************/</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#ifndef EZMQ_BYTEDATA_H_</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define EZMQ_BYTEDATA_H_</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_e_z_m_q_message_8h.html">EZMQMessage.h</a>&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>ezmq</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classezmq_1_1_e_z_m_q_byte_data.html">   26</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html">EZMQByteData</a> : <span class="keyword">public</span> <a class="code" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classezmq_1_1_e_z_m_q_byte_data.html#ace0275ad425a23da3f872d8668225b48">   29</a></span>&#160;            <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classezmq_1_1_e_z_m_q_subscriber.html">EZMQSubscriber</a>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classezmq_1_1_e_z_m_q_byte_data.html#a2be84db0595387e024a6f95544f192f1">   30</a></span>&#160;            <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classezmq_1_1_e_z_m_q_publisher.html">EZMQPublisher</a>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a611aed8be287f62527a48cd5aeb807d8">EZMQByteData</a>(<span class="keyword">const</span> uint8_t *data,  <span class="keywordtype">size_t</span> dataLength);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a711ce7ba7ec3accf89eeb1f8aa1641e7">~EZMQByteData</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a0c8e56771718f2db80e10c7bf7e4e424">getLength</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keyword">const</span> uint8_t * <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#ac03f978fcbab52c4576f2a66d2064326">getByteData</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a90311ef3b4e931c045e833a9415022a2">setByteData</a>(<span class="keyword">const</span> uint8_t * data, <span class="keywordtype">size_t</span> dataLength);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keyword">const</span> uint8_t *mData;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordtype">size_t</span> mDataLength;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    };</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#endif // EZMQ_BYTEDATA_H_</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#ifndef EZMQ_BYTEDATA_H_</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define EZMQ_BYTEDATA_H_</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_e_z_m_q_message_8h.html">EZMQMessage.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>ezmq</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classezmq_1_1_e_z_m_q_byte_data.html">   37</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html">EZMQByteData</a> : <span class="keyword">public</span> <a class="code" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classezmq_1_1_e_z_m_q_byte_data.html#ace0275ad425a23da3f872d8668225b48">   40</a></span>&#160;            <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classezmq_1_1_e_z_m_q_subscriber.html">EZMQSubscriber</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classezmq_1_1_e_z_m_q_byte_data.html#a2be84db0595387e024a6f95544f192f1">   41</a></span>&#160;            <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classezmq_1_1_e_z_m_q_publisher.html">EZMQPublisher</a>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a611aed8be287f62527a48cd5aeb807d8">EZMQByteData</a>(<span class="keyword">const</span> uint8_t *data,  <span class="keywordtype">size_t</span> dataLength);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a711ce7ba7ec3accf89eeb1f8aa1641e7">~EZMQByteData</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keywordtype">size_t</span> <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a0c8e56771718f2db80e10c7bf7e4e424">getLength</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keyword">const</span> uint8_t * <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#ac03f978fcbab52c4576f2a66d2064326">getByteData</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_byte_data.html#a90311ef3b4e931c045e833a9415022a2">setByteData</a>(<span class="keyword">const</span> uint8_t * data, <span class="keywordtype">size_t</span> dataLength);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keyword">const</span> uint8_t *mData;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="keywordtype">size_t</span> mDataLength;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    };</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#endif // EZMQ_BYTEDATA_H_</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_byte_data_html_a611aed8be287f62527a48cd5aeb807d8"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_byte_data.html#a611aed8be287f62527a48cd5aeb807d8">ezmq::EZMQByteData::EZMQByteData</a></div><div class="ttdeci">EZMQByteData(const uint8_t *data, size_t dataLength)</div><div class="ttdoc">Construtor for EZMQByteData. </div></div>
 <div class="ttc" id="namespaceezmq_html_a5237953fc6aa030143ad6c575aa42638"><div class="ttname"><a href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">ezmq::EZMQErrorCode</a></div><div class="ttdeci">EZMQErrorCode</div><div class="ttdoc">EZMQ stack error codes. </div><div class="ttdef"><b>Definition:</b> EZMQErrorCodes.h:32</div></div>
-<div class="ttc" id="classezmq_1_1_e_z_m_q_message_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_message.html">ezmq::EZMQMessage</a></div><div class="ttdef"><b>Definition:</b> EZMQMessage.h:39</div></div>
+<div class="ttc" id="classezmq_1_1_e_z_m_q_message_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_message.html">ezmq::EZMQMessage</a></div><div class="ttdoc">This class is the base class for EMZQ message/event. </div><div class="ttdef"><b>Definition:</b> EZMQMessage.h:49</div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_byte_data_html_a711ce7ba7ec3accf89eeb1f8aa1641e7"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_byte_data.html#a711ce7ba7ec3accf89eeb1f8aa1641e7">ezmq::EZMQByteData::~EZMQByteData</a></div><div class="ttdeci">~EZMQByteData()</div><div class="ttdoc">Destructor of EZMQByteData. </div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_publisher_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_publisher.html">ezmq::EZMQPublisher</a></div><div class="ttdoc">This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. </div><div class="ttdef"><b>Definition:</b> EZMQPublisher.h:83</div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_byte_data_html_ac03f978fcbab52c4576f2a66d2064326"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_byte_data.html#ac03f978fcbab52c4576f2a66d2064326">ezmq::EZMQByteData::getByteData</a></div><div class="ttdeci">const uint8_t * getByteData() const </div><div class="ttdoc">Get message&#39;s byte data. </div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_byte_data_html_a0c8e56771718f2db80e10c7bf7e4e424"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_byte_data.html#a0c8e56771718f2db80e10c7bf7e4e424">ezmq::EZMQByteData::getLength</a></div><div class="ttdeci">size_t getLength() const </div><div class="ttdoc">Get length of data. </div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_byte_data_html_a90311ef3b4e931c045e833a9415022a2"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_byte_data.html#a90311ef3b4e931c045e833a9415022a2">ezmq::EZMQByteData::setByteData</a></div><div class="ttdeci">EZMQErrorCode setByteData(const uint8_t *data, size_t dataLength)</div><div class="ttdoc">Set byte data. </div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_subscriber_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_subscriber.html">ezmq::EZMQSubscriber</a></div><div class="ttdoc">This class Contains the APIs related to start, stop, subscribe APIs of EZMQ Subscriber. </div><div class="ttdef"><b>Definition:</b> EZMQSubscriber.h:80</div></div>
-<div class="ttc" id="classezmq_1_1_e_z_m_q_byte_data_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_byte_data.html">ezmq::EZMQByteData</a></div><div class="ttdef"><b>Definition:</b> EZMQByteData.h:26</div></div>
-<div class="ttc" id="_e_z_m_q_message_8h_html"><div class="ttname"><a href="_e_z_m_q_message_8h.html">EZMQMessage.h</a></div></div>
+<div class="ttc" id="classezmq_1_1_e_z_m_q_byte_data_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_byte_data.html">ezmq::EZMQByteData</a></div><div class="ttdoc">This class represents EZMQ byte data message format. </div><div class="ttdef"><b>Definition:</b> EZMQByteData.h:37</div></div>
+<div class="ttc" id="_e_z_m_q_message_8h_html"><div class="ttname"><a href="_e_z_m_q_message_8h.html">EZMQMessage.h</a></div><div class="ttdoc">This file represents EZMQ message. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
     <ul>
-        <li class="footer">Generated on Mon Aug 20 2018 17:21:49</li>
+        <li class="footer">Generated on Mon Aug 20 2018 20:03:16</li>
     </ul>
 </div>
 </body>

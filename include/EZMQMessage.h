@@ -15,6 +15,12 @@
  *
  *******************************************************************************/
 
+/**
+ * @file   EZMQMessage.h
+ *
+ * @brief This file represents EZMQ message.
+ */
+
 #ifndef EZMQ_MESSAGE_H_
 #define EZMQ_MESSAGE_H_
 
@@ -36,6 +42,10 @@ namespace ezmq
         EZMQ_CONTENT_TYPE_JSON  //Not in use as of now
     } EZMQContentType;
 
+    /**
+     * @class  EZMQMessage
+     * @brief   This class is the base class for EMZQ message/event.
+     */
     class EZMQMessage
     {
         public:

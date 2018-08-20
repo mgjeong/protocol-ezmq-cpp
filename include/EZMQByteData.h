@@ -15,6 +15,12 @@
  *
  *******************************************************************************/
 
+ /**
+ * @file   EZMQByteData.h
+ *
+ * @brief This file contains APIs related to byte data message format.
+ */
+
 #ifndef EZMQ_BYTEDATA_H_
 #define EZMQ_BYTEDATA_H_
 
@@ -23,6 +29,11 @@
 
 namespace ezmq
 {
+
+    /**
+     * @class  EZMQByteData
+     * @brief   This class represents EZMQ byte data message format.
+     */
     class EZMQByteData : public EZMQMessage
     {
         public:
