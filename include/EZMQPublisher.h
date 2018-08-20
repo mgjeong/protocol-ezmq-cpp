@@ -107,6 +107,21 @@ namespace ezmq
             ~EZMQPublisher();
 
             /**
+            * Set the server private/secret key.
+            *
+            * @param key - Server private/Secret key.
+            *
+            * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+            *
+            * @throws EZMQException
+            *
+            * @note
+            * (1) Key should be 40-character string encoded in the Z85 encoding format <br>
+            * (2) This API should be called before start() API.
+            */
+            EZMQErrorCode setServerPrivateKey(const std::string& key);
+
+            /**
             * Starts PUB instance.
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
@@ -130,9 +145,9 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            * @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/<br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
             EZMQErrorCode publish(std::string topic, const EZMQMessage &event);
 
@@ -146,9 +161,9 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            *  @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/<br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
             EZMQErrorCode publish(const std::list<std::string> &topics, const EZMQMessage &event);
 
@@ -168,6 +183,7 @@ namespace ezmq
 
         private:
             int mPort;
+            std::string mServerSecretKey;
 
             //callbacks
             EZMQStartCB mStartCallback;

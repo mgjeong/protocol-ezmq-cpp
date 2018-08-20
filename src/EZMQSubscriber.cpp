@@ -21,6 +21,7 @@
 #include "EZMQSubscriber.h"
 #include "EZMQLogger.h"
 #include "EZMQByteData.h"
+#include "EZMQException.h"
 
 #define TCP_PREFIX "tcp://"
 #define INPROC_PREFIX "inproc://shutdown-"
@@ -28,6 +29,7 @@
 #define CONTENT_TYPE_OFFSET 5
 #define VERSION_OFFSET 2
 #define VERSION_MASK 0x07
+#define KEY_LENGTH 40
 #define TAG "EZMQSubscriber"
 
 #ifdef __GNUC__
@@ -226,6 +228,43 @@ namespace ezmq
         }
     }
 
+    EZMQErrorCode EZMQSubscriber::setClientKeys(const std::string& clientPrivateKey,
+        const std::string& clientPublicKey)
+    {
+        EZMQ_SCOPE_LOGGER(TAG, __func__);
+#ifdef SECURITY_ENABLED
+        if (clientPrivateKey.length() != KEY_LENGTH || clientPublicKey.length() != KEY_LENGTH)
+        {
+            EZMQ_LOG(ERROR, TAG, "Invalid length of public/private key");
+            return EZMQ_ERROR;
+        }
+        mClientSecretKey = clientPrivateKey;
+        mClientPublicKey= clientPublicKey;
+#else
+        UNUSED(clientPrivateKey);
+        UNUSED(clientPublicKey);
+        throw EZMQException("Security is not enabled");
+#endif // SECURITY_ENABLED
+        return EZMQ_OK;
+    }
+
+    EZMQErrorCode EZMQSubscriber::setServerPublicKey(const std::string& key)
+    {
+        EZMQ_SCOPE_LOGGER(TAG, __func__);
+#ifdef SECURITY_ENABLED
+        if (key.length() != KEY_LENGTH)
+        {
+            EZMQ_LOG(ERROR, TAG, "Invalid key length");
+            return EZMQ_ERROR;
+        }
+        mServerPublicKey = key;
+#else
+        UNUSED(key);
+        throw EZMQException("Security is not enabled");
+#endif // SECURITY_ENABLED
+        return EZMQ_OK;
+    }
+
     EZMQErrorCode EZMQSubscriber::start()
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
@@ -259,6 +298,29 @@ namespace ezmq
             {
                 mSubscriber = new zmq::socket_t(*mContext, ZMQ_SUB);
                 ALLOC_ASSERT(mSubscriber)
+#ifdef SECURITY_ENABLED
+                //Set sever public key
+                if (mServerPublicKey.length() == KEY_LENGTH)
+                {
+                    mSubscriber->setsockopt(ZMQ_CURVE_SERVERKEY, mServerPublicKey.c_str(),
+                        mServerPublicKey.size());
+                }
+                //Set Client public key
+                if (mClientPublicKey.length() == KEY_LENGTH)
+                {
+                    mSubscriber->setsockopt(ZMQ_CURVE_PUBLICKEY, mClientPublicKey.c_str(),
+                        mClientPublicKey.size());
+                }
+                //Set Client private/secret key
+                if (mClientSecretKey.length() == KEY_LENGTH)
+                {
+                    mSubscriber->setsockopt(ZMQ_CURVE_SECRETKEY, mClientSecretKey.c_str(),
+                        mClientSecretKey.size());
+                }
+                // clear the keys
+                clearKeys();
+#endif // SECURITY_ENABLED
+
                 std::string address = getSocketAddress(mIp, mPort);
                 mSubscriber->connect(address);
                 EZMQ_LOG_V(DEBUG, TAG, "Starting subscriber [Address]: %s", address.c_str());
@@ -372,6 +434,30 @@ namespace ezmq
         try
         {
             VERIFY_NON_NULL(mSubscriber)
+
+#ifdef SECURITY_ENABLED
+            //Set sever public key
+            if (mServerPublicKey.length() == KEY_LENGTH)
+            {
+                mSubscriber->setsockopt(ZMQ_CURVE_SERVERKEY, mServerPublicKey.c_str(),
+                    mServerPublicKey.size());
+            }
+            //Set Client public key
+            if (mClientPublicKey.length() == KEY_LENGTH)
+            {
+                mSubscriber->setsockopt(ZMQ_CURVE_PUBLICKEY, mClientPublicKey.c_str(),
+                    mClientPublicKey.size());
+            }
+            //Set Client private/secret key
+            if (mClientSecretKey.length() == KEY_LENGTH)
+            {
+                mSubscriber->setsockopt(ZMQ_CURVE_SECRETKEY, mClientSecretKey.c_str(),
+                    mClientSecretKey.size());
+            }
+            // clear the keys
+            clearKeys();
+#endif // SECURITY_ENABLED
+
             mSubscriber->connect(getSocketAddress(ip, port));
             mSubscriber->setsockopt(ZMQ_SUBSCRIBE, topic.c_str(), topic.size());
         }
@@ -482,6 +568,9 @@ namespace ezmq
                 mShutdownServer = nullptr;
             }
 
+            // clear the keys
+            clearKeys();
+
             // close subscriber socket
             if (mSubscriber)
             {
@@ -565,6 +654,31 @@ namespace ezmq
             EZMQ_LOG_V(ERROR, TAG, "Allocation failed: %s", e.what());
         }
         return topic;
+    }
+
+    void EZMQSubscriber::clearKeys()
+    {
+        // clear the keys
+        if(!mServerPublicKey.empty())
+        {
+            const char *serverPublickey = mServerPublicKey.data();
+            memset((char *)serverPublickey, '\0', mServerPublicKey.length()-1);
+            mServerPublicKey = "";
+        }
+
+        if(!mClientPublicKey.empty())
+        {
+            const char *clientPublicKey = mClientPublicKey.data();
+            memset((char *)clientPublicKey, '\0', mClientPublicKey.length()-1);
+            mClientPublicKey = "";
+        }
+
+        if(!mClientSecretKey.empty())
+        {
+            const char *clientSecretKey = mClientSecretKey.data();
+            memset((char *)clientSecretKey, '\0', mClientSecretKey.length()-1);
+            mClientSecretKey = "";
+        }
     }
 }
 

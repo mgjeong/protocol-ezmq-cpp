@@ -30,6 +30,7 @@
 #include "EZMQPublisher.h"
 #include "EZMQLogger.h"
 #include "EZMQByteData.h"
+#include "EZMQException.h"
 
 #define PUB_TCP_PREFIX "tcp://*:"
 #define TOPIC_PATTERN "[a-zA-Z0-9-_./]+"
@@ -37,6 +38,7 @@
 #define EZMQ_HEADER 0x00
 #define CONTENT_TYPE_OFFSET 5
 #define VERSION_OFFSET 2
+#define KEY_LENGTH 40
 #define TAG "EZMQPublisher"
 
 #ifdef __GNUC__
@@ -76,6 +78,23 @@ namespace ezmq
         }
     }
 
+    EZMQErrorCode EZMQPublisher::setServerPrivateKey(const std::string& key)
+    {
+        EZMQ_SCOPE_LOGGER(TAG, __func__);
+#ifdef SECURITY_ENABLED
+        if (key.length() != KEY_LENGTH)
+        {
+            EZMQ_LOG(ERROR, TAG, "Invalid key length");
+            return EZMQ_ERROR;
+        }
+        mServerSecretKey = key;
+#else
+        UNUSED(key);
+        throw EZMQException("Security is not enabled");
+#endif // SECURITY_ENABLED
+        return EZMQ_OK;
+    }
+
     EZMQErrorCode EZMQPublisher::start()
     {
         EZMQ_SCOPE_LOGGER(TAG, __func__);
@@ -87,6 +106,21 @@ namespace ezmq
                 VERIFY_NON_NULL(mContext)
                 mPublisher = new(std::nothrow) zmq::socket_t(*mContext, ZMQ_PUB);
                 ALLOC_ASSERT(mPublisher)
+#ifdef SECURITY_ENABLED
+                if (mServerSecretKey.length() == KEY_LENGTH)
+                {
+                    //Set curve role as server
+                    int as_server = 1;
+                    mPublisher->setsockopt(ZMQ_CURVE_SERVER, &as_server, sizeof (int));
+                    //Set private/secret key of sever
+                    mPublisher->setsockopt(ZMQ_CURVE_SECRETKEY, mServerSecretKey.c_str(),
+                        mServerSecretKey.size());
+                    // clear the key
+                    const char *key = mServerSecretKey.data();
+                    memset((char *)key, '\0', mServerSecretKey.length()-1);
+                    mServerSecretKey = "";
+                }
+#endif // SECURITY_ENABLED
                 mPublisher->bind(getSocketAddress());
             }
         }
@@ -245,6 +279,14 @@ namespace ezmq
 
         // Sync close
         result = syncClose();
+        // clear the key
+        if(!mServerSecretKey.empty())
+        {
+            const char *key = mServerSecretKey.data();
+            memset((char *)key, '\0', mServerSecretKey.length()-1);
+            mServerSecretKey = "";
+        }
+
         delete mPublisher;
         mPublisher = nullptr;
         EZMQ_LOG(DEBUG, TAG, "publisher stopped");

@@ -115,6 +115,40 @@ namespace ezmq
             ~EZMQSubscriber();
 
             /**
+            * Set the security keys of client/its own.
+            *
+            * @param clientPrivateKey - Client private/secret key.
+            * @param clientPublicKey - Client public key.
+            *
+            * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+            *
+            * @throws EZMQException
+            *
+            * @note
+            * (1) Key should be 40-character string encoded in the Z85 encoding format <br>
+            * (2) This API should be called before start() API.
+            */
+            EZMQErrorCode setClientKeys(const std::string& clientPrivateKey, const std::string& clientPublicKey);
+
+            /**
+            * Set the server public key.
+            *
+            * @param key - Server public key.
+            *
+            * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+            *
+            * @throws EZMQException
+            *
+            * @note
+            * (1) Key should be 40-character string encoded in the Z85 encoding format <br>
+            * (2) This API should be called before start() API. <br>
+            * (3) If using the following API in secured mode: <br>
+            *      subscribe(const std::string &ip, const int &port, std::string topic);
+            *      setServerPublicKey API needs to be called before that.
+            */
+            EZMQErrorCode setServerPublicKey(const std::string& key);
+
+            /**
             * Starts SUB  instance.
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
@@ -135,9 +169,9 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            * @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/<br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
             EZMQErrorCode subscribe(std::string topic);
 
@@ -150,9 +184,9 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            *  @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/ <br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
             EZMQErrorCode subscribe(const std::list<std::string> &topics);
 
@@ -165,12 +199,14 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            * note (1) It will be using same Subscriber socket for connecting to given
-            * ip:port. (2) To unsubcribe use un-subscribe API with the same topic. (3)
-            * Topic name should be as path format. For example: home/livingroom/ (4)
-            * Topic name can have letters [a-z, A-z], numerics [0-9] and special
-            * characters _ - . and / (5) Topic will be appended with forward slash [/]
-            * in case, if application has not appended it.
+            * @note
+            * (1) It will be using same Subscriber socket for connecting to given ip:port. <br>
+            * (2) To unsubcribe use un-subscribe API with the same topic. <br>
+            * (3) Topic name should be as path format. For example: home/livingroom/ <br>
+            * (4) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and / <br>
+            * (5) Topic will be appended with forward slash [/] in case, if application has not appended it <br>
+            * (6) If using in secured mode: Call setServerPublicKey(const std::string& key) API with target server
+            *     public key before calling this API.
             */
             EZMQErrorCode subscribe(const std::string &ip, const int &port, std::string topic);
 
@@ -187,9 +223,9 @@ namespace ezmq
             * @param topic - topic to be unsubscribed.
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            * @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/ <br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
             EZMQErrorCode unSubscribe(std::string topic);
 
@@ -202,9 +238,9 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            *  @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/<br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
             EZMQErrorCode unSubscribe(const std::list<std::string> &topics);
 
@@ -240,6 +276,9 @@ namespace ezmq
             std::string mServiceName;
             std::string mIp;
             int mPort;
+            std::string mServerPublicKey;
+            std::string mClientPublicKey;
+            std::string mClientSecretKey;
 
             //Receiver Thread
             std::thread mThread;
@@ -272,6 +311,7 @@ namespace ezmq
             void receive();
             void parseSocketData();
             std::string  sanitizeTopic(std::string &topic);
+            void clearKeys();
     };
 }
 #endif //EZMQ_SUBSCRIBER_H
