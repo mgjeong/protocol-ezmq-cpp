@@ -7,6 +7,7 @@ var classezmq_1_1_e_z_m_q_publisher =
     [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95", null ],
     [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#a84eb89dc1ada7f6644de2a05d2bc0796", null ],
     [ "publish", "classezmq_1_1_e_z_m_q_publisher.html#a0781c0de9aafecd15fd59eb28c703e3a", null ],
+    [ "setServerPrivateKey", "classezmq_1_1_e_z_m_q_publisher.html#a2d5311cdbd69e8f86cc120731d6fd039", null ],
     [ "start", "classezmq_1_1_e_z_m_q_publisher.html#a6d19badbf84eca6ca31e005487a50e5a", null ],
     [ "stop", "classezmq_1_1_e_z_m_q_publisher.html#a13cc31ab048c67c4946525a97cdd5685", null ]
 ];

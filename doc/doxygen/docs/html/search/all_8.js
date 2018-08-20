@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['max_5flog_5fv_5fbuffer_5fsize',['MAX_LOG_V_BUFFER_SIZE',['../_e_z_m_q_logger_8h.html#a884f629f41c55c0ba7214b8e4e19b1c4',1,'EZMQLogger.h']]]
+  ['terminate',['terminate',['../classezmq_1_1_e_z_m_q_a_p_i.html#a5ec1ac25171692194aa1666a84a4e1d8',1,'ezmq::EZMQAPI']]]
 ];

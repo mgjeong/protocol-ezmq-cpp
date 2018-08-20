@@ -67,7 +67,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -90,7 +89,7 @@ $(document).ready(function(){initNavTree('_e_z_m_q_publisher_8h_source.html','')
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -133,7 +132,7 @@ $(document).ready(function(){initNavTree('_e_z_m_q_publisher_8h_source.html','')
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">//ZeroMQ header file</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;zmq.hpp&quot;</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;EZMQMessage.h&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_e_z_m_q_message_8h.html">EZMQMessage.h</a>&quot;</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_e_z_m_q_error_codes_8h.html">EZMQErrorCodes.h</a>&quot;</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span>ezmq</div>
@@ -161,42 +160,45 @@ $(document).ready(function(){initNavTree('_e_z_m_q_publisher_8h_source.html','')
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a4d52fe93b21c04640b991f42fc4a176f">~EZMQPublisher</a>();</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a6d19badbf84eca6ca31e005487a50e5a">start</a>();</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">publish</a>(<span class="keyword">const</span> EZMQMessage &amp;event);</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">publish</a>(std::string topic, <span class="keyword">const</span> EZMQMessage &amp;event);</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">publish</a>(<span class="keyword">const</span> std::list&lt;std::string&gt; &amp;topics, <span class="keyword">const</span> EZMQMessage &amp;event);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a13cc31ab048c67c4946525a97cdd5685">stop</a>();</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            <span class="keywordtype">int</span> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#af59ad9b83875094af97b32f5a26d0c0f">getPort</a>();</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            <span class="keywordtype">int</span> mPort;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="comment">//callbacks</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            <a class="code" href="namespaceezmq.html#a259b2a1eeacb9d4073a6a3a25de9ba2e">EZMQStartCB</a> mStartCallback;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            <a class="code" href="namespaceezmq.html#a86ce04b3b9ab40d7e724e81ccdf81a22">EZMQStopCB</a> mStopCallback;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            <a class="code" href="namespaceezmq.html#af63b61aec2258186ed280a3720a33bf2">EZMQErrorCB</a> mErrorCallback;</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <a class="code" href="classezmq_1_1_e_z_m_q_p_u_b_callback.html">EZMQPUBCallback</a> *mPubCallback;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            <span class="comment">//ZMQ socket</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            zmq::socket_t *mPublisher;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            std::shared_ptr&lt;zmq::context_t&gt; mContext;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            <span class="comment">//Mutex</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            std::recursive_mutex mPubLock;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> publishInternal(std::string &amp;topic, <span class="keyword">const</span> EZMQMessage &amp;event);</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            std::string getSocketAddress();</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            std::string  sanitizeTopic(std::string &amp;topic);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> syncClose();</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    };</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;}</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="preprocessor">#endif //EZMQ_PUBLISHER_H</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a2d5311cdbd69e8f86cc120731d6fd039">setServerPrivateKey</a>(<span class="keyword">const</span> std::string&amp; key);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a6d19badbf84eca6ca31e005487a50e5a">start</a>();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">publish</a>(<span class="keyword">const</span> <a class="code" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;event);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">publish</a>(std::string topic, <span class="keyword">const</span> <a class="code" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;event);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">publish</a>(<span class="keyword">const</span> std::list&lt;std::string&gt; &amp;topics, <span class="keyword">const</span> <a class="code" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;event);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#a13cc31ab048c67c4946525a97cdd5685">stop</a>();</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            <span class="keywordtype">int</span> <a class="code" href="classezmq_1_1_e_z_m_q_publisher.html#af59ad9b83875094af97b32f5a26d0c0f">getPort</a>();</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="keywordtype">int</span> mPort;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            std::string mServerSecretKey;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <span class="comment">//callbacks</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <a class="code" href="namespaceezmq.html#a259b2a1eeacb9d4073a6a3a25de9ba2e">EZMQStartCB</a> mStartCallback;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            <a class="code" href="namespaceezmq.html#a86ce04b3b9ab40d7e724e81ccdf81a22">EZMQStopCB</a> mStopCallback;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            <a class="code" href="namespaceezmq.html#af63b61aec2258186ed280a3720a33bf2">EZMQErrorCB</a> mErrorCallback;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            <a class="code" href="classezmq_1_1_e_z_m_q_p_u_b_callback.html">EZMQPUBCallback</a> *mPubCallback;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            <span class="comment">//ZMQ socket</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            zmq::socket_t *mPublisher;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            std::shared_ptr&lt;zmq::context_t&gt; mContext;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            <span class="comment">//Mutex</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            std::recursive_mutex mPubLock;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> publishInternal(std::string &amp;topic, <span class="keyword">const</span> <a class="code" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;event);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            std::string getSocketAddress();</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            std::string  sanitizeTopic(std::string &amp;topic);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> syncClose();</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    };</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;}</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="preprocessor">#endif //EZMQ_PUBLISHER_H</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_publisher_html_a4d52fe93b21c04640b991f42fc4a176f"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_publisher.html#a4d52fe93b21c04640b991f42fc4a176f">ezmq::EZMQPublisher::~EZMQPublisher</a></div><div class="ttdeci">~EZMQPublisher()</div><div class="ttdoc">Destructor of EZMQPublisher. </div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_p_u_b_callback_html_a7d296ecc5bf7b5119c5df2df0d3ce94f"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_p_u_b_callback.html#a7d296ecc5bf7b5119c5df2df0d3ce94f">ezmq::EZMQPUBCallback::onStartCB</a></div><div class="ttdeci">virtual void onStartCB(EZMQErrorCode)</div><div class="ttdoc">Invoked on start of PUB instance. </div><div class="ttdef"><b>Definition:</b> EZMQPublisher.h:61</div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_p_u_b_callback_html_ab018b7670aee9ab84436c4baf0c41e24"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_p_u_b_callback.html#ab018b7670aee9ab84436c4baf0c41e24">ezmq::EZMQPUBCallback::onErrorCB</a></div><div class="ttdeci">virtual void onErrorCB(EZMQErrorCode)</div><div class="ttdoc">Invoked on error of PUB instance. </div><div class="ttdef"><b>Definition:</b> EZMQPublisher.h:75</div></div>
@@ -208,8 +210,11 @@ $(document).ready(function(){initNavTree('_e_z_m_q_publisher_8h_source.html','')
 <div class="ttc" id="namespaceezmq_html_af63b61aec2258186ed280a3720a33bf2"><div class="ttname"><a href="namespaceezmq.html#af63b61aec2258186ed280a3720a33bf2">ezmq::EZMQErrorCB</a></div><div class="ttdeci">std::function&lt; void(EZMQErrorCode code)&gt; EZMQErrorCB</div><div class="ttdef"><b>Definition:</b> EZMQPublisher.h:47</div></div>
 <div class="ttc" id="namespaceezmq_html_a5237953fc6aa030143ad6c575aa42638"><div class="ttname"><a href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">ezmq::EZMQErrorCode</a></div><div class="ttdeci">EZMQErrorCode</div><div class="ttdoc">EZMQ stack error codes. </div><div class="ttdef"><b>Definition:</b> EZMQErrorCodes.h:32</div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_publisher_html_a6d19badbf84eca6ca31e005487a50e5a"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_publisher.html#a6d19badbf84eca6ca31e005487a50e5a">ezmq::EZMQPublisher::start</a></div><div class="ttdeci">EZMQErrorCode start()</div><div class="ttdoc">Starts PUB instance. </div></div>
+<div class="ttc" id="classezmq_1_1_e_z_m_q_message_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_message.html">ezmq::EZMQMessage</a></div><div class="ttdef"><b>Definition:</b> EZMQMessage.h:39</div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_p_u_b_callback_html_a020537cb41620f6931b13699d68d92e7"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_p_u_b_callback.html#a020537cb41620f6931b13699d68d92e7">ezmq::EZMQPUBCallback::onStopCB</a></div><div class="ttdeci">virtual void onStopCB(EZMQErrorCode)</div><div class="ttdoc">Invoked on stop of SUB instance. </div><div class="ttdef"><b>Definition:</b> EZMQPublisher.h:68</div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_publisher_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_publisher.html">ezmq::EZMQPublisher</a></div><div class="ttdoc">This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. </div><div class="ttdef"><b>Definition:</b> EZMQPublisher.h:83</div></div>
+<div class="ttc" id="classezmq_1_1_e_z_m_q_publisher_html_a2d5311cdbd69e8f86cc120731d6fd039"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_publisher.html#a2d5311cdbd69e8f86cc120731d6fd039">ezmq::EZMQPublisher::setServerPrivateKey</a></div><div class="ttdeci">EZMQErrorCode setServerPrivateKey(const std::string &amp;key)</div><div class="ttdoc">Set the server private/secret key. </div></div>
+<div class="ttc" id="_e_z_m_q_message_8h_html"><div class="ttname"><a href="_e_z_m_q_message_8h.html">EZMQMessage.h</a></div></div>
 <div class="ttc" id="_e_z_m_q_error_codes_8h_html"><div class="ttname"><a href="_e_z_m_q_error_codes_8h.html">EZMQErrorCodes.h</a></div><div class="ttdoc">This file contains error codes of EZMQ stack possibly return to application. </div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_publisher_html_a20a611e64acbee20a4609942f77cec95"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">ezmq::EZMQPublisher::publish</a></div><div class="ttdeci">EZMQErrorCode publish(const EZMQMessage &amp;event)</div><div class="ttdoc">Publish events on the socket for subscribers. </div></div>
 <div class="ttc" id="classezmq_1_1_e_z_m_q_p_u_b_callback_html"><div class="ttname"><a href="classezmq_1_1_e_z_m_q_p_u_b_callback.html">ezmq::EZMQPUBCallback</a></div><div class="ttdoc">Interface to receive callback from EZMQ. </div><div class="ttdef"><b>Definition:</b> EZMQPublisher.h:53</div></div>
@@ -217,7 +222,7 @@ $(document).ready(function(){initNavTree('_e_z_m_q_publisher_8h_source.html','')
 </div><!-- doc-content -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
     <ul>
-        <li class="footer">Generated on Wed Jul 11 2018 15:36:57</li>
+        <li class="footer">Generated on Mon Aug 20 2018 17:21:49</li>
     </ul>
 </div>
 </body>
