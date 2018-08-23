@@ -20,6 +20,7 @@
 #include "EZMQPublisher.h"
 #include "UnitTestHelper.h"
 
+#define SERVER_SECRET_KEY "[:X%Q3UfY+kv2A^.wv:(qy2E=bk0L][cm=mS3Hcx"
 #define TAG "EZMQ_PUB_TEST"
 static int mPort = 5562;
 using namespace ezmq;
@@ -121,6 +122,24 @@ TEST_F(EZMQPublisherTest, publish)
     EXPECT_EQ(EZMQ_OK, mPublisher->start());
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
 }
+
+#ifdef SECURITY_ENABLED
+TEST_F(EZMQPublisherTest, publishSecure)
+{
+    ezmq::Event event = getProtoBufEvent();
+    EXPECT_EQ(EZMQ_OK, mPublisher->setServerPrivateKey(SERVER_SECRET_KEY));
+    EXPECT_EQ(EZMQ_OK, mPublisher->start());
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
+}
+
+TEST_F(EZMQPublisherTest, publishSecureNegative)
+{
+    ezmq::Event event = getProtoBufEvent();
+    EXPECT_EQ(EZMQ_ERROR, mPublisher->setServerPrivateKey(""));
+    EXPECT_EQ(EZMQ_OK, mPublisher->start());
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
+}
+#endif // SECURITY_ENABLED
 
 TEST_F(EZMQPublisherTest, publishByteData)
 {

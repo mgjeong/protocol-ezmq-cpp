@@ -21,6 +21,9 @@
 #include "UnitTestHelper.h"
 
 #define TAG "EZMQ_PUB_TEST"
+#define SERVER_PUBLIC_KEY "tXJx&1^QE2g7WCXbF.$$TVP.wCtxwNhR8?iLi&S<"
+#define CLIENT_SECRET_KEY "ZB1@RS6Kv^zucova$kH(!o>tZCQ.<!Q)6-0aWFmW"
+#define CLIENT_PUBLIC_KEY "-QW?Ved(f:<::3d5tJ$[4Er&]6#9yr=vha/caBc("
 
 using namespace ezmq;
 
@@ -112,6 +115,24 @@ TEST_F(EZMQSubscriberTest, subscribe)
     EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe());
 }
 
+#ifdef SECURITY_ENABLED
+TEST_F(EZMQSubscriberTest, subscribeSecured)
+{
+    EXPECT_EQ(EZMQ_OK, mSubscriber->setServerPublicKey(SERVER_PUBLIC_KEY));
+    EXPECT_EQ(EZMQ_OK, mSubscriber->setClientKeys(CLIENT_SECRET_KEY, CLIENT_PUBLIC_KEY));
+    EXPECT_EQ(EZMQ_OK, mSubscriber->start());
+    EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe());
+}
+
+TEST_F(EZMQSubscriberTest, subscribeNegative)
+{
+    EXPECT_EQ(EZMQ_ERROR, mSubscriber->setServerPublicKey(""));
+    EXPECT_EQ(EZMQ_ERROR, mSubscriber->setClientKeys("", ""));
+    EXPECT_EQ(EZMQ_OK, mSubscriber->start());
+    EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe());
+}
+#endif // SECURITY_ENABLED
+
 TEST_F(EZMQSubscriberTest, subscribeTopic)
 {
     EXPECT_EQ(EZMQ_OK, mSubscriber->start());
@@ -128,6 +149,17 @@ TEST_F(EZMQSubscriberTest, subscribeTopicIPPort)
     topic = "";
     EXPECT_EQ(EZMQ_INVALID_TOPIC, mSubscriber->subscribe(mIp, mPort, topic));
 }
+
+#ifdef SECURITY_ENABLED
+TEST_F(EZMQSubscriberTest, subscribeTopicIPPortSecured)
+{
+    std::string topic = "topic";
+    EXPECT_EQ(EZMQ_OK, mSubscriber->start());
+    EXPECT_EQ(EZMQ_OK, mSubscriber->setServerPublicKey(SERVER_PUBLIC_KEY));
+    EXPECT_EQ(EZMQ_OK, mSubscriber->setClientKeys(CLIENT_SECRET_KEY, CLIENT_PUBLIC_KEY));
+    EXPECT_EQ(EZMQ_OK, mSubscriber->subscribe(mIp, mPort, topic));
+}
+#endif // SECURITY_ENABLED
 
 TEST_F(EZMQSubscriberTest, subscribeTopicList)
 {
