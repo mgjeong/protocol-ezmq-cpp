@@ -28,12 +28,12 @@ DEP_ROOT=$(pwd)/dependencies
 EZMQ_TARGET_ARCH="$(uname -m)"
 EZMQ_WITH_DEP=false
 EZMQ_BUILD_MODE="release"
-EZMQ_WITH_SECURITY=false
+EZMQ_WITH_SECURITY=true
 
 RELEASE="1"
 LOGGING=false
-SECURED="0"
-ZMQ_LIBSODIUM="no"
+SECURED="1"
+ZMQ_LIBSODIUM="yes"
 
 install_dependencies() {
     # download required tool chain for cross compilation [arm/arm64/armhf]
@@ -203,17 +203,22 @@ usage() {
     echo "  --target_arch=[x86|x86_64|arm|arm64|armhf|armhf-qemu|armhf-native] :  Choose Target Architecture"
     echo "  --with_dependencies=[true|false](default: false)                   :  Build ezmq along with dependencies [zmq and protobuf]"
     echo "  --build_mode=[release|debug](default: release)                     :  Build ezmq library and samples in release or debug mode"
-    echo "  --with_security=[true|false](default: false)                       :  Build ezmq library with or without Security feature"
+    echo "  --with_security=[true|false](default: true)                        :  Build ezmq library with or without Security feature"
     echo "  -c                                                                 :  Clean ezmq Repository and its dependencies"
     echo "  -h / --help                                                        :  Display help and exit"
     echo -e "${GREEN}Notes: ${NO_COLOUR}"
     echo "  - While building newly for any architecture use -with_dependencies=true option."
-    echo "  - If building with Security, make sure libsodium is installed, it can be installed using:"
+    echo "  - Before running script, Make sure libsodium is installed, it can be installed using:"
     echo "    $ sudo apt-get install libsodium-dev"
 
 }
 
 build() {
+    echo -e "${GREEN}Target Arch is: $EZMQ_TARGET_ARCH${NO_COLOUR}"
+    echo -e "${GREEN}Build mode is: $EZMQ_BUILD_MODE${NO_COLOUR}"
+    echo -e "${GREEN}Build with depedencies: ${EZMQ_WITH_DEP}${NO_COLOUR}"
+    echo -e "${GREEN}Is security enabled: $EZMQ_WITH_SECURITY${NO_COLOUR}"
+
     if [ ${EZMQ_WITH_DEP} = true ]; then
         install_dependencies
     fi
@@ -223,9 +228,9 @@ build() {
         LOGGING=true
     fi
     
-    if [ ${EZMQ_WITH_SECURITY} = true ]; then
-        ZMQ_LIBSODIUM="yes"
-        SECURED="1"
+    if [ ${EZMQ_WITH_SECURITY} = false ]; then
+        ZMQ_LIBSODIUM="no"
+        SECURED="0"
     fi
     
     cd $PROJECT_ROOT
@@ -267,17 +272,14 @@ process_cmd_args() {
                     echo -e "${RED}Unknown option for --with_dependencies${NO_COLOUR}"
                     shift 1; exit 0
                 fi
-                echo -e "${GREEN}Build with depedencies: ${EZMQ_WITH_DEP}${NO_COLOUR}"
                 shift 1;
                 ;;
             --target_arch=*)
                 EZMQ_TARGET_ARCH="${1#*=}";
-                echo -e "${GREEN}Target Arch is: $EZMQ_TARGET_ARCH${NO_COLOUR}"
                 shift 1
                 ;;
             --build_mode=*)
                 EZMQ_BUILD_MODE="${1#*=}";
-                echo -e "${GREEN}Build mode is: $EZMQ_BUILD_MODE${NO_COLOUR}"
                 shift 1;
                 ;;
             --with_security=*)
@@ -286,7 +288,6 @@ process_cmd_args() {
                     echo -e "${RED}Unknown option for --with_security${NO_COLOUR}"
                     shift 1; exit 0
                 fi              
-                echo -e "${GREEN}Is security enabled: $EZMQ_WITH_SECURITY${NO_COLOUR}"
                 shift 1;
                 ;;  
             -c)

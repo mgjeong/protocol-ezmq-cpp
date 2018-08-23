@@ -23,7 +23,7 @@ and serialization / deserialization middlewares along with some added functional
   - Version : 2.3.0 or above
   - [How to install](http://scons.org/doc/2.3.0/HTML/scons-user/c95.html)
 
- - You must install **libsodium**, if you want to use ezMQ stack in **secured mode**:
+ - You must install **libsodium**:
    ```
    $ sudo apt-get install libsodium-dev 
    ```
