@@ -15,3 +15,6 @@ cd out/linux/x86_64/release/unittests
 #ezmq_byteData_test
 ./ezmq_byteData_test
 
+#ezmq_exception_test
+./ezmq_exception_test
+

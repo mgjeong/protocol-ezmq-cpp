@@ -207,6 +207,7 @@ generate_report_EZMQ()
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_pub_test"
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_sub_test"
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_byteData_test"
+                "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_exception_test"
                );
 
     for exe in ${tests_list[@]}; do

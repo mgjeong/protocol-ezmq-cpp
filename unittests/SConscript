@@ -93,14 +93,23 @@ ezmq_byteData_test = ezmq_test_env.Program('ezmq_byteData_test',
 Alias("ezmq_byteData_test", ezmq_byteData_test)
 ezmq_test_env.AppendTarget('ezmq_byteData_test')
 
+ezmq_exception_test_src = ezmq_test_env.Glob('./EZMQExceptionTest.cpp')
+ezmq_exception_test = ezmq_test_env.Program('ezmq_exception_test',
+                                         ezmq_exception_test_src)
+Alias("ezmq_exception_test", ezmq_exception_test)
+ezmq_test_env.AppendTarget('ezmq_exception_test')
+
 if env.get('TEST') == '1' and target_os =='linux':
 	run_test(ezmq_test_env, '', 'unittests/ezmq_api_test', ezmq_api_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_pub_test', ezmq_pub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_sub_test', ezmq_sub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_byteData_test', ezmq_bytedata_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_exception_test', ezmq_exception_test)
 
 if env.get('TEST') == '1' and target_os =='windows':
 	run_test(ezmq_test_env, '', 'unittests/ezmq_api_test.exe', ezmq_api_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_pub_test.exe', ezmq_pub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_sub_test.exe', ezmq_sub_test)
 	run_test(ezmq_test_env, '', 'unittests/ezmq_byteData_test.exe', ezmq_byteData_test)
+	run_test(ezmq_test_env, '', 'unittests/ezmq_exception_test.exe', ezmq_exception_test)
+
