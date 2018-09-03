@@ -23,6 +23,11 @@ and serialization / deserialization middlewares along with some added functional
   - Version : 2.3.0 or above
   - [How to install](http://scons.org/doc/2.3.0/HTML/scons-user/c95.html)
 
+ - You must install **libsodium**:
+   ```
+   $ sudo apt-get install libsodium-dev 
+   ```
+
 ## How to build ##
 1. Goto: ~/protocol-ezmq-cpp/</br>
 2. Following are the scripts for building ezmq library:</br>

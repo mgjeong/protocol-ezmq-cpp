@@ -7,6 +7,8 @@ var classezmq_1_1_e_z_m_q_subscriber =
     [ "getIp", "classezmq_1_1_e_z_m_q_subscriber.html#a670ca17b47341956399c16a9430ad34d", null ],
     [ "getPort", "classezmq_1_1_e_z_m_q_subscriber.html#a1be97ef0f20539d97418427e5bda4b86", null ],
     [ "getServiceName", "classezmq_1_1_e_z_m_q_subscriber.html#a6a7ec984270da0eacfc69cb7e73373d4", null ],
+    [ "setClientKeys", "classezmq_1_1_e_z_m_q_subscriber.html#a8e051918093dd7413b4f6d500c26c2dc", null ],
+    [ "setServerPublicKey", "classezmq_1_1_e_z_m_q_subscriber.html#acfd9fb018b96d4a05a0b08470ef6754a", null ],
     [ "start", "classezmq_1_1_e_z_m_q_subscriber.html#a5a4a17c6be940aa511c500d6448d0999", null ],
     [ "stop", "classezmq_1_1_e_z_m_q_subscriber.html#a121ce071a2b497548f47558c57222211", null ],
     [ "subscribe", "classezmq_1_1_e_z_m_q_subscriber.html#a114024260eab339b7e01a43bb351ddfd", null ],

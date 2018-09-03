@@ -95,7 +95,11 @@ help_vars.AddVariables(
     EnumVariable('LOG_LEVEL',
                  'Enable stack logging level',
                  default='DEBUG',
-                 allowed_values=('DEBUG', 'INFO', 'ERROR', 'WARNING', 'FATAL'))
+                 allowed_values=('DEBUG', 'INFO', 'ERROR', 'WARNING', 'FATAL')),
+    EnumVariable('SECURED',
+                     'Build with ZMQ Curve [libsodium]',
+                     default='0',
+                     allowed_values=('0', '1'))
 )
 
 AddOption(
@@ -346,6 +350,9 @@ env.AppendUnique(CPPDEFINES={'EZMQ_LOG_LEVEL': env.get('LOG_LEVEL')})
 
 if env.get('LOGGING'):
     env.AppendUnique(CPPDEFINES=['DEBUG_LOG'])
+
+if (env.get('SECURED') == '1'):
+    env.AppendUnique(CPPDEFINES=['SECURITY_ENABLED'])
 
 #external libs building
 env.SConscript('external_builders.scons')

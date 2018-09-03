@@ -29,6 +29,7 @@
 #include "EZMQMessage.h"
 #include "EZMQByteData.h"
 #include "EZMQErrorCodes.h"
+#include "EZMQException.h"
 #include "Event.pb.h"
 
 #if defined(_WIN32)
@@ -42,6 +43,7 @@ using namespace std;
 using namespace ezmq;
 
 EZMQPublisher *gPublisher  = nullptr;
+std::string gServerSecretKey = "[:X%Q3UfY+kv2A^.wv:(qy2E=bk0L][cm=mS3Hcx";
 
 void startCB(EZMQErrorCode /*code*/)
 {
@@ -96,8 +98,12 @@ void printError()
     cout<<"\nRe-run the application as shown in below examples: "<<endl;
     cout<<"\n  (1) For publishing without topic: "<<endl;
     cout<<"     ./publisher -port 5562"<<endl;
-    cout<<"\n  (2) For publishing with topic: "<<endl;
+    cout<<"\n  (2) For publishing without topic [Secured]: "<<endl;
+    cout<<"     ./publisher -port 5562 -secured 1"<<endl;
+    cout<<"\n  (3) For publishing with topic: "<<endl;
     cout<<"      ./publisher -port 5562 -t topic1"<<endl;
+    cout<<"\n  (4) For publishing with topic [Secured]: "<<endl;
+    cout<<"      ./publisher -port 5562 -t topic1 -secured 1"<<endl;
 }
 
 void sigint(int /*signal*/)
@@ -114,10 +120,11 @@ int main(int argc, char* argv[])
 {
     int port = 5562;
     std::string topic="";
+    int secured = 0;
     EZMQErrorCode result = EZMQ_ERROR;
 
     // get port from command line arguments
-    if(argc != 3 && argc != 5)
+    if(argc != 3 && argc != 5 && argc != 7)
     {
         printError();
         return -1;
@@ -135,6 +142,12 @@ int main(int argc, char* argv[])
         {
             topic = argv[n + 1];
             cout<<"Topic is : " << topic<<endl;
+            n = n + 2;
+        }
+        else if (0 == strcmp(argv[n],"-secured"))
+        {
+            secured = atoi(argv[n + 1]);
+            cout<<"Secured : " << secured<<endl;
             n = n + 2;
         }
         else
@@ -163,6 +176,20 @@ int main(int argc, char* argv[])
         abort();
     }
     std::cout<<"Publisher created !!"<<endl;
+
+    // set the server key
+    if(1 == secured)
+    {
+        try
+        {
+            result = gPublisher->setServerPrivateKey(gServerSecretKey);
+        }
+        catch(EZMQException &e)
+       {
+            cout<<"Exception caught in setServerPrivateKey: "<<e.what() << endl;
+            return -1;
+       }
+    }
 
     //Start EZMQ Publisher
     result = gPublisher->start();

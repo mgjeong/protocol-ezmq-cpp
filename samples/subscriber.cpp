@@ -32,15 +32,19 @@
 #include "Event.pb.h"
 #include "EZMQMessage.h"
 #include "EZMQByteData.h"
+#include "EZMQException.h"
 
 using namespace std;
 using namespace ezmq;
 
-EZMQSubscriber *subscriber = nullptr ;
+EZMQSubscriber *gSubscriber = nullptr ;
+std::string gServerPublicKey = "tXJx&1^QE2g7WCXbF.$$TVP.wCtxwNhR8?iLi&S<";
+std::string gClientPublicKey = "-QW?Ved(f:<::3d5tJ$[4Er&]6#9yr=vha/caBc(";
+std::string gClientSecretKey = "ZB1@RS6Kv^zucova$kH(!o>tZCQ.<!Q)6-0aWFmW";
 
-bool isStarted;
-std::mutex m_mutex;
-std::condition_variable m_cv;
+bool gIsStarted;
+std::mutex gMutex;
+std::condition_variable gCV;
 
 void printEvent(const ezmq::Event &event)
 {
@@ -117,10 +121,10 @@ class EZMQSubCallback: public EZMQSUBCallback
 
 void sigint(int /*signal*/)
 {
-    if (isStarted)
+    if (gIsStarted)
     {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_cv.notify_all();
+        std::unique_lock<std::mutex> lock(gMutex);
+        gCV.notify_all();
     }
     else
     {
@@ -132,11 +136,13 @@ void printError()
 {
     cout<<"\nRe-run the application as shown in below examples: "<<endl;
     cout<<"\n  (1) For subscribing without topic: "<<endl;
-    cout<<"     ./subscriber -ip 107.108.81.116 -port 5562"<<endl;
-    cout<<"     ./subscriber -ip localhost -port 5562"<<endl;
-    cout<<"\n  (2) For subscribing with topic: "<<endl;
-    cout<<"     ./subscriber -ip 107.108.81.116 -port 5562 -t topic1"<<endl;
-    cout<<"     ./subscriber -ip localhost -port 5562 -t topic1"<<endl;
+    cout<<"     ./subscriber -ip 192.168.0.1 -port 5562"<<endl;
+    cout<<"\n  (2) For subscribing without topic: [Secured]"<<endl;
+    cout<<"     ./subscriber -ip 192.168.0.1 -port 5562 -secured 1"<<endl;
+    cout<<"\n  (3) For subscribing with topic: "<<endl;
+    cout<<"     ./subscriber -ip 192.168.0.1-port 5562 -t topic1"<<endl;
+    cout<<"\n  (3) For subscribing with topic: [Secured] "<<endl;
+    cout<<"     ./subscriber -ip 192.168.0.1 -port 5562 -t topic1 -secured 1"<<endl;
 }
 
 int main(int argc, char* argv[])
@@ -144,11 +150,12 @@ int main(int argc, char* argv[])
     std::string ip;
     int port = 5562;
     std::string topic="";
+    int secured = 0;
     EZMQErrorCode result = EZMQ_ERROR;
-    isStarted = false;
+    gIsStarted = false;
 
     // get ip and port from command line arguments
-    if(argc != 5 && argc != 7)
+    if(argc != 5 && argc!=7 && argc != 9)
     {
         printError();
         return -1;
@@ -174,6 +181,12 @@ int main(int argc, char* argv[])
             cout<<"Topic is : " << topic<<endl;
             n = n + 2;
         }
+        else if (0 == strcmp(argv[n],"-secured"))
+        {
+            secured = atoi(argv[n + 1]);
+            cout<<"Secured : " << secured<<endl;
+            n = n + 2;
+        }
         else
         {
             printError();
@@ -194,30 +207,45 @@ int main(int argc, char* argv[])
 
     //Create EZMQ Subscriber
     EZMQSubCallback *callback = new EZMQSubCallback();
-    subscriber =  new(std::nothrow) EZMQSubscriber(ip, port, callback);
-    if(NULL == subscriber)
+    gSubscriber =  new(std::nothrow) EZMQSubscriber(ip, port, callback);
+    if(NULL == gSubscriber)
     {
-        std::cout<<"subscriber creation failed !!"<<endl;
+        std::cout<<"gSubscriber creation failed !!"<<endl;
         abort();
     }
     std::cout<<"Subscriber created !!"<<endl;
 
+    // set the server and client keys
+    if(1 == secured)
+    {
+        try
+        {
+            gSubscriber->setServerPublicKey(gServerPublicKey);
+            gSubscriber->setClientKeys(gClientSecretKey, gClientPublicKey);
+        }
+        catch(EZMQException &e)
+        {
+            cout<<"Exception caught in set keys: "<<e.what() << endl;
+            return -1;
+        }
+    }
+
     //Start EZMQ Subscriber
-    result = subscriber->start();
+    result = gSubscriber->start();
     cout<<"Subscriber start [Result] : "<<result<<endl;
     if(result != EZMQ_OK)
     {
         return -1;
     }
-    isStarted = true;
+    gIsStarted = true;
     //subscribe for events
     if (topic.empty())
     {
-        result = subscriber->subscribe();
+        result = gSubscriber->subscribe();
     }
     else
     {
-        result = subscriber->subscribe(topic);
+        result = gSubscriber->subscribe(topic);
     }
 
     if (result != EZMQ_OK)
@@ -227,13 +255,13 @@ int main(int argc, char* argv[])
     }
 
     cout<<"Suscribed to publisher.. -- Waiting for Events --"<<endl;
-    std::unique_lock<std::mutex> lock(m_mutex);
-    m_cv.wait(lock);
+    std::unique_lock<std::mutex> lock(gMutex);
+    gCV.wait(lock);
 
-    if(nullptr!=subscriber)
+    if(nullptr!=gSubscriber)
     {
         cout<<"callig stop API: "<<endl;
-        result = subscriber->stop();
+        result = gSubscriber->stop();
         cout<<"stop API: [Result]: "<<result<<std::endl;
     }
 return 0;
