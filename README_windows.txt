@@ -33,8 +33,8 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
     (a) libsodium [Required only for ezMQ Secured mode]:
        $ cd ~/protocol-ezmq-cpp/dependencies
        $ git clone https://github.com/jedisct1/libsodium.git
-	   $ cd libsodium
-	   $ git checkout 1.0.16
+       $ cd libsodium
+       $ git checkout 1.0.16
        $ cd ./builds/msvc/vs2015
        $ MSBuild libsodium.sln /p:Configuration=StaticRelease   
 	   
