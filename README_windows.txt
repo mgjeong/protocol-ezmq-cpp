@@ -32,9 +32,11 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
 2. Building EMZQ dependencies:
     (a) libsodium [Required only for ezMQ Secured mode]:
        $ cd ~/protocol-ezmq-cpp/dependencies
-       $ Extract the tar: libsodium-1.0.16.tar.gz to libsodium
-       $ cd ~/protocol-ezmq-cpp/dependencies/libsodium/builds/msvc/vs2015
-       $ MSBuild libsodium.sln /p:Configuration=StaticRelease  
+       $ git clone https://github.com/jedisct1/libsodium.git
+	   $ cd libsodium
+	   $ git checkout 1.0.16
+       $ cd ./builds/msvc/vs2015
+       $ MSBuild libsodium.sln /p:Configuration=StaticRelease   
 	   
     (b) libzmq:
        $ cd ~/protocol-ezmq-cpp/dependencies
