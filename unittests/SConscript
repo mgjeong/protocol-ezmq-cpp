@@ -46,6 +46,8 @@ if target_os not in ['windows']:
     else:
         ezmq_test_env.AppendUnique(CCFLAGS=['-Os'])
 else:
+    if env.get('SECURED') == '1':
+        ezmq_test_env.AppendUnique(LIBS=File('#/dependencies/libsodium/bin/x64/Release/v140/static/libsodium.lib'))
     ezmq_test_env.AppendUnique(LIBS=File('#/dependencies/libzmq/bin/x64/Release/v140/static/libzmq.lib'))
     ezmq_test_env.AppendUnique(LIBS=File('#/dependencies/protobuf-3.4.0/cmake/build/solution/Release/libprotobuf.lib'))
     if not env.get('RELEASE'):

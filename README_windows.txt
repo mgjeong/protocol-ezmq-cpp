@@ -30,17 +30,26 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
         - The above script will turn cmd to visual studio terminal.
 
 2. Building EMZQ dependencies:
-   (a) libzmq:
+    (a) libsodium [Required only for ezMQ Secured mode]:
+       $ cd ~/protocol-ezmq-cpp/dependencies
+       $ Extract the tar: libsodium-1.0.16.tar.gz to libsodium
+       $ cd ~/protocol-ezmq-cpp/dependencies/libsodium/builds/msvc/vs2015
+       $ MSBuild libsodium.sln /p:Configuration=StaticRelease  
+	   
+    (b) libzmq:
        $ cd ~/protocol-ezmq-cpp/dependencies
        $ git clone https://github.com/zeromq/libzmq.git
        $ cd libzmq
        $ git checkout v4.2.2
        $ cd builds/msvc/vs2015
-       $ MSBuild libzmq.sln /p:Configuration=StaticRelease
+       - For unsecured mode:
+         $ MSBuild libzmq.sln /p:Configuration=StaticRelease
+       - For secured mode:
+         $ MSBuild libzmq.sln /p:Configuration=StaticRelease,Option-sodium=true
 
        On succesful build it will create libzmq.lib [./bin/x64/Release/v140/static/libzmq.lib]
 
-   (b) protobuf:
+    (c) protobuf:
        $ cd ~/protocol-ezmq-cpp/dependencies
        $ git clone https://github.com/google/protobuf.git
        $ cd protobuf
@@ -57,14 +66,15 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
        $ cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=../../../../install ../..
        $ MSBuild protobuf.sln /p:Configuration=Release
 
-       On succesful build it will create libzmq.lib [./cmake/build/solution/Release/libprotobuf.lib]
+       On succesful build it will create libzmq.lib [./cmake/build/solution/Release/libprotobuf.lib] 
 
 3. Build ezmq library:
     $ cd ~/protocol-ezmq-cpp/
     $ scons TARGET_OS=windows TARGET_ARCH=amd64
 
     Note:
-    To build in debug mode use RELEASE=0 flag.
+    - To build in debug mode use RELEASE=0 flag.
+    - To build in secured mode use SECURED=1 flag
 
 4. Run the samples:
    $ cd ~/protocol-ezmq-cpp/out/windows/win32/amd64/release/samples
