@@ -104,8 +104,10 @@ Make sure all the pre-requisite tools are installed and added to PATH variable.
    To build ezmq without dependencies:
     $ build_auto.bat
      OR
-    $ build_auto.bat --with_dependencies=false
+    $ build_auto.bat --with_dependencies=false --with_security=true
 	
     To build ezmq in debug mode:
     $ build_auto.bat --with_dependencies=false --build_mode=debug
 
+    To build ezmq in secure mode:
+    $ build_auto.bat --with_dependencies=false --with_security=true
