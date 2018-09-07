@@ -1,11 +1,103 @@
 @ECHO OFF
     set ezmq_cpp_dir=%cd%
+	set dependencies=false
+	set buildmode=release
+	set secure=false
 
-    IF "%~1"=="" GOTO WITH_NO_FLAG
-    IF "%~1"=="--with_dependencies" GOTO WITH_FLAG
-    GOTO ERROR_INVALID_PARAM
+    IF "%~1"=="" GOTO BUILD_EZMQ_CPP
+	
+	:: Dependency flag check
+    IF "%~1"=="--with_dependencies" (
+		IF "%~2"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~2"=="true" (
+		set dependencies=true
+		)
+	) ELSE IF "%~3"=="--with_dependencies" (
+		IF "%~4"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~4"=="true" (
+		set dependencies=true
+		)
+	)ELSE IF "%~5"=="--with_dependencies" (
+		IF "%~6"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~6"=="true" (
+		set dependencies=true
+		)
+	)
+	
+	:: Security flag check
+    IF "%~1"=="--with_security" (
+		IF "%~2"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~2"=="true" (
+		set secure=true
+		)
+	) ELSE IF "%~3"=="--with_security" (
+		IF "%~4"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~4"=="true" (
+		set secure=true
+		)
+	)ELSE IF "%~5"=="--with_security" (
+		IF "%~6"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~6"=="true" (
+		set secure=true
+		)
+	)
+	
+	:: Build mode flag check
+    IF "%~1"=="--build_mode" (
+		IF "%~2"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~2"=="debug" (
+		set buildmode=debug
+		)
+	) ELSE IF "%~3"=="--build_mode" (
+		IF "%~4"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~4"=="debug" (
+		set buildmode=debug
+		)
+	)ELSE IF "%~5"=="--build_mode" (
+		IF "%~6"=="" GOTO ERROR_INVALID_PARAM
+		
+		IF "%~6"=="debug" (
+		set buildmode=debug
+		)
+	)
+	
+	if %dependencies%==true (
+	GOTO BUILD_DEPENDENCY
+	) 
+	
+    GOTO BUILD_EZMQ_CPP
 
 :BUILD_DEPENDENCY
+    if %secure%==true (
+	ECHO SECURE MODE ON, CLONING LIBSODIUM
+	cd dependencies
+	
+	::Clone and build libsodium if not already built.
+	IF EXIST "libsodium" (
+	ECHO LIBSODIUM already exists.
+	) ELSE (
+	::clone libsodium
+	git clone https://github.com/jedisct1/libsodium.git
+	:: building libsodium
+	IF EXIST "libsodium" (
+	cd libsodium
+	git checkout 1.0.16
+	cd builds/msvc/vs2015
+	MSBuild libsodium.sln /p:Configuration=StaticRelease
+	)
+	)
+	ECHO Finished building libsodium
+	)
+
+    cd %ezmq_cpp_dir%
     cd dependencies
     ECHO BUILDING DEPENDENCIES ZMQ AND PROTOBUF
 
@@ -20,10 +112,14 @@
     cd libzmq
     git checkout v4.2.2
     cd builds/msvc/vs2015
-    MSBuild libzmq.sln /p:Configuration=StaticRelease
+	if %secure%==true (
+	MSBuild libzmq.sln /p:Configuration=StaticRelease
+	) ELSE (
+	MSBuild libzmq.sln /p:Configuration=StaticRelease,Option-sodium=true
+	)
     )
     )
-    :: Finished building libzmq
+    ECHO Finished building libzmq
 
     cd %ezmq_cpp_dir%
     cd dependencies
@@ -52,22 +148,9 @@
     )
     :: Finished building protobuf
 
-    GOTO DOWNLOAD_GTEST_HIPPMOCKS
+    GOTO BUILD_EZMQ_CPP
 
-:WITH_FLAG
-    IF "%~2"=="" GOTO ERROR_INVALID_PARAM_VALUE
-    IF "%~2"=="true" GOTO BUILD_DEPENDENCY
-    IF "%~2"=="True" GOTO BUILD_DEPENDENCY
-    IF "%~2"=="false" GOTO WITH_NO_FLAG
-    IF "%~2"=="False" GOTO WITH_NO_FLAG
-    GOTO ERROR_INVALID_PARAM_VALUE
-
-:WITH_NO_FLAG
-    ECHO Dependency option not provided or set to false. Building with --with_dependencies=false.
-    ECHO Building in Release mode.
-    GOTO DOWNLOAD_GTEST_HIPPMOCKS
-
-:DOWNLOAD_GTEST_HIPPMOCKS
+:BUILD_EZMQ_CPP
     ::gtest 1.7
     cd %ezmq_cpp_dir%/extlibs/gtest
     IF EXIST "googletest-release-1.7.0" (
@@ -91,39 +174,41 @@
     )
     ::hippmocks done
 
-    GOTO BUILD_EZMQ_CPP
-
-:BUILD_EZMQ_CPP
     :: Build protocol-ezmq-cpp
     cd %ezmq_cpp_dir%
 	
-	IF "%~3"=="" GOTO RELEASE_BUILD
-	IF "%~3"=="--build_mode" (
-	IF "%~4"=="" GOTO ERROR_INVALID_PARAM
-	IF "%~4"=="Debug" GOTO DEBUG_BUILD
-	IF "%~4"=="debug" GOTO DEBUG_BUILD
+	IF %buildmode%==debug (
+	GOTO DEBUG_BUILD
 	)
+	
 	GOTO RELEASE_BUILD
 	
 :DEBUG_BUILD
 	ECHO "BUILDING IN DEBUG MODE"
+	IF %secure%==true (
+	call scons TARGET_OS=windows TARGET_ARCH=amd64 RELEASE=0 SECURED=1
+	) ELSE (
 	call scons TARGET_OS=windows TARGET_ARCH=amd64 RELEASE=0
+	)
+	
     GOTO END
 	
 :RELEASE_BUILD
 	ECHO "BUILDING IN RELEASE MODE"
+	IF %secure%==true (
+	call scons TARGET_OS=windows TARGET_ARCH=amd64 SECURED=1
+	) ELSE (
 	call scons TARGET_OS=windows TARGET_ARCH=amd64
-    GOTO END
+	)
 	
-:ERROR_INVALID_PARAM_VALUE
-    ECHO The value of "%~1" was not found or INVALID. Please re run the batch file.
-    ECHO e.g. build_auto.bat --with_dependencies=true
     GOTO END
 
 :ERROR_INVALID_PARAM
     ECHO Invalid parameter provided. Please re run the batch file.
     ECHO e.g. build_auto.bat --with_dependencies=true
     ECHO e.g. build_auto.bat --with_dependencies=true --build_mode=debug
+	ECHO e.g. build_auto.bat --with_dependencies=true --with_security=true --build_mode=debug
+	ECHO e.g. build_auto.bat --with_security=true
     GOTO END
 
 :END
