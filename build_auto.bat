@@ -113,9 +113,9 @@
     git checkout v4.2.2
     cd builds/msvc/vs2015
 	if %secure%==true (
-	MSBuild libzmq.sln /p:Configuration=StaticRelease
-	) ELSE (
 	MSBuild libzmq.sln /p:Configuration=StaticRelease,Option-sodium=true
+	) ELSE (
+	MSBuild libzmq.sln /p:Configuration=StaticRelease
 	)
     )
     )
