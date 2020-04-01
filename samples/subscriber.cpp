@@ -38,9 +38,10 @@ using namespace std;
 using namespace ezmq;
 
 EZMQSubscriber *gSubscriber = nullptr ;
-std::string gServerPublicKey = "tXJx&1^QE2g7WCXbF.$$TVP.wCtxwNhR8?iLi&S<";
-std::string gClientPublicKey = "-QW?Ved(f:<::3d5tJ$[4Er&]6#9yr=vha/caBc(";
-std::string gClientSecretKey = "ZB1@RS6Kv^zucova$kH(!o>tZCQ.<!Q)6-0aWFmW";
+// put server & client key
+std::string gServerPublicKey = "";
+std::string gClientPublicKey = "";
+std::string gClientSecretKey = "";
 
 bool gIsStarted;
 std::mutex gMutex;
