@@ -7,16 +7,17 @@
 
 var indexSectionsWithContent =
 {
-  0: "defghilmpsuw~",
-  1: "es",
+  0: "eghimopstuw~",
+  1: "e",
   2: "e",
   3: "eh",
-  4: "egpsu~",
-  5: "e",
-  6: "el",
-  7: "defiw",
-  8: "defimuw",
-  9: "w"
+  4: "egiopstuw~",
+  5: "m",
+  6: "e",
+  7: "e",
+  8: "e",
+  9: "e",
+  10: "w"
 };
 
 var indexSectionNames =
@@ -26,11 +27,12 @@ var indexSectionNames =
   2: "namespaces",
   3: "files",
   4: "functions",
-  5: "typedefs",
-  6: "enums",
-  7: "enumvalues",
-  8: "defines",
-  9: "pages"
+  5: "variables",
+  6: "typedefs",
+  7: "enums",
+  8: "enumvalues",
+  9: "related",
+  10: "pages"
 };
 
 function convertToId(search)

@@ -47,7 +47,30 @@ namespace ezmq
     /**
     * Callbacks to get all the subscribed events for a specific topic.
     */
-    typedef std::function<void(std::string topic, const EZMQMessage &event)> EZMQSubTopicCB;
+    typedef std::function<void(const std::string &topic, const EZMQMessage &event)> EZMQSubTopicCB;
+
+    /**
+     * Interface to receive message callback from EZMQ subscriber.
+     */
+    class EZMQSUBCallback
+    {
+        public:
+
+            /**
+             * Invoked when message is received.
+             *
+             * @param event - Received message.
+             */
+            virtual void onMessageCB(const EZMQMessage &/*event*/) {}
+
+            /**
+             * Invoked when message is received for a specific topic..
+             *
+             * @param topic - Topic for the received event.
+             * @param event - Received message.
+             */
+            virtual void onMessageCB(const std::string &/*topic*/, const EZMQMessage &/*event*/) {}
+    };
 
     /**
     * @class  EZMQSubscriber
@@ -66,7 +89,16 @@ namespace ezmq
             * @param subCallback- Subscriber callback to receive events.
             * @param topicCallback - Subscriber callback to receive events for a particular topic.
             */
-            EZMQSubscriber(std::string ip, int port, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback);
+            EZMQSubscriber(const std::string &ip, const int &port, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback);
+
+            /**
+             * Construtor of EZMQSubscriber.
+             *
+             * @param ip - ip to be used for subscriber socket.
+             * @param port - Port to be used for subscriber socket.
+             * @param callback - Callback interface object to receive events.
+             */
+            EZMQSubscriber(const std::string &ip, const int &port, EZMQSUBCallback *callback);
 
             /**
             *  Construtor of EZMQSubscriber.
@@ -75,12 +107,46 @@ namespace ezmq
             * @param subCallback- Subscriber callback to receive events.
             * @param topicCallback - Subscriber callback to receive events for a particular topic.
             */
-            EZMQSubscriber(std::string serviceName, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback);
+            EZMQSubscriber(const std::string &serviceName, EZMQSubCB subCallback, EZMQSubTopicCB topicCallback);
 
             /**
             * Destructor of EZMQPublisher.
             */
             ~EZMQSubscriber();
+
+            /**
+            * Set the security keys of client/its own.
+            *
+            * @param clientPrivateKey - Client private/secret key.
+            * @param clientPublicKey - Client public key.
+            *
+            * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+            *
+            * @throws EZMQException
+            *
+            * @note
+            * (1) Key should be 40-character string encoded in the Z85 encoding format <br>
+            * (2) This API should be called before start() API.
+            */
+            EZMQErrorCode setClientKeys(const std::string& clientPrivateKey, const std::string& clientPublicKey);
+
+            /**
+            * Set the server public key.
+            *
+            * @param key - Server public key.
+            *
+            * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+            *
+            * @throws EZMQException
+            *
+            * @note
+            * (1) Key should be 40-character string encoded in the Z85 encoding format <br>
+            * (2) This API should be called before start() API. <br>
+            * (3) If using the following API in secured mode: <br>
+            *      subscribe(const std::string &ip, const int &port, std::string topic);
+            *      setServerPublicKey API needs to be called before that.
+            */
+            EZMQErrorCode setServerPublicKey(const std::string& key);
 
             /**
             * Starts SUB  instance.
@@ -103,11 +169,11 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            * @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/<br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode subscribe( std::string topic);
+            EZMQErrorCode subscribe(std::string topic);
 
             /**
             * Subscribe for event/messages on given list of topics. On any of the topic
@@ -118,11 +184,31 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            *  @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/ <br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode subscribe(std::list<std::string> topics);
+            EZMQErrorCode subscribe(const std::list<std::string> &topics);
+
+            /**
+            * Subscribe for event/messages from given IP:Port on the given topic.
+            *
+            * @param ip - Target[Publisher] IP address.
+            * @param port - Target[Publisher] Port number.
+            * @param topic - Topic to be subscribed.
+            *
+            * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
+            *
+            * @note
+            * (1) It will be using same Subscriber socket for connecting to given ip:port. <br>
+            * (2) To unsubcribe use un-subscribe API with the same topic. <br>
+            * (3) Topic name should be as path format. For example: home/livingroom/ <br>
+            * (4) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and / <br>
+            * (5) Topic will be appended with forward slash [/] in case, if application has not appended it <br>
+            * (6) If using in secured mode: Call setServerPublicKey(const std::string& key) API with target server
+            *     public key before calling this API.
+            */
+            EZMQErrorCode subscribe(const std::string &ip, const int &port, std::string topic);
 
             /**
             * Un-subscribe all the events from publisher.
@@ -137,9 +223,9 @@ namespace ezmq
             * @param topic - topic to be unsubscribed.
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            * @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/ <br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
             EZMQErrorCode unSubscribe(std::string topic);
 
@@ -152,11 +238,11 @@ namespace ezmq
             *
             * @return EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.
             *
-            *  @note (1) Topic name should be as path format. For example:
-            *       home/livingroom/ (2) Topic name can have letters [a-z, A-z],
-            *       numerics [0-9] and special characters _ - . and /
+            * @note
+            * (1) Topic name should be as path format. For example: home/livingroom/<br>
+            * (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and /
             */
-            EZMQErrorCode unSubscribe(std::list<std::string> topics);
+            EZMQErrorCode unSubscribe(const std::list<std::string> &topics);
 
             /**
             * Stops SUB instance.
@@ -190,6 +276,9 @@ namespace ezmq
             std::string mServiceName;
             std::string mIp;
             int mPort;
+            std::string mServerPublicKey;
+            std::string mClientPublicKey;
+            std::string mClientSecretKey;
 
             //Receiver Thread
             std::thread mThread;
@@ -198,6 +287,7 @@ namespace ezmq
             //EZMQ callbacks
             EZMQSubCB mSubCallback;
             EZMQSubTopicCB mSubTopicCallback;
+            EZMQSUBCallback *mCallback;
 
             // ZMQ Subscriber socket
             zmq::socket_t * mSubscriber;
@@ -213,13 +303,15 @@ namespace ezmq
             //Mutex
             std::recursive_mutex mSubLock;
 
-            EZMQErrorCode subscribeInternal(std::string topic);
-            EZMQErrorCode unSubscribeInternal(std::string topic);
-            std::string getSocketAddress();
+            EZMQErrorCode subscribeInternal(std::string &topic);
+            EZMQErrorCode subscribeInternal(const std::string &ip, const int &port, std::string &topic);
+            EZMQErrorCode unSubscribeInternal(std::string &topic);
+            std::string getSocketAddress(const std::string &ip, const int &port);
             std::string getInProcUniqueAddress();
             void receive();
             void parseSocketData();
-            std::string  sanitizeTopic(std::string topic);
+            std::string  sanitizeTopic(std::string &topic);
+            void clearKeys();
     };
 }
 #endif //EZMQ_SUBSCRIBER_H

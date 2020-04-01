@@ -10,9 +10,9 @@ and serialization / deserialization middlewares along with some added functional
 
 ## Prerequisites ##
  - You must install basic prerequisites for build
-   - Install build-essential
+   - Make sure that libtool, pkg-config, build-essential, autoconf, and automake are installed.
    ```
-   $ sudo apt-get install build-essential
+   $ sudo apt-get install libtool pkg-config build-essential autoconf automake
    ```
 
 - Python
@@ -23,15 +23,21 @@ and serialization / deserialization middlewares along with some added functional
   - Version : 2.3.0 or above
   - [How to install](http://scons.org/doc/2.3.0/HTML/scons-user/c95.html)
 
+ - You must install **libsodium**:
+   ```
+   $ sudo apt-get install libsodium-dev 
+   ```
+
 ## How to build ##
-1. Goto: ~/protocol-ezmq-cpp/
-2. Run the script:
-   ```
-   ./build.sh <options>
-   ```
+1. Goto: ~/protocol-ezmq-cpp/</br>
+2. Following are the scripts for building ezmq library:</br>
+   **(a) build.sh**      : Native build for x86_64</br>
+   **(b) build_arm.sh**  : Native build for armhf [Raspberry pi board]</br>
+   **(c) build_auto.sh** : Generic script</br>
+
 **Notes** </br>
-(a) For getting help about script option: **$ ./build.sh --help** </br>
-(b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library.
+(a) For getting help about script [ build_auto.sh ] : **$ ./build_auto.sh --help** </br>
+(b) Currently, Script needs sudo permission for installing zeroMQ and protobuf libraries. In future need for sudo will be removed by installing those libraries in ezmq library. </br> 
 
 ## How to run ##
 

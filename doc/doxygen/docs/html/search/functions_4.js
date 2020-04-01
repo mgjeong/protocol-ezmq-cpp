@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unsubscribe',['unSubscribe',['../classezmq_1_1_e_z_m_q_subscriber.html#ace92c8c1b4b79ce0f45e57d78a210d8d',1,'ezmq::EZMQSubscriber::unSubscribe()'],['../classezmq_1_1_e_z_m_q_subscriber.html#a7c4ab9e3f4387784adf6696797fd2569',1,'ezmq::EZMQSubscriber::unSubscribe(std::string topic)'],['../classezmq_1_1_e_z_m_q_subscriber.html#a42b85003c5ed76013c0a171f946d3ce0',1,'ezmq::EZMQSubscriber::unSubscribe(std::list&lt; std::string &gt; topics)']]]
+  ['publish',['publish',['../classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95',1,'ezmq::EZMQPublisher::publish(const EZMQMessage &amp;event)'],['../classezmq_1_1_e_z_m_q_publisher.html#a84eb89dc1ada7f6644de2a05d2bc0796',1,'ezmq::EZMQPublisher::publish(std::string topic, const EZMQMessage &amp;event)'],['../classezmq_1_1_e_z_m_q_publisher.html#a0781c0de9aafecd15fd59eb28c703e3a',1,'ezmq::EZMQPublisher::publish(const std::list&lt; std::string &gt; &amp;topics, const EZMQMessage &amp;event)']]]
 ];

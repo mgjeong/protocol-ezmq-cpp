@@ -25,9 +25,17 @@
 #define EZMQ_API_H
 
 #include <memory>
+#include <time.h>
 
-//ZeroMQ header file
+#if defined(_WIN32)
+#define ZMQ_STATIC
+#pragma once
 #include "zmq.hpp"
+#undef ZMQ_STATIC
+#else
+#include "zmq.hpp"
+#endif
+
 #include "EZMQErrorCodes.h"
 
 namespace ezmq
@@ -75,8 +83,8 @@ namespace ezmq
         private:
             EZMQAPI()
             {
-              mStatus = EZMQ_Constructed;
-              std::srand(std::time(0));
+                mStatus = EZMQ_Constructed;
+                std::srand(time(0));
             }
             EZMQStatusCode mStatus;
             std::shared_ptr<zmq::context_t> mContext;

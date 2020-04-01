@@ -1,6 +1,7 @@
 var _e_z_m_q_logger_8h =
 [
     [ "ScopeLogger", "classezmq_1_1_scope_logger.html", "classezmq_1_1_scope_logger" ],
+    [ "ALLOC_ASSERT", "_e_z_m_q_logger_8h.html#a4db3744017b846485f374000bfe37ca4", null ],
     [ "DEBUG_PRIVATE", "_e_z_m_q_logger_8h.html#ab969cb288c8520ae9afc2f4904512aff", null ],
     [ "ERROR_PRIVATE", "_e_z_m_q_logger_8h.html#aeae4a209fbc28f09dedd7963e071fb55", null ],
     [ "EZMQ_LOG", "_e_z_m_q_logger_8h.html#a43548bdc167e8573ab71fc47f8254de4", null ],
@@ -14,6 +15,8 @@ var _e_z_m_q_logger_8h =
     [ "INFO_PRIVATE", "_e_z_m_q_logger_8h.html#a9cb3405ac95f7e520b605d4abc8bdd20", null ],
     [ "MAX_LOG_V_BUFFER_SIZE", "_e_z_m_q_logger_8h.html#a884f629f41c55c0ba7214b8e4e19b1c4", null ],
     [ "UNUSED", "_e_z_m_q_logger_8h.html#a86d500a34c624c2cae56bc25a31b12f3", null ],
+    [ "VERIFY_NON_NULL", "_e_z_m_q_logger_8h.html#a0f28948329f836be4610db021b2cdf19", null ],
+    [ "VERIFY_NON_NULL_TOPIC", "_e_z_m_q_logger_8h.html#a425666bd8ed4f539495bd08c07101c56", null ],
     [ "WARNING_PRIVATE", "_e_z_m_q_logger_8h.html#a864b092f667a288545998c289813ac1a", null ],
     [ "LogLevel", "_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9", [
       [ "DEBUG", "_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a0593585da9181e972974c1274d8f2b4f", null ],

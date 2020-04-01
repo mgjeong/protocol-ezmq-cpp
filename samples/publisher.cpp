@@ -16,16 +16,34 @@
  *******************************************************************************/
 
 #include <iostream>
+
+#ifdef __linux__
 #include <unistd.h>
+#endif
+#if defined(_WIN32)
+#include <signal.h>
+#endif
+
 #include "EZMQAPI.h"
 #include "EZMQPublisher.h"
 #include "EZMQMessage.h"
 #include "EZMQByteData.h"
 #include "EZMQErrorCodes.h"
+#include "EZMQException.h"
 #include "Event.pb.h"
+
+#if defined(_WIN32)
+#define sleep(x) Sleep(x)
+#define DELAY 2000
+#else
+#define DELAY 2
+#endif
 
 using namespace std;
 using namespace ezmq;
+
+EZMQPublisher *gPublisher  = nullptr;
+std::string gServerSecretKey = "[:X%Q3UfY+kv2A^.wv:(qy2E=bk0L][cm=mS3Hcx";
 
 void startCB(EZMQErrorCode /*code*/)
 {
@@ -80,19 +98,33 @@ void printError()
     cout<<"\nRe-run the application as shown in below examples: "<<endl;
     cout<<"\n  (1) For publishing without topic: "<<endl;
     cout<<"     ./publisher -port 5562"<<endl;
-    cout<<"\n  (2) For publishing with topic: "<<endl;
+    cout<<"\n  (2) For publishing without topic [Secured]: "<<endl;
+    cout<<"     ./publisher -port 5562 -secured 1"<<endl;
+    cout<<"\n  (3) For publishing with topic: "<<endl;
     cout<<"      ./publisher -port 5562 -t topic1"<<endl;
+    cout<<"\n  (4) For publishing with topic [Secured]: "<<endl;
+    cout<<"      ./publisher -port 5562 -t topic1 -secured 1"<<endl;
+}
+
+void sigint(int /*signal*/)
+{
+    if(gPublisher)
+    {
+        cout<<"-- Destroying publisher-- "<<endl;
+        delete gPublisher;
+        gPublisher = NULL;
+    }
 }
 
 int main(int argc, char* argv[])
 {
     int port = 5562;
     std::string topic="";
-    EZMQPublisher *publisher  = NULL;
+    int secured = 0;
     EZMQErrorCode result = EZMQ_ERROR;
 
     // get port from command line arguments
-    if(argc != 3 && argc != 5)
+    if(argc != 3 && argc != 5 && argc != 7)
     {
         printError();
         return -1;
@@ -112,11 +144,20 @@ int main(int argc, char* argv[])
             cout<<"Topic is : " << topic<<endl;
             n = n + 2;
         }
+        else if (0 == strcmp(argv[n],"-secured"))
+        {
+            secured = atoi(argv[n + 1]);
+            cout<<"Secured : " << secured<<endl;
+            n = n + 2;
+        }
         else
         {
             printError();
         }
     }
+
+    //this handler is added to check stop API
+    signal(SIGINT, sigint);
 
      //Initialize EZMQ stack
     EZMQAPI *obj = EZMQAPI::getInstance();
@@ -128,16 +169,30 @@ int main(int argc, char* argv[])
     }
 
     //Create EZMQ Publisher
-    publisher = new(std::nothrow) EZMQPublisher(port, startCB,  stopCB,  errorCB);
-    if(NULL == publisher)
+    gPublisher = new(std::nothrow) EZMQPublisher(port, startCB,  stopCB,  errorCB);
+    if(NULL == gPublisher)
     {
         std::cout<<"Publisher creation failed !!"<<endl;
         abort();
     }
     std::cout<<"Publisher created !!"<<endl;
 
+    // set the server key
+    if(1 == secured)
+    {
+        try
+        {
+            result = gPublisher->setServerPrivateKey(gServerSecretKey);
+        }
+        catch(EZMQException &e)
+       {
+            cout<<"Exception caught in setServerPrivateKey: "<<e.what() << endl;
+            return -1;
+       }
+    }
+
     //Start EZMQ Publisher
-    result = publisher->start();
+    result = gPublisher->start();
     cout<<"Publisher start [Result] : "<<result<<endl;
     if(result != EZMQ_OK)
     {
@@ -155,13 +210,18 @@ int main(int argc, char* argv[])
     int i = 1;
     while(i <= 15)
     {
+        //This check is required while used ctrl+c for program termination
+        if(!gPublisher)
+        {
+            return -1;
+        }
         if (topic.empty())
         {
-            result = publisher->publish(event);
+            result = gPublisher->publish(event);
         }
         else
         {
-            result = publisher->publish(topic, event);
+            result = gPublisher->publish(topic, event);
         }
         if(result != EZMQ_OK)
         {
@@ -169,14 +229,14 @@ int main(int argc, char* argv[])
             return 0;
         }
         cout<<"Event "<<i <<" Published" <<endl;
-        sleep(2);
+        sleep(DELAY);
         i++;
     }
 
-    if(publisher)
+    if(gPublisher)
     {
         cout<<"-- Destroying publisher-- "<<endl;
-        delete publisher;
+        delete gPublisher;
     }
 return 0;
 }

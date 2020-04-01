@@ -20,6 +20,7 @@
 #include "EZMQPublisher.h"
 #include "UnitTestHelper.h"
 
+#define SERVER_SECRET_KEY "[:X%Q3UfY+kv2A^.wv:(qy2E=bk0L][cm=mS3Hcx"
 #define TAG "EZMQ_PUB_TEST"
 static int mPort = 5562;
 using namespace ezmq;
@@ -38,6 +39,25 @@ void errorCB(EZMQErrorCode /*code*/)
 {
     EZMQ_LOG(DEBUG, TAG, "error callback");
 }
+
+class EZMQPubCallback: public EZMQPUBCallback
+{
+   public:
+        void onStartCB(EZMQErrorCode errorCode)
+        {
+            std::cout << "onStartCB error code: "<< errorCode << std::endl;
+        }
+
+        void onStopCB(EZMQErrorCode errorCode)
+        {
+            std::cout << "onStopCB error code: "<< errorCode << std::endl;
+        }
+
+        void onErrorCB(EZMQErrorCode errorCode)
+        {
+            std::cout << "onErrorCB error code: "<< errorCode << std::endl;
+        }
+};
 
 class EZMQPublisherTest: public TestWithMock
 {
@@ -74,6 +94,14 @@ TEST_F(EZMQPublisherTest, constructor)
     ASSERT_NE(nullptr, instance);
 }
 
+TEST_F(EZMQPublisherTest, constructor1)
+{
+    EZMQPubCallback *callback = new EZMQPubCallback();
+    EZMQPublisher *instance = new(std::nothrow) EZMQPublisher(mPort, callback);
+    ALLOC_ASSERT(instance)
+    ASSERT_NE(nullptr, instance);
+}
+
 TEST_F(EZMQPublisherTest, startstop)
 {
     for( int i =1; i<=10; i++)
@@ -94,6 +122,24 @@ TEST_F(EZMQPublisherTest, publish)
     EXPECT_EQ(EZMQ_OK, mPublisher->start());
     EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
 }
+
+#ifdef SECURITY_ENABLED
+TEST_F(EZMQPublisherTest, publishSecure)
+{
+    ezmq::Event event = getProtoBufEvent();
+    EXPECT_EQ(EZMQ_OK, mPublisher->setServerPrivateKey(SERVER_SECRET_KEY));
+    EXPECT_EQ(EZMQ_OK, mPublisher->start());
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
+}
+
+TEST_F(EZMQPublisherTest, publishSecureNegative)
+{
+    ezmq::Event event = getProtoBufEvent();
+    EXPECT_EQ(EZMQ_ERROR, mPublisher->setServerPrivateKey(""));
+    EXPECT_EQ(EZMQ_OK, mPublisher->start());
+    EXPECT_EQ(EZMQ_OK, mPublisher->publish(event));
+}
+#endif // SECURITY_ENABLED
 
 TEST_F(EZMQPublisherTest, publishByteData)
 {
@@ -184,8 +230,9 @@ TEST_F(EZMQPublisherTest, publishNegative)
     ezmq::Event event = getProtoBufEvent();
     ezmq::EZMQByteData byteEvent = getByteData();
 
-    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish("", event));
-    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish("", byteEvent));
+    std::string topic = "";
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topic, event));
+    EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topic, byteEvent));
 
     std::list<std::string> topicList;
     EXPECT_EQ(EZMQ_INVALID_TOPIC, mPublisher->publish(topicList, event));

@@ -4,6 +4,7 @@
 ##
 
 import os
+import platform
 Import('env')
 
 gtest_env = env.Clone()
@@ -52,6 +53,9 @@ if not os.path.exists(gtest_unpacked_sentinel):
     print 'Unzipping to : ' + gtest_dir
     gtest_env.UnpackAll(gtest_dir, gtest_zip)
 
+host_arch = platform.machine()
+print 'Host Arch: %s' % host_arch
+
 if target_os in ['linux']:
     if not os.path.exists(gtest_configured_sentinel):
         # Run configure on gtest
@@ -67,9 +71,12 @@ if target_os in ['linux']:
                 gtest_dir,
                 './configure --disable-shared --host=aarch64-unknown-linux-gnu CC=/usr/bin/aarch64-linux-gnu-gcc-4.8 CXX=/usr/bin/aarch64-linux-gnu-g++-4.8')
         elif target_arch in ['armhf']:
-                configure_ran = env.Configure(
-                gtest_dir,
-                './configure --disable-shared --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8')
+                if host_arch in ['armv7l', 'armhf']:
+                        configure_ran = env.Configure(gtest_dir,'./configure --disable-shared')
+                else:
+                        configure_ran = env.Configure(
+                        gtest_dir,
+                        './configure --disable-shared --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc-4.8 CXX=arm-linux-gnueabihf-g++-4.8')
         else:
                 configure_ran = env.Configure(gtest_dir,'./configure --disable-shared')
 

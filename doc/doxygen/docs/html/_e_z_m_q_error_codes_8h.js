@@ -3,7 +3,8 @@ var _e_z_m_q_error_codes_8h =
     [ "EZMQErrorCode", "_e_z_m_q_error_codes_8h.html#a5237953fc6aa030143ad6c575aa42638", [
       [ "EZMQ_OK", "_e_z_m_q_error_codes_8h.html#a5237953fc6aa030143ad6c575aa42638a5fce8dc3a08dc7731684be281caaba69", null ],
       [ "EZMQ_ERROR", "_e_z_m_q_error_codes_8h.html#a5237953fc6aa030143ad6c575aa42638ab12fb9689bf2421abc244073fe06cf3e", null ],
-      [ "EZMQ_INVALID_TOPIC", "_e_z_m_q_error_codes_8h.html#a5237953fc6aa030143ad6c575aa42638a9ac612f57d6e551395d19fc457ee0906", null ]
+      [ "EZMQ_INVALID_TOPIC", "_e_z_m_q_error_codes_8h.html#a5237953fc6aa030143ad6c575aa42638a9ac612f57d6e551395d19fc457ee0906", null ],
+      [ "EZMQ_INVALID_CONTENT_TYPE", "_e_z_m_q_error_codes_8h.html#a5237953fc6aa030143ad6c575aa42638aafcdb439655e18fac600268fdcf32b2b", null ]
     ] ],
     [ "EZMQStatusCode", "_e_z_m_q_error_codes_8h.html#a837fa54c465546044c1b8d63630d4a72", [
       [ "EZMQ_Unknown", "_e_z_m_q_error_codes_8h.html#a837fa54c465546044c1b8d63630d4a72aed2f6c849adde70038df2879b54cf2ce", null ],

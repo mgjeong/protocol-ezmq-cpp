@@ -127,6 +127,12 @@ Namespaces</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:a86d500a34c624c2cae56bc25a31b12f3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_e_z_m_q_logger_8h.html#a86d500a34c624c2cae56bc25a31b12f3">UNUSED</a>(x)&#160;&#160;&#160;(void)(x)</td></tr>
 <tr class="separator:a86d500a34c624c2cae56bc25a31b12f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f28948329f836be4610db021b2cdf19"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_e_z_m_q_logger_8h.html#a0f28948329f836be4610db021b2cdf19">VERIFY_NON_NULL</a>(PARAM)</td></tr>
+<tr class="separator:a0f28948329f836be4610db021b2cdf19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a425666bd8ed4f539495bd08c07101c56"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_e_z_m_q_logger_8h.html#a425666bd8ed4f539495bd08c07101c56">VERIFY_NON_NULL_TOPIC</a>(PARAM)</td></tr>
+<tr class="separator:a425666bd8ed4f539495bd08c07101c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4db3744017b846485f374000bfe37ca4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_e_z_m_q_logger_8h.html#a4db3744017b846485f374000bfe37ca4">ALLOC_ASSERT</a>(PARAM)</td></tr>
+<tr class="separator:a4db3744017b846485f374000bfe37ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a884f629f41c55c0ba7214b8e4e19b1c4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_e_z_m_q_logger_8h.html#a884f629f41c55c0ba7214b8e4e19b1c4">MAX_LOG_V_BUFFER_SIZE</a>&#160;&#160;&#160;(256)</td></tr>
 <tr class="separator:a884f629f41c55c0ba7214b8e4e19b1c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6193c0b6f895e578d47a2bb477f7bc31"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_e_z_m_q_logger_8h.html#a6193c0b6f895e578d47a2bb477f7bc31">EZMQ_LOG_PRIVATE_DATA</a>&#160;&#160;&#160;(1 &lt;&lt; 31)</td></tr>
@@ -183,6 +189,29 @@ Functions</h2></td></tr>
 <tr class="separator:af0240fc490c12b8ab46688d60f7e92e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a4db3744017b846485f374000bfe37ca4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ALLOC_ASSERT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">PARAM</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span> (!PARAM) \</div>
+<div class="line">{ <a class="code" href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">\</a></div>
+<div class="line"><a class="code" href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">    EZMQ_LOG_V</a>(<a class="code" href="_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90">ERROR</a>, TAG, <span class="stringliteral">&quot;[%s:%d] Memory allocation failed&quot;</span>, __func__, __LINE__); \</div>
+<div class="line">    abort(); \</div>
+<div class="line">} \</div>
+<div class="ttc" id="_e_z_m_q_logger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90"><div class="ttname"><a href="_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90">ERROR</a></div><div class="ttdef"><b>Definition:</b> EZMQLogger.h:70</div></div>
+<div class="ttc" id="_e_z_m_q_logger_8h_html_a84fab4df35acd6180054bafa73f9e4f9"><div class="ttname"><a href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">EZMQ_LOG_V</a></div><div class="ttdeci">#define EZMQ_LOG_V(level, tag,...)</div><div class="ttdef"><b>Definition:</b> EZMQLogger.h:156</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 <a class="anchor" id="ab969cb288c8520ae9afc2f4904512aff"></a>
 <div class="memitem">
 <div class="memproto">
@@ -427,6 +456,54 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a0f28948329f836be4610db021b2cdf19"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VERIFY_NON_NULL</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">PARAM</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span> (!PARAM) \</div>
+<div class="line">{ <a class="code" href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">\</a></div>
+<div class="line"><a class="code" href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">    EZMQ_LOG_V</a>(<a class="code" href="_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90">ERROR</a>, TAG, <span class="stringliteral">&quot;[%s:%d] NULL parameter&quot;</span>, __func__, __LINE__); \</div>
+<div class="line">    return <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638ab12fb9689bf2421abc244073fe06cf3e">EZMQ_ERROR</a>; \</div>
+<div class="line">}</div>
+<div class="ttc" id="_e_z_m_q_logger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90"><div class="ttname"><a href="_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90">ERROR</a></div><div class="ttdef"><b>Definition:</b> EZMQLogger.h:70</div></div>
+<div class="ttc" id="namespaceezmq_html_a5237953fc6aa030143ad6c575aa42638ab12fb9689bf2421abc244073fe06cf3e"><div class="ttname"><a href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638ab12fb9689bf2421abc244073fe06cf3e">ezmq::EZMQ_ERROR</a></div><div class="ttdef"><b>Definition:</b> EZMQErrorCodes.h:35</div></div>
+<div class="ttc" id="_e_z_m_q_logger_8h_html_a84fab4df35acd6180054bafa73f9e4f9"><div class="ttname"><a href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">EZMQ_LOG_V</a></div><div class="ttdeci">#define EZMQ_LOG_V(level, tag,...)</div><div class="ttdef"><b>Definition:</b> EZMQLogger.h:156</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a425666bd8ed4f539495bd08c07101c56"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VERIFY_NON_NULL_TOPIC</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">PARAM</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span> (!PARAM) \</div>
+<div class="line">{ <a class="code" href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">\</a></div>
+<div class="line"><a class="code" href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">    EZMQ_LOG_V</a>(<a class="code" href="_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90">ERROR</a>, TAG, <span class="stringliteral">&quot;[%s:%d] Invalid Topic&quot;</span>, __func__, __LINE__); \</div>
+<div class="line">    return <a class="code" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638a9ac612f57d6e551395d19fc457ee0906">EZMQ_INVALID_TOPIC</a>; \</div>
+<div class="line">}</div>
+<div class="ttc" id="_e_z_m_q_logger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90"><div class="ttname"><a href="_e_z_m_q_logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a2fd6f336d08340583bd620a7f5694c90">ERROR</a></div><div class="ttdef"><b>Definition:</b> EZMQLogger.h:70</div></div>
+<div class="ttc" id="namespaceezmq_html_a5237953fc6aa030143ad6c575aa42638a9ac612f57d6e551395d19fc457ee0906"><div class="ttname"><a href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638a9ac612f57d6e551395d19fc457ee0906">ezmq::EZMQ_INVALID_TOPIC</a></div><div class="ttdef"><b>Definition:</b> EZMQErrorCodes.h:36</div></div>
+<div class="ttc" id="_e_z_m_q_logger_8h_html_a84fab4df35acd6180054bafa73f9e4f9"><div class="ttname"><a href="_e_z_m_q_logger_8h.html#a84fab4df35acd6180054bafa73f9e4f9">EZMQ_LOG_V</a></div><div class="ttdeci">#define EZMQ_LOG_V(level, tag,...)</div><div class="ttdef"><b>Definition:</b> EZMQLogger.h:156</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 <a class="anchor" id="a864b092f667a288545998c289813ac1a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -643,7 +720,7 @@ Functions</h2></td></tr>
 </div><!-- doc-content -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
     <ul>
-        <li class="footer">Generated on Thu Dec 28 2017 11:01:51</li>
+        <li class="footer">Generated on Fri Aug 17 2018 12:29:21</li>
     </ul>
 </div>
 </body>

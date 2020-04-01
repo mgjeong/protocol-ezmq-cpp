@@ -67,6 +67,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -90,7 +91,7 @@ $(document).ready(function(){initNavTree('classezmq_1_1_e_z_m_q_publisher.html',
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -113,24 +114,30 @@ $(document).ready(function(){initNavTree('classezmq_1_1_e_z_m_q_publisher.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2a2c0bd91bcbbbbb8be0edc792b2dbf1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a2a2c0bd91bcbbbbb8be0edc792b2dbf1">EZMQPublisher</a> (int port, <a class="el" href="namespaceezmq.html#a259b2a1eeacb9d4073a6a3a25de9ba2e">EZMQStartCB</a> startCB, <a class="el" href="namespaceezmq.html#a86ce04b3b9ab40d7e724e81ccdf81a22">EZMQStopCB</a> stopCB, <a class="el" href="namespaceezmq.html#af63b61aec2258186ed280a3720a33bf2">EZMQErrorCB</a> errorCB)</td></tr>
-<tr class="memdesc:a2a2c0bd91bcbbbbb8be0edc792b2dbf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construtor of <a class="el" href="classezmq_1_1_e_z_m_q_publisher.html" title="This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. ">EZMQPublisher</a>.  <a href="#a2a2c0bd91bcbbbbb8be0edc792b2dbf1">More...</a><br /></td></tr>
-<tr class="separator:a2a2c0bd91bcbbbbb8be0edc792b2dbf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3953bc0549b932c6b0cef45ba6b63920"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a3953bc0549b932c6b0cef45ba6b63920">EZMQPublisher</a> (const int &amp;port, <a class="el" href="namespaceezmq.html#a259b2a1eeacb9d4073a6a3a25de9ba2e">EZMQStartCB</a> startCB, <a class="el" href="namespaceezmq.html#a86ce04b3b9ab40d7e724e81ccdf81a22">EZMQStopCB</a> stopCB, <a class="el" href="namespaceezmq.html#af63b61aec2258186ed280a3720a33bf2">EZMQErrorCB</a> errorCB)</td></tr>
+<tr class="memdesc:a3953bc0549b932c6b0cef45ba6b63920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construtor of <a class="el" href="classezmq_1_1_e_z_m_q_publisher.html" title="This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. ">EZMQPublisher</a>.  <a href="#a3953bc0549b932c6b0cef45ba6b63920">More...</a><br /></td></tr>
+<tr class="separator:a3953bc0549b932c6b0cef45ba6b63920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dfdb64c863bc8c43f23178bfe86bb9b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a5dfdb64c863bc8c43f23178bfe86bb9b">EZMQPublisher</a> (const int &amp;port, <a class="el" href="classezmq_1_1_e_z_m_q_p_u_b_callback.html">EZMQPUBCallback</a> *callback)</td></tr>
+<tr class="memdesc:a5dfdb64c863bc8c43f23178bfe86bb9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construtor of <a class="el" href="classezmq_1_1_e_z_m_q_publisher.html" title="This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. ">EZMQPublisher</a>.  <a href="#a5dfdb64c863bc8c43f23178bfe86bb9b">More...</a><br /></td></tr>
+<tr class="separator:a5dfdb64c863bc8c43f23178bfe86bb9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d52fe93b21c04640b991f42fc4a176f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a4d52fe93b21c04640b991f42fc4a176f">~EZMQPublisher</a> ()</td></tr>
 <tr class="memdesc:a4d52fe93b21c04640b991f42fc4a176f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor of <a class="el" href="classezmq_1_1_e_z_m_q_publisher.html" title="This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. ">EZMQPublisher</a>.  <a href="#a4d52fe93b21c04640b991f42fc4a176f">More...</a><br /></td></tr>
 <tr class="separator:a4d52fe93b21c04640b991f42fc4a176f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d5311cdbd69e8f86cc120731d6fd039"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a2d5311cdbd69e8f86cc120731d6fd039">setServerPrivateKey</a> (const std::string &amp;key)</td></tr>
+<tr class="memdesc:a2d5311cdbd69e8f86cc120731d6fd039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the server private/secret key.  <a href="#a2d5311cdbd69e8f86cc120731d6fd039">More...</a><br /></td></tr>
+<tr class="separator:a2d5311cdbd69e8f86cc120731d6fd039"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d19badbf84eca6ca31e005487a50e5a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a6d19badbf84eca6ca31e005487a50e5a">start</a> ()</td></tr>
 <tr class="memdesc:a6d19badbf84eca6ca31e005487a50e5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts PUB instance.  <a href="#a6d19badbf84eca6ca31e005487a50e5a">More...</a><br /></td></tr>
 <tr class="separator:a6d19badbf84eca6ca31e005487a50e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cef94aabfdefb82143a2bd626bef491"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a5cef94aabfdefb82143a2bd626bef491">publish</a> (ezmq::Event event)</td></tr>
-<tr class="memdesc:a5cef94aabfdefb82143a2bd626bef491"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish events on the socket for subscribers.  <a href="#a5cef94aabfdefb82143a2bd626bef491">More...</a><br /></td></tr>
-<tr class="separator:a5cef94aabfdefb82143a2bd626bef491"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab409db3b1efa7bc07aa8df4a8e72969d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#ab409db3b1efa7bc07aa8df4a8e72969d">publish</a> (std::string topic, ezmq::Event event)</td></tr>
-<tr class="memdesc:ab409db3b1efa7bc07aa8df4a8e72969d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish events on a specific topic on socket for subscribers.  <a href="#ab409db3b1efa7bc07aa8df4a8e72969d">More...</a><br /></td></tr>
-<tr class="separator:ab409db3b1efa7bc07aa8df4a8e72969d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8a2a42ec9112a3f11620f677adf9c7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#af8a2a42ec9112a3f11620f677adf9c7d">publish</a> (std::list&lt; std::string &gt; topics, ezmq::Event event)</td></tr>
-<tr class="memdesc:af8a2a42ec9112a3f11620f677adf9c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish an events on list of topics on socket for subscribers.  <a href="#af8a2a42ec9112a3f11620f677adf9c7d">More...</a><br /></td></tr>
-<tr class="separator:af8a2a42ec9112a3f11620f677adf9c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20a611e64acbee20a4609942f77cec95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a20a611e64acbee20a4609942f77cec95">publish</a> (const <a class="el" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;event)</td></tr>
+<tr class="memdesc:a20a611e64acbee20a4609942f77cec95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish events on the socket for subscribers.  <a href="#a20a611e64acbee20a4609942f77cec95">More...</a><br /></td></tr>
+<tr class="separator:a20a611e64acbee20a4609942f77cec95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84eb89dc1ada7f6644de2a05d2bc0796"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a84eb89dc1ada7f6644de2a05d2bc0796">publish</a> (std::string topic, const <a class="el" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;event)</td></tr>
+<tr class="memdesc:a84eb89dc1ada7f6644de2a05d2bc0796"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish events on a specific topic on socket for subscribers.  <a href="#a84eb89dc1ada7f6644de2a05d2bc0796">More...</a><br /></td></tr>
+<tr class="separator:a84eb89dc1ada7f6644de2a05d2bc0796"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0781c0de9aafecd15fd59eb28c703e3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a0781c0de9aafecd15fd59eb28c703e3a">publish</a> (const std::list&lt; std::string &gt; &amp;topics, const <a class="el" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;event)</td></tr>
+<tr class="memdesc:a0781c0de9aafecd15fd59eb28c703e3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish an events on list of topics on socket for subscribers.  <a href="#a0781c0de9aafecd15fd59eb28c703e3a">More...</a><br /></td></tr>
+<tr class="separator:a0781c0de9aafecd15fd59eb28c703e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13cc31ab048c67c4946525a97cdd5685"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a13cc31ab048c67c4946525a97cdd5685">stop</a> ()</td></tr>
 <tr class="memdesc:a13cc31ab048c67c4946525a97cdd5685"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops PUB instance.  <a href="#a13cc31ab048c67c4946525a97cdd5685">More...</a><br /></td></tr>
 <tr class="separator:a13cc31ab048c67c4946525a97cdd5685"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,14 +148,14 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a2a2c0bd91bcbbbbb8be0edc792b2dbf1"></a>
+<a class="anchor" id="a3953bc0549b932c6b0cef45ba6b63920"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ezmq::EZMQPublisher::EZMQPublisher </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">const int &amp;&#160;</td>
           <td class="paramname"><em>port</em>, </td>
         </tr>
         <tr>
@@ -184,6 +191,41 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">startCB-</td><td>Start callback. </td></tr>
     <tr><td class="paramname">stopCB</td><td>- Stop Callback. </td></tr>
     <tr><td class="paramname">errorCB</td><td>- Error Callback. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a5dfdb64c863bc8c43f23178bfe86bb9b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ezmq::EZMQPublisher::EZMQPublisher </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classezmq_1_1_e_z_m_q_p_u_b_callback.html">EZMQPUBCallback</a> *&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construtor of <a class="el" href="classezmq_1_1_e_z_m_q_publisher.html" title="This class Contains the APIs related to start, stop, publish APIs of EZMQ Publisher. ">EZMQPublisher</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">port</td><td>- Port to be used for publisher socket. </td></tr>
+    <tr><td class="paramname">callback</td><td>- Callback interface object. </td></tr>
   </table>
   </dd>
 </dl>
@@ -226,14 +268,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5cef94aabfdefb82143a2bd626bef491"></a>
+<a class="anchor" id="a20a611e64acbee20a4609942f77cec95"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> ezmq::EZMQPublisher::publish </td>
           <td>(</td>
-          <td class="paramtype">ezmq::Event&#160;</td>
+          <td class="paramtype">const <a class="el" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;&#160;</td>
           <td class="paramname"><em>event</em></td><td>)</td>
           <td></td>
         </tr>
@@ -251,7 +293,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab409db3b1efa7bc07aa8df4a8e72969d"></a>
+<a class="anchor" id="a84eb89dc1ada7f6644de2a05d2bc0796"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -264,7 +306,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ezmq::Event&#160;</td>
+          <td class="paramtype">const <a class="el" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;&#160;</td>
           <td class="paramname"><em>event</em>&#160;</td>
         </tr>
         <tr>
@@ -284,24 +326,25 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>(1) Topic name should be as path format. For example: home/livingroom/ (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and / </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>(1) Topic name should be as path format. For example: home/livingroom/<br />
+ (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and / </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="af8a2a42ec9112a3f11620f677adf9c7d"></a>
+<a class="anchor" id="a0781c0de9aafecd15fd59eb28c703e3a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> ezmq::EZMQPublisher::publish </td>
           <td>(</td>
-          <td class="paramtype">std::list&lt; std::string &gt;&#160;</td>
+          <td class="paramtype">const std::list&lt; std::string &gt; &amp;&#160;</td>
           <td class="paramname"><em>topics</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ezmq::Event&#160;</td>
+          <td class="paramtype">const <a class="el" href="classezmq_1_1_e_z_m_q_message.html">EZMQMessage</a> &amp;&#160;</td>
           <td class="paramname"><em>event</em>&#160;</td>
         </tr>
         <tr>
@@ -322,7 +365,41 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>(1) Topic name should be as path format. For example: home/livingroom/ (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and / </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>(1) Topic name should be as path format. For example: home/livingroom/<br />
+ (2) Topic name can have letters [a-z, A-z], numerics [0-9] and special characters _ - . and / </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2d5311cdbd69e8f86cc120731d6fd039"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceezmq.html#a5237953fc6aa030143ad6c575aa42638">EZMQErrorCode</a> ezmq::EZMQPublisher::setServerPrivateKey </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the server private/secret key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- Server private/Secret key.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>EZMQErrorCode - EZMQ_OK on success, otherwise appropriate error code.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classezmq_1_1_e_z_m_q_exception.html" title="Exception class that contains exception constructors and Message. ">EZMQException</a></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>(1) Key should be 40-character string encoded in the Z85 encoding format <br />
+ (2) This API should be called before <a class="el" href="classezmq_1_1_e_z_m_q_publisher.html#a6d19badbf84eca6ca31e005487a50e5a" title="Starts PUB instance. ">start()</a> API. </dd></dl>
 
 </div>
 </div>
@@ -369,7 +446,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- doc-content -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
     <ul>
-        <li class="footer">Generated on Thu Dec 28 2017 11:01:51</li>
+        <li class="footer">Generated on Mon Aug 20 2018 20:03:16</li>
     </ul>
 </div>
 </body>

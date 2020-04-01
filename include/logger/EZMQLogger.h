@@ -59,6 +59,10 @@ if (!PARAM) \
 // EZMQSetLogLevel() enabled private data logging.
 #define EZMQ_LOG_PRIVATE_DATA (1 << 31)
 
+#ifdef ERROR
+#undef ERROR
+#endif
+
 typedef enum {
     DEBUG = 0,
     INFO,

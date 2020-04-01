@@ -95,7 +95,11 @@ help_vars.AddVariables(
     EnumVariable('LOG_LEVEL',
                  'Enable stack logging level',
                  default='DEBUG',
-                 allowed_values=('DEBUG', 'INFO', 'ERROR', 'WARNING', 'FATAL'))
+                 allowed_values=('DEBUG', 'INFO', 'ERROR', 'WARNING', 'FATAL')),
+    EnumVariable('SECURED',
+                     'Build with ZMQ Curve [libsodium]',
+                     default='0',
+                     allowed_values=('0', '1'))
 )
 
 AddOption(
@@ -173,9 +177,9 @@ if target_os in targets_support_cc:
         env.AppendUnique(CCFLAGS=['--sysroot=' + sys_root])
         env.AppendUnique(LINKFLAGS=['--sysroot=' + sys_root])
 
-print "tc_path: %s" % tc_path
-print "prefix: %s" % prefix
-print "sys_root: %s" % sys_root
+        print "tc_path: %s" % tc_path
+        print "prefix: %s" % prefix
+        print "sys_root: %s" % sys_root
 
 if target_os in ['windows']:
     # UnpackAll.py needs access to system PATH components that SCons
@@ -346,6 +350,9 @@ env.AppendUnique(CPPDEFINES={'EZMQ_LOG_LEVEL': env.get('LOG_LEVEL')})
 
 if env.get('LOGGING'):
     env.AppendUnique(CPPDEFINES=['DEBUG_LOG'])
+
+if (env.get('SECURED') == '1'):
+    env.AppendUnique(CPPDEFINES=['SECURITY_ENABLED'])
 
 #external libs building
 env.SConscript('external_builders.scons')

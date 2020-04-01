@@ -8,6 +8,7 @@ The main fearues are as followings. <br />
 (1) Currently supports streaming using 0mq and serialization / deserialization using protobuf. <br />
 (2) Publisher -> Multiple Subscribers broadcasting.<br />
 (3) Topic based subscription and data routing at source (read publisher).<br />
-(4) High speed serialization and deserialization.
+(4) High speed serialization and deserialization.<br />
+(5) Curve security.
 
 */

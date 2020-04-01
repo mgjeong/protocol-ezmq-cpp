@@ -54,9 +54,9 @@ usage() {
     echo "      --ut_report=[yes|no] (default: yes)          :  The unit test report will be generated in xml format (as gtest only supports xml)."
     echo "      --target_arch=[x86|x86_64] (default: x86)    :  Choose Target Architecture for running test executables."
     echo "Example:"
-    echo "  $ cd ~/EZMQ/cpp/ "
-    echo "  $ scons LOGGING=1 RELEASE=0 TARGET_ARCH=x86 TEST=0"
-    echo "  $ ./generate_report.sh --format=html --timestamp=yes --ut_report=yes"
+    echo "  $ ./generate_report.sh --target_arch=x86_64 --format=html --timestamp=yes --ut_report=yes"
+    echo "Note:"
+    echo "Before running this script, Make sure EZMQ sdk is built in debug mode and with security"
 }
 
 clean_ezmq() {
@@ -207,6 +207,7 @@ generate_report_EZMQ()
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_pub_test"
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_sub_test"
                 "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_byteData_test"
+                "${EZMQ}/out/${EZMQ_TARGET_OS}/${EZMQ_TARGET_ARCH}/debug/unittests/ezmq_exception_test"
                );
 
     for exe in ${tests_list[@]}; do

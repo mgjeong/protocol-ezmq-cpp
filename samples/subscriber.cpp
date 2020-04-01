@@ -16,10 +16,15 @@
  *******************************************************************************/
 
 #include <iostream>
-#include <unistd.h>
 #include <signal.h>
 #include <condition_variable>
 #include <memory>
+#ifdef __linux__
+#include <unistd.h>
+#endif
+#if defined(_WIN32)
+#include <signal.h>
+#endif
 
 #include "EZMQAPI.h"
 #include "EZMQSubscriber.h"
@@ -27,15 +32,19 @@
 #include "Event.pb.h"
 #include "EZMQMessage.h"
 #include "EZMQByteData.h"
+#include "EZMQException.h"
 
 using namespace std;
 using namespace ezmq;
 
-EZMQSubscriber *subscriber = nullptr ;
+EZMQSubscriber *gSubscriber = nullptr ;
+std::string gServerPublicKey = "tXJx&1^QE2g7WCXbF.$$TVP.wCtxwNhR8?iLi&S<";
+std::string gClientPublicKey = "-QW?Ved(f:<::3d5tJ$[4Er&]6#9yr=vha/caBc(";
+std::string gClientSecretKey = "ZB1@RS6Kv^zucova$kH(!o>tZCQ.<!Q)6-0aWFmW";
 
-bool isStarted;
-std::mutex m_mutex;
-std::condition_variable m_cv;
+bool gIsStarted;
+std::mutex gMutex;
+std::condition_variable gCV;
 
 void printEvent(const ezmq::Event &event)
 {
@@ -71,47 +80,51 @@ void printByteData(const ezmq::EZMQByteData &byteData)
     cout<<"\n----------------------------------------"<<endl;
 }
 
-void subCB(const EZMQMessage &event)
+class EZMQSubCallback: public EZMQSUBCallback
 {
-    cout<<"App: Event received "<<endl;
-    if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
-        const Event *protoEvent =  dynamic_cast<const Event*>(&event);
-        printEvent(*protoEvent);
-    }
-    else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
-        const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
-        printByteData(*byteData);
-    }
-}
+   public:
+        void onMessageCB(const EZMQMessage &event)
+        {
+            cout<<"App: Event received: onMessageCB "<<endl;
+            if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
+                const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+                printEvent(*protoEvent);
+            }
+            else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
+                const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+                printByteData(*byteData);
+            }
+        }
 
-void subTopicCB(std::string topic, const EZMQMessage &event)
-{
-    cout<<"App: Event received "<<endl;
-    cout<<"Topic: "<<topic<<endl;
-    if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
-        const Event *protoEvent =  dynamic_cast<const Event*>(&event);
-        printEvent(*protoEvent);
-    }
-    else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
-    {
-        cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
-        const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
-        printByteData(*byteData);
-    }
-}
+        void onMessageCB(const std::string &topic, const EZMQMessage &event)
+        {
+            cout<<"App: Event received : onMessageCB"<<endl;
+            cout<<"Topic: "<<topic<<endl;
+            if(EZMQ_CONTENT_TYPE_PROTOBUF == event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_PROTOBUF"<<endl;
+                const Event *protoEvent =  dynamic_cast<const Event*>(&event);
+                printEvent(*protoEvent);
+            }
+            else if(EZMQ_CONTENT_TYPE_BYTEDATA== event.getContentType())
+            {
+                cout<<"Content-Type: EZMQ_CONTENT_TYPE_BYTEDATA"<<endl;
+                const EZMQByteData *byteData =  dynamic_cast<const EZMQByteData*>(&event);
+                printByteData(*byteData);
+            }
+        }
+};
 
 void sigint(int /*signal*/)
 {
-    if (isStarted)
+    if (gIsStarted)
     {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_cv.notify_all();
+        std::unique_lock<std::mutex> lock(gMutex);
+        gCV.notify_all();
     }
     else
     {
@@ -135,11 +148,12 @@ int main(int argc, char* argv[])
     std::string ip;
     int port = 5562;
     std::string topic="";
+    int secured = 0;
     EZMQErrorCode result = EZMQ_ERROR;
-    isStarted = false;
+    gIsStarted = false;
 
     // get ip and port from command line arguments
-    if(argc != 5 && argc != 7)
+    if(argc != 5 && argc!=7 && argc != 9)
     {
         printError();
         return -1;
@@ -165,6 +179,12 @@ int main(int argc, char* argv[])
             cout<<"Topic is : " << topic<<endl;
             n = n + 2;
         }
+        else if (0 == strcmp(argv[n],"-secured"))
+        {
+            secured = atoi(argv[n + 1]);
+            cout<<"Secured : " << secured<<endl;
+            n = n + 2;
+        }
         else
         {
             printError();
@@ -184,30 +204,46 @@ int main(int argc, char* argv[])
     }
 
     //Create EZMQ Subscriber
-    subscriber =  new(std::nothrow) EZMQSubscriber(ip, port,  subCB,  subTopicCB);
-    if(NULL == subscriber)
+    EZMQSubCallback *callback = new EZMQSubCallback();
+    gSubscriber =  new(std::nothrow) EZMQSubscriber(ip, port, callback);
+    if(NULL == gSubscriber)
     {
-        std::cout<<"subscriber creation failed !!"<<endl;
+        std::cout<<"gSubscriber creation failed !!"<<endl;
         abort();
     }
     std::cout<<"Subscriber created !!"<<endl;
 
+    // set the server and client keys
+    if(1 == secured)
+    {
+        try
+        {
+            gSubscriber->setServerPublicKey(gServerPublicKey);
+            gSubscriber->setClientKeys(gClientSecretKey, gClientPublicKey);
+        }
+        catch(EZMQException &e)
+        {
+            cout<<"Exception caught in set keys: "<<e.what() << endl;
+            return -1;
+        }
+    }
+
     //Start EZMQ Subscriber
-    result = subscriber->start();
+    result = gSubscriber->start();
     cout<<"Subscriber start [Result] : "<<result<<endl;
     if(result != EZMQ_OK)
     {
         return -1;
     }
-    isStarted = true;
+    gIsStarted = true;
     //subscribe for events
     if (topic.empty())
     {
-        result = subscriber->subscribe();
+        result = gSubscriber->subscribe();
     }
     else
     {
-        result = subscriber->subscribe(topic);
+        result = gSubscriber->subscribe(topic);
     }
 
     if (result != EZMQ_OK)
@@ -217,13 +253,13 @@ int main(int argc, char* argv[])
     }
 
     cout<<"Suscribed to publisher.. -- Waiting for Events --"<<endl;
-    std::unique_lock<std::mutex> lock(m_mutex);
-    m_cv.wait(lock);
+    std::unique_lock<std::mutex> lock(gMutex);
+    gCV.wait(lock);
 
-    if(nullptr!=subscriber)
+    if(nullptr!=gSubscriber)
     {
         cout<<"callig stop API: "<<endl;
-        result = subscriber->stop();
+        result = gSubscriber->stop();
         cout<<"stop API: [Result]: "<<result<<std::endl;
     }
 return 0;
