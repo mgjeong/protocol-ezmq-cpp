@@ -43,7 +43,8 @@ using namespace std;
 using namespace ezmq;
 
 EZMQPublisher *gPublisher  = nullptr;
-std::string gServerSecretKey = "[:X%Q3UfY+kv2A^.wv:(qy2E=bk0L][cm=mS3Hcx";
+// put server secret key
+std::string gServerSecretKey = "";
 
 void startCB(EZMQErrorCode /*code*/)
 {
@@ -88,7 +89,8 @@ ezmq::Event getProtoBufEvent()
     readin2->set_modified(20);
     readin2->set_id("id2");
     readin2->set_origin(25);
-    readin2->set_pushed(1);
+    readin2->set_pushed(1);
+
 
     return event;
 }
