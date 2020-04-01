@@ -123,10 +123,10 @@ void printError()
 {
     cout<<"\nRe-run the application as shown in below examples: "<<endl;
     cout<<"\n  (1) For subscribing without topic: "<<endl;
-    cout<<"     ./subscriber -ip 107.108.81.116 -port 5562"<<endl;
+    cout<<"     ./subscriber -ip 0.0.0.0 -port 5562"<<endl;
     cout<<"     ./subscriber -ip localhost -port 5562"<<endl;
     cout<<"\n  (2) For subscribing with topic: "<<endl;
-    cout<<"     ./subscriber -ip 107.108.81.116 -port 5562 -t topic1"<<endl;
+    cout<<"     ./subscriber -ip 0.0.0.0 -port 5562 -t topic1"<<endl;
     cout<<"     ./subscriber -ip localhost -port 5562 -t topic1"<<endl;
 }
 
