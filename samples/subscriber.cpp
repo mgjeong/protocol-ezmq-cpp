@@ -137,13 +137,11 @@ void printError()
 {
     cout<<"\nRe-run the application as shown in below examples: "<<endl;
     cout<<"\n  (1) For subscribing without topic: "<<endl;
-    cout<<"     ./subscriber -ip 192.168.0.1 -port 5562"<<endl;
-    cout<<"\n  (2) For subscribing without topic: [Secured]"<<endl;
-    cout<<"     ./subscriber -ip 192.168.0.1 -port 5562 -secured 1"<<endl;
-    cout<<"\n  (3) For subscribing with topic: "<<endl;
-    cout<<"     ./subscriber -ip 192.168.0.1-port 5562 -t topic1"<<endl;
-    cout<<"\n  (3) For subscribing with topic: [Secured] "<<endl;
-    cout<<"     ./subscriber -ip 192.168.0.1 -port 5562 -t topic1 -secured 1"<<endl;
+    cout<<"     ./subscriber -ip 0.0.0.0 -port 5562"<<endl;
+    cout<<"     ./subscriber -ip localhost -port 5562"<<endl;
+    cout<<"\n  (2) For subscribing with topic: "<<endl;
+    cout<<"     ./subscriber -ip 0.0.0.0 -port 5562 -t topic1"<<endl;
+    cout<<"     ./subscriber -ip localhost -port 5562 -t topic1"<<endl;
 }
 
 int main(int argc, char* argv[])
