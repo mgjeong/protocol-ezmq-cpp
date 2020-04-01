@@ -21,9 +21,10 @@
 #include "UnitTestHelper.h"
 
 #define TAG "EZMQ_PUB_TEST"
-#define SERVER_PUBLIC_KEY "tXJx&1^QE2g7WCXbF.$$TVP.wCtxwNhR8?iLi&S<"
-#define CLIENT_SECRET_KEY "ZB1@RS6Kv^zucova$kH(!o>tZCQ.<!Q)6-0aWFmW"
-#define CLIENT_PUBLIC_KEY "-QW?Ved(f:<::3d5tJ$[4Er&]6#9yr=vha/caBc("
+// put server & client key
+#define SERVER_PUBLIC_KEY ""
+#define CLIENT_SECRET_KEY ""
+#define CLIENT_PUBLIC_KEY ""
 
 using namespace ezmq;
 
