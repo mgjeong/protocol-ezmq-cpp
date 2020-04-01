@@ -20,7 +20,8 @@
 #include "EZMQPublisher.h"
 #include "UnitTestHelper.h"
 
-#define SERVER_SECRET_KEY "[:X%Q3UfY+kv2A^.wv:(qy2E=bk0L][cm=mS3Hcx"
+//put server secret key
+#define SERVER_SECRET_KEY ""
 #define TAG "EZMQ_PUB_TEST"
 static int mPort = 5562;
 using namespace ezmq;
